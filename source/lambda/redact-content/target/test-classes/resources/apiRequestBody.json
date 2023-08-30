@@ -1,0 +1,55 @@
+{
+    "entities": {
+        "entity-standard": {
+            "OTHER": {
+                "John Doe": [
+                    1,
+                    2,
+                    3
+                ],
+                "type 2": [
+                    2
+                ]
+            },
+            "DATE": {
+                "10/23/20, 3:28 PM": [
+                    1,
+                    2
+                ],
+                "December 25, 2025": [
+                    2
+                ]
+            }
+        },
+        "entity-medical": {
+            "EntityType1": {
+                "ActualEntityText": [
+                    1,
+                    2,
+                    3
+                ]
+            }
+        }
+    },
+    "phrases": [
+        {
+            "text": "to blenders Seattle",
+            "pages": [
+                1,
+                2
+            ]
+        },
+        {
+            "text": "Seattle",
+            "pages": [
+                1
+            ]
+        },
+        {
+            "text": "not a phrase",
+            "pages": [
+                1
+            ]
+        }
+    ]
+}

@@ -1,0 +1,266 @@
+{
+  "StateMachines": {
+    "StateMachine1": {
+      "TestCases": {
+        "AnalyzeDocTestSuccess": {
+          "TextractWorkflowStepFunctionCallbackSendMessage": "MockedTextractAnalyzeDocSuccess",
+          "EventBridgePublishEvents": "MockedPublishEventSuccess"
+        },
+        "AnalyzeDocTestSkipDoc": {
+          "TextractWorkflowStepFunctionCallbackSendMessage": "MockedTextractAnalyzeDocSuccess",
+          "EventBridgePublishEvents": "MockedPublishEventSuccess"
+        },
+        "AnalyzeDocTestRetryWithSuccess": {
+          "TextractWorkflowStepFunctionCallbackSendMessage": "MockedTextractAnalyzeDocRetryWithSuccess",
+          "EventBridgePublishEvents": "MockedPublishEventSuccess"
+        },
+        "AnalyzeDocTestFail": {
+          "TextractWorkflowStepFunctionCallbackSendMessage": "MockedTextractAnalyzeDocThrowException",
+          "FailureEventBridgePublishFailureEvents": "MockedPublishEventSuccess",
+          "FailureSendMessagetoDLQ": "PublishEventToDLQSuccess"
+        },
+        "AnalyzeDocTestFailSimple": {
+          "TextractWorkflowStepFunctionCallbackSendMessage": "MockedTextractAnalyzeDocThrowException",
+          "FailureMarkCaseStatusFailure": "MockedMarkCaseAsFailure",
+          "SyncTaskFailStateFailureSendMessagetoDLQ": "PublishEventToDLQSuccess",
+          "FailureSendMessagetoDLQ": "PublishEventToDLQSuccess"
+        },
+        "AnalyzeIDTest1": {
+          "TextractWorkflowStepFunctionCallbackSendMessage": "MockedTextractAnalyzeIDSuccess",
+          "EventBridgePublishEvents": "MockedPublishEventSuccess"
+        },
+        "AnalyzeExpenseTest1": {
+          "TextractWorkflowStepFunctionCallbackSendMessage": "MockedTextractAnalyzeExpenseSuccess",
+          "EventBridgePublishEvents": "MockedPublishEventSuccess"
+        },
+        "AlternatePathTest": {
+          "TextractWorkflowStepFunctionCallbackSendMessage": "GenericSuccess",
+          "EventBridgePublishEvents": "GenericSuccess"
+        }
+      }
+    }
+  },
+  "MockedResponses": {
+    "MockedTextractAnalyzeDocSuccess": {
+      "0": {
+        "Return": {
+          "stage": "textract",
+          "document": {
+            "caseId": "fake-case-id-1",
+            "id": "fake-doc-id-1",
+            "selfCertifiedDocType": "passport",
+            "s3Prefix": "s3-prefix",
+            "processingType": "sync",
+            "documentWorkflow": [
+              "textract"
+            ]
+          },
+          "inferences": {
+            "textract-analyzeDoc": "analyze-doc-s3-key"
+          }
+        }
+      },
+      "1": {
+        "Return": {
+          "stage": "textract",
+          "document": {
+            "caseId": "fake-case-id-1",
+            "id": "fake-doc-id-2",
+            "selfCertifiedDocType": "passport",
+            "s3Prefix": "s3-prefix",
+            "processingType": "sync",
+            "documentWorkflow": [
+              "textract"
+            ]
+          },
+          "inferences": {
+            "textract-analyzeDoc": "analyze-doc-s3-key"
+          }
+        }
+      }
+    },
+    "PublishEventToDLQSuccess": {
+      "0": {
+        "Return": {
+          "MD50ofMessageBody": "fake-md50-sqs",
+          "MessageId": "fake-msg-id"
+        }
+      }
+    },
+    "MockedTextractAnalyzeDocThrowException": {
+      "0": {
+        "Throw": {
+          "Cause": "mocked-error-cause",
+          "Error": "States.Runtime"
+        }
+      }
+    },
+    "MockedTextractAnalyzeDocRetryWithSuccess": {
+      "0": {
+        "Throw": {
+          "Cause": "mocked-error-cause",
+          "Error": "States.Runtime"
+        }
+      },
+      "1": {
+        "Return": {
+          "stage": "textract",
+          "document": {
+            "caseId": "fake-case-id-1",
+            "id": "fake-doc-id-1",
+            "selfCertifiedDocType": "passport",
+            "s3Prefix": "s3-prefix",
+            "processingType": "sync"
+          },
+          "inferences": {
+            "textract-analyzeDoc": "analyze-doc-s3-key"
+          }
+        }
+      }
+    },
+    "MockedTextractAnalyzeIDSuccess": {
+      "0-2": {
+        "Return": {
+          "stage": "textract",
+          "document": {
+            "caseId": "fake-case-id-1",
+            "id": "fake-doc-id-1",
+            "selfCertifiedDocType": "passport",
+            "s3Prefix": "s3-prefix",
+            "processingType": "sync"
+          },
+          "inferences": {
+            "textract-analyzeDoc": {
+              "AnalyzeIDModelVersion": "fake-model-version",
+              "DocumentMetadata": {
+                "Pages": 1
+              },
+              "IdentityDocuments": [
+                {
+                  "DocumentIndex": 1,
+                  "MockedData": "fake-data"
+                },
+                {
+                  "DocumentIndex": 2,
+                  "MockedData": "fake-data"
+                }
+              ]
+            }
+          }
+        }
+      },
+      "3": {
+        "Throw": {
+          "taskToken": "fake-task-token",
+          "cause": "mocked-fake-error",
+          "error": "mocked-fake-error"
+        }
+      }
+    },
+    "MockedTextractAnalyzeExpenseSuccess": {
+      "0-2": {
+        "Return": {
+          "stage": "textract",
+          "document": {
+            "caseId": "fake-case-id-1",
+            "id": "fake-doc-id-1",
+            "selfCertifiedDocType": "passport",
+            "s3Prefix": "s3-prefix",
+            "processingType": "sync"
+          },
+          "inferences": {
+            "textract-analyzeDoc": {
+              "DocumentMetadata": {
+                "Pages": 1
+              },
+              "ExpenseDocuments": [
+                {
+                  "ExpenseIndex": 1,
+                  "MockedData": "fake-data"
+                },
+                {
+                  "ExpenseIndex": 2,
+                  "MockedData": "fake-data"
+                }
+              ]
+            }
+          }
+        }
+      },
+      "3": {
+        "Throw": {
+          "taskToken": "fake-task-token",
+          "cause": "mocked-fake-error",
+          "error": "mocked-fake-error"
+        }
+      }
+    },
+    "GenericSuccess": {
+      "0": {
+        "Return": "Success"
+      }
+    },
+    "MockedMarkCaseAsFailure": {
+      "0": {
+        "Return": {
+          "detail": {
+            "case": {
+              "id": "fake-case-id-3",
+              "status": "failure",
+              "stage": "textract",
+              "workflows": [
+                "textract"
+              ],
+              "documentList": [
+                {
+                  "stage": "textract",
+                  "document": {
+                    "caseId": "fake-case-id-1",
+                    "id": "fake-doc-id-1",
+                    "piiFlag": true,
+                    "selfCertifiedDocType": "passport",
+                    "processingType": "sync",
+                    "s3Prefix": "s3-prefix",
+                    "documentWorkflow": [
+                      "textract"
+                    ]
+                  }
+                }
+              ]
+            }
+          },
+          "error": {
+            "Error": "{}",
+            "Cause": "Mocked error MockedMarkCaseAsFailure "
+          }
+        }
+      }
+    },
+    "MockedPublishEventSuccess": {
+      "0-2": {
+        "Return": {
+          "FailedEntryCount": 0,
+          "Entries": [
+            {
+              "EventId": "fake-event-id-1"
+            }
+          ]
+        }
+      }
+    },
+    "MockedPublishEventFailure": {
+      "0": {
+        "Return": {
+          "FailedEntryCount": 1,
+          "Entries": [
+            {
+              "ErrorCode": 500,
+              "ErrorMessage": "FAKE: Internal Error",
+              "EventId": "fake-event-id-2"
+            }
+          ]
+        }
+      }
+    }
+  }
+}

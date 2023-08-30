@@ -1,0 +1,37 @@
+{
+  "Name": "multi-doc-textract-entity",
+  "WorkflowSequence": [
+    "textract",
+    "entity-standard"
+  ],
+  "MinRequiredDocuments": [
+    {
+      "DocumentType": "generic",
+      "FileTypes": [
+        ".pdf",
+        ".png",
+        ".jpeg",
+        ".jpg"
+      ],
+      "MaxSize": "5",
+      "WorkflowsToProcess": [
+        "textract"
+      ],
+      "NumDocuments": "1" 
+    },
+    {
+      "DocumentType": "receipt",
+      "FileTypes": [
+        ".pdf",
+        ".png",
+        ".jpeg",
+        ".jpg"
+      ],
+      "MaxSize": "5",
+      "WorkflowsToProcess": [
+        "entity-standard"
+      ],
+      "NumDocuments": "1"
+    }
+  ]
+}

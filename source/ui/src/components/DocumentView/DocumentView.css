@@ -1,0 +1,37 @@
+/**********************************************************************************************************************
+ *  Copyright Amazon.com, Inc. or its affiliates. All Rights Reserved.                                                *
+ *                                                                                                                    *
+ *  Licensed under the Apache License, Version 2.0 (the "License"). You may not use this file except in compliance    *
+ *  with the License. A copy of the License is located at                                                             *
+ *                                                                                                                    *
+ *      http://www.apache.org/licenses/LICENSE-2.0                                                                    *
+ *                                                                                                                    *
+ *  or in the 'license' file accompanying this file. This file is distributed on an 'AS IS' BASIS, WITHOUT WARRANTIES *
+ *  OR CONDITIONS OF ANY KIND, express or implied. See the License for the specific language governing permissions    *
+ *  and limitations under the License.                                                                                *
+ *********************************************************************************************************************/
+
+.react-tabs__tab {
+    cursor: pointer;
+}
+
+.tab-box {
+    cursor: pointer;
+    display: inline-block;
+    width: 20%;
+    padding: 10px;
+    text-align: center;
+    border: 1px solid #ccc;
+}
+
+.document-view-box {
+    padding-top: 3%;
+    padding-left: 1%;
+    padding-right: 1%;
+}
+
+.document-view-header {
+    padding-top: 1%;
+    padding-left: 20%;
+    padding-bottom: -10%;
+}

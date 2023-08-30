@@ -1,0 +1,1 @@
+FROM 'amazon/aws-stepfunctions-local'

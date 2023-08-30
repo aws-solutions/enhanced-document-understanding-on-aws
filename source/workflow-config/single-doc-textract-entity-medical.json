@@ -1,0 +1,24 @@
+{
+  "Name": "single-doc-textract-entity-medical",
+  "WorkflowSequence": [
+    "textract",
+    "entity-medical"
+  ],
+  "MinRequiredDocuments": [
+    {
+      "DocumentType": "generic",
+      "FileTypes": [
+        ".pdf",
+        ".png",
+        ".jpeg",
+        ".jpg"
+      ],
+      "MaxSize": "5",
+      "WorkflowsToProcess": [
+        "textract",
+        "entity-medical"
+      ],
+      "NumDocuments": "1" 
+    }
+  ]
+}

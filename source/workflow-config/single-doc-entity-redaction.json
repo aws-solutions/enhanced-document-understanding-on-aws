@@ -1,0 +1,26 @@
+{
+    "Name": "single-doc-entity-detection",
+    "WorkflowSequence": [
+        "textract",
+        "entity-standard",
+        "redaction"
+    ],
+    "MinRequiredDocuments": [
+        {
+            "DocumentType": "generic",
+            "FileTypes": [
+                ".pdf",
+                ".png",
+                ".jpeg",
+                ".jpg"
+            ],
+            "MaxSize": "5",
+            "WorkflowsToProcess": [
+                "textract",
+                "entity-standard",
+                "redaction"
+            ],
+            "NumDocuments": "1"
+        }
+    ]
+}

@@ -1,0 +1,89 @@
+/**********************************************************************************************************************
+ *  Copyright Amazon.com, Inc. or its affiliates. All Rights Reserved.                                                *
+ *                                                                                                                    *
+ *  Licensed under the Apache License, Version 2.0 (the "License"). You may not use this file except in compliance    *
+ *  with the License. A copy of the License is located at                                                             *
+ *                                                                                                                    *
+ *      http://www.apache.org/licenses/LICENSE-2.0                                                                    *
+ *                                                                                                                    *
+ *  or in the 'license' file accompanying this file. This file is distributed on an 'AS IS' BASIS, WITHOUT WARRANTIES *
+ *  OR CONDITIONS OF ANY KIND, express or implied. See the License for the specific language governing permissions    *
+ *  and limitations under the License.                                                                                *
+ *********************************************************************************************************************/
+
+.pdf-viewer {
+    position: relative;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    /* overflow-y: scroll; */
+
+    flex: 1 1 0px;
+    overflow: hidden;
+    overflow-y: auto;
+}
+
+.box-highlight, .kv-key {
+    position: absolute;
+    display: block;
+    background-color: rgba(#fee385, 0.5);
+    box-shadow: 0 0 0 2px #f6761d;
+    box-sizing: content-box;
+    /* transition: all 1000ms 1000ms linear; */
+    transition-property: background-color, box-shadow;
+    mix-blend-mode: multiply;
+}
+
+.box-highlightPREVIEW_REDACTION_ON {
+    position: absolute;
+    display: block;
+    background-color:#000000;
+    box-shadow: 0 0 0 2px #000000;
+    box-sizing: content-box;
+    /* transition: all 1000ms 1000ms linear; */
+    transition-property: background-color, box-shadow;
+    mix-blend-mode: multiply;
+}
+
+.kv-value{
+    position: absolute;
+    display: block;
+    background-color: rgba(#0095ff, 0.5);
+    box-shadow: 0 0 0 2px #0095ff;
+    box-sizing: content-box;
+    transition: none;
+    transition-property: background-color, box-shadow;
+    mix-blend-mode: multiply;
+}
+
+.document {
+    flex: 1;
+    display: flex;
+    flex-direction: column;
+  }
+
+.canvas-wrapper {
+    flex: 1 1 0px;
+    flex-direction: column;
+    overflow: hidden;
+    overflow-y: auto;
+    align-items: center;
+}
+
+.canvas {
+    box-shadow: 0 2px 10px rgba(color(gray, 80), 0.1);
+    position: relative;
+    display: flex;
+    flex: 1;
+    font-size: 0;
+    align-self: center;
+    justify-content: center;
+}
+
+.cellHighlight {
+    position: absolute;
+    display: block;
+    background: transparent;
+    box-shadow: 0 0 0 0.5px #0000;
+    pointer-events: none;
+}
