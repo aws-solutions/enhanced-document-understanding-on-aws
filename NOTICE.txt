@@ -1,0 +1,124 @@
+Enhanced Document Understanding on AWS
+
+Copyright Amazon.com, Inc. or its affiliates. All Rights Reserved.
+Licensed under the Apache License Version 2.0 (the "License"). You may not use this file except
+in compliance with the License. A copy of the License is located at http://www.apache.org/licenses/
+or in the "license" file accompanying this file. This file is distributed on an "AS IS" BASIS,
+WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, express or implied. See the License for the
+specific language governing permissions and limitations under the License.
+
+**********************
+THIRD PARTY COMPONENTS
+**********************
+This software includes third party software subject to the following copyrights:
+
+@aws-amplify/ui-react                                    Apache-2.0
+@aws-cdk/aws-servicecatalogappregistry-alpha             Apache-2.0
+@aws-sdk/client-sfn                                      Apache-2.0
+@aws-sdk/util-arn-parser                                 Apache-2.0
+@aws-solutions-constructs/aws-apigateway-lambda          Apache-2.0
+@aws-solutions-constructs/aws-cloudfront-s3              Apache-2.0
+@aws-solutions-constructs/aws-eventbridge-lambda         Apache-2.0
+@aws-solutions-constructs/aws-eventbridge-stepfunctions  Apache-2.0
+@aws-solutions-constructs/aws-lambda-dynamodb            Apache-2.0
+@aws-solutions-constructs/aws-lambda-s3                  Apache-2.0
+@aws-solutions-constructs/aws-lambda-sns                 Apache-2.0
+@aws-solutions-constructs/aws-lambda-stepfunctions       Apache-2.0
+@aws-solutions-constructs/aws-sns-sqs                    Apache-2.0
+@aws-solutions-constructs/aws-sqs-lambda                 Apache-2.0
+@aws-solutions-constructs/aws-wafwebacl-apigateway       Apache-2.0
+@aws-solutions-constructs/core                           Apache-2.0
+@cloudscape-design/components                            Apache-2.0
+@cloudscape-design/design-tokens                         Apache-2.0
+@cloudscape-design/global-styles                         Apache-2.0
+@cloudscape-design/jest-preset                           Apache-2.0
+@tanstack/react-table                                    MIT
+@testing-library/jest-dom                                MIT
+@testing-library/react                                   MIT
+@testing-library/user-event                              MIT
+@types/dockerode                                         Apache-2.0
+@types/jest                                              MIT
+@types/mock-fs                                           MIT
+@types/node                                              MIT
+@types/npmlog                                            MIT
+@types/prettier                                          MIT
+@types/react-pdf                                         MIT
+@types/uuid                                              MIT
+@typescript-eslint/eslint-plugin                         MIT
+@typescript-eslint/parser                                BSD-2-Clause
+attrs                                                    MIT 
+aws-amplify                                              Apache-2.0
+aws-cdk-lib                                              Apache-2.0
+aws-lambda-powertools                                    MIT
+aws-sdk                                                  Apache-2.0
+aws-sdk-client-mock                                      MIT
+aws-sdk-mock                                             Apache-2.0
+aws-xray-sdk                                             Apache-2.0
+awscli                                                   Apache-2.0 
+babel-jest                                               MIT
+bootstrap                                                MIT
+boto3                                                    Apache-2.0
+botocore                                                 Apache-2.0
+cdk-nag                                                  Apache-2.0
+colorama                                                 BSD-3-Clause 
+com.amazonaws>>aws-lambda-java-events                    Apache-2.0
+com.drewnoakes>>metadata-extractor                       Apache-2.0
+com.google.code.gson>>gson                               Apache-2.0
+constructs                                               Apache-2.0
+coverage                                                 Apache-2.0 
+dayjs                                                    MIT
+docutils                                                 BSD License
+eslint                                                   MIT
+exceptiongroup                                           MIT 
+freezegun                                                Apache-2.0
+identity-obj-proxy                                       MIT
+iniconfig                                                MIT 
+jest                                                     MIT
+jmespath                                                 MIT 
+jwt-decode                                               MIT
+lodash                                                   MIT
+mock                                                     BSD License
+mock-fs                                                  MIT
+moto                                                     Apache-2.0
+npmlog                                                   ISC
+org.apache.pdfbox>>pdfbox                                Apache-2.0
+org.jacoco>>org.jacoco.report                            EPL 2.0
+org.junit.jupiter>>junit-jupiter-engine                  EPL 2.0
+org.mockito>>mockito-inline                              MIT
+pdf-lib                                                  MIT
+pdfjs-dist                                               Apache-2.0
+pluggy                                                   MIT 
+portfinder                                               MIT
+prettier                                                 MIT
+pyasn1                                                   BSD-2-Clause 
+pytest                                                   MIT
+pytest-cov                                               MIT
+pytest-env                                               MIT
+python-dateutil                                          Apache-2.0 
+PyYAML                                                   MIT
+ramda                                                    MIT
+react                                                    MIT
+react-bootstrap                                          MIT
+react-dom                                                MIT
+react-pdf                                                MIT
+react-router-dom                                         MIT
+react-scripts                                            MIT
+react-tabs                                               MIT
+rsa                                                      Apache-2.0 
+s3transfer                                               Apache-2.0 
+setuptools                                               MIT
+software.amazon.awssdk>>cloudwatch                       Apache-2.0
+software.amazon.awssdk>>s3                               Apache-2.0
+software.amazon.awssdk>>sfn                              Apache-2.0
+software.amazon.lambda>>powertools-logging               Apache-2.0
+software.amazon.lambda>>powertools-tracing               Apache-2.0
+source-map-support                                       MIT
+testcontainers                                           MIT
+tomli                                                    MIT 
+ts-jest                                                  MIT
+ts-node                                                  MIT
+typescript                                               Apache-2.0
+uk.org.webcompere>>system-stubs-core                     MIT
+uk.org.webcompere>>system-stubs-jupiter                  MIT
+uuid                                                     MIT
+wrapt                                                    BSD License

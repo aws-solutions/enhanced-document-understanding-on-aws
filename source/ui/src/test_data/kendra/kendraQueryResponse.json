@@ -1,0 +1,101 @@
+{
+    "FacetResults": [],
+    "QueryId": "7b989798-a09e-4dae-8235-400d0edba37d",
+    "ResultItems": [
+        {
+            "AdditionalAttributes": [],
+            "DocumentAttributes": [
+                {
+                    "Key": "_excerpt_page_number",
+                    "Value": {
+                        "LongValue": 1
+                    }
+                }
+            ],
+            "DocumentExcerpt": {
+                "Highlights": [
+                    {
+                        "BeginOffset": 36,
+                        "EndOffset": 44,
+                        "TopAnswer": false,
+                        "Type": "STANDARD"
+                    },
+                    {
+                        "BeginOffset": 113,
+                        "EndOffset": 121,
+                        "TopAnswer": false,
+                        "Type": "STANDARD"
+                    },
+                    {
+                        "BeginOffset": 181,
+                        "EndOffset": 189,
+                        "TopAnswer": false,
+                        "Type": "STANDARD"
+                    }
+                ],
+                "Text": "...niddk.nih.gov/health-information/diabetes/overview/insulin-medicines-treatments\n\n\nInsulin, Medicines, & Other Diabetes\nTreatments\nOn this page:\n\n\nWhat medicines might I take for diabetes?\n\n\nWhat are the di!erent types of insulin?\n\n\nWhat are the di!erent ways to take insulin?\n\n\nWhat oral medicines..."
+            },
+            "DocumentId": "doc-8613454d-537e-4d20-bd96-300890584d20",
+            "DocumentTitle": {
+                "Highlights": [],
+                "Text": "doc-8613454d-537e-4d20-bd96-300890584d20"
+            },
+            "DocumentURI": "",
+            "FeedbackToken": "AYADeL2N5rkULpqmXbvPcSZdCswAXwABABVhd3MtY3J5cHRvLXB1YmxpYy1rZXkAREFza2FZWXN1SHJKL2tzVG5GTU80aW1OOElqdE0yVmhURkI1VTBPWklmZmlwNGFrSTY0MmM5N1ZDQmN0SlQ5SVB2dz09AAEAB2F3cy1rbXMAS2Fybjphd3M6a21zOnVzLXdlc3QtMjoxNDk0MDA5NDM5NTk6a2V5LzUyN2YwMjRhLTUyMDktNDI4NC1iOTYwLTJhMjYxMzQxNWNkNgC4AQIBAHjrAD4cTTr5UnHIMrKClONXQOiVPndspUgnTPlJ4Tow7QEcfg6iNd7Ouv3Ir9Ix9jwBAAAAfjB8BgkqhkiG9w0BBwagbzBtAgEAMGgGCSqGSIb3DQEHATAeBglghkgBZQMEAS4wEQQMJtAAw3Drlv1FD0auAgEQgDs4W4o_M9Ja0E6hq9rlF42jTTfPD1OixpSss11HLGLEKhCcPzDYavCEyZMfFy7Y8nm0dYm5ZiBZz24QKQIAAAAADAAAEAAAAAAAAAAAAAAAAABsP4o2WTGIekWeLjnY6FiL_____wAAAAEAAAAAAAAAAAAAAAEAAAF2NwBH5tW9VVxOoRS6IxCWWc05gUPO_eZivXd8EA9MEIsv8KU4UKTldiAj-nHX2x39wlluNGLKXvk3NKeyRQTHE1yXRsVIa7F5-JKFfbcPkVPfiQgLakliAOapZGhizEMr-605sYQICiuLOuaKz9CHdKE85GKVH5sE-itnBD87sKWVnpkRH2OcZtFyKuOcb1dhMfK5zKGKj7FzAFedAIgCf2uawYn_ZUGYw4sR87SUpwi75QDQ1E50YzwSdsuJBv3v3wZ9LsHiwgCvzl4oIZMd1JIwRXtHIIFP1OF77bAUmwTvpwQmwF97SNMz3IibjR9ZmhqUXm9MRzlaCxc0eoapG_Iqwd9u1Ua-c02N4sluHinRXiQOcABgvTPFwXqvOgOtlDcY5S8A7jEngIDiqvzlmLjFRuFIOoRQLEHmQG5sjVl6mDtMwtHt7GYoPiwUYmgWUqiebl5vdMs4Pe1y9gKcLZY9vbE6A_AE9xkgkWhswHfT1MpcLaNz1pYpip3fMvshrsSHIKrOAGcwZQIwTc-Rc0dcUdIVqZea3dY0ZSb1H0zSNtrcggqcZBIFgSCYx_g4NP8U9BT07N3eBy97AjEAhmtZpU6U2dOxrV3R1qhQxRZFw_dGhgDkVEbvETqQBaJ2NNIEhu6wapymhHknHqrC.7b989798-a09e-4dae-8235-400d0edba37d-39094317-3dc6-4070-9c28-09d26df5aee3",
+            "Format": "TEXT",
+            "Id": "7b989798-a09e-4dae-8235-400d0edba37d-39094317-3dc6-4070-9c28-09d26df5aee3",
+            "ScoreAttributes": {
+                "ScoreConfidence": "MEDIUM"
+            },
+            "Type": "DOCUMENT"
+        },
+        {
+            "AdditionalAttributes": [],
+            "DocumentAttributes": [
+                {
+                    "Key": "_excerpt_page_number2",
+                    "Value": {
+                        "LongValue": 1
+                    }
+                }
+            ],
+            "DocumentExcerpt": {
+                "Highlights": [
+                    {
+                        "BeginOffset": 45,
+                        "EndOffset": 53,
+                        "TopAnswer": false,
+                        "Type": "STANDARD"
+                    },
+                    {
+                        "BeginOffset": 113,
+                        "EndOffset": 121,
+                        "TopAnswer": false,
+                        "Type": "STANDARD"
+                    },
+                    {
+                        "BeginOffset": 181,
+                        "EndOffset": 189,
+                        "TopAnswer": false,
+                        "Type": "STANDARD"
+                    }
+                ],
+                "Text": "...niddk.nih.gov/health-information/diabetes/overview/insulin-medicines-treatments\n\n\nInsulin, Medicines, & Other Diabetes\nTreatments\nOn this page:\n\n\nWhat medicines might I take for diabetes?\n\n\nWhat are the di!erent types of insulin?\n\n\nWhat are the di!erent ways to take insulin?\n\n\nWhat oral medicines..."
+            },
+            "DocumentId": "doc-cadec9c3-ea09-4157-a916-36532565dd12",
+            "DocumentTitle": {
+                "Highlights": [],
+                "Text": "doc-cadec9c3-ea09-4157-a916-36532565dd12"
+            },
+            "DocumentURI": "",
+            "FeedbackToken": "AYADeL2N5rkULpqmXbvQcSZdCswAXwABABVhd3MtY3J5cHRvLXB1YmxpYy1rZXkAREFza2FZWXN1SHJKL2tzVG5GTU80aW1OOElqdE0yVmhURkI1VTBPWklmZmlwNGFrSTY0MmM5N1ZDQmN0SlQ5SVB2dz09AAEAB2F3cy1rbXMAS2Fybjphd3M6a21zOnVzLXdlc3QtMjoxNDk0MDA5NDM5NTk6a2V5LzUyN2YwMjRhLTUyMDktNDI4NC1iOTYwLTJhMjYxMzQxNWNkNgC4AQIBAHjrAD4cTTr5UnHIMrKClONXQOiVPndspUgnTPlJ4Tow7QEcfg6iNd7Ouv3Ir9Ix9jwBAAAAfjB8BgkqhkiG9w0BBwagbzBtAgEAMGgGCSqGSIb3DQEHATAeBglghkgBZQMEAS4wEQQMJtAAw3Drlv1FD0auAgEQgDs4W4o_M9Ja0E6hq9rlF42jTTfPD1OixpSss11HLGLEKhCcPzDYavCEyZMfFy7Y8nm0dYm5ZiBZz24QKQIAAAAADAAAEAAAAAAAAAAAAAAAAABsP4o2WTGIekWeLjnY6FiL_____wAAAAEAAAAAAAAAAAAAAAEAAAF2NwBH5tW9VVxOoRS6IxCWWc05gUPO_eZivXd8EA9MEIsv8KU4UKTldiAj-nHX2x39wlluNGLKXvk3NKeyRQTHE1yXRsVIa7F5-JKFfbcPkVPfiQgLakliAOapZGhizEMr-605sYQICiuLOuaKz9CHdKE85GKVH5sE-itnBD87sKWVnpkRH2OcZtFyKuOcb1dhMfK5zKGKj7FzAFedAIgCf2uawYn_ZUGYw4sR87SUpwi75QDQ1E50YzwSdsuJBv3v3wZ9LsHiwgCvzl4oIZMd1JIwRXtHIIFP1OF77bAUmwTvpwQmwF97SNMz3IibjR9ZmhqUXm9MRzlaCxc0eoapG_Iqwd9u1Ua-c02N4sluHinRXiQOcABgvTPFwXqvOgOtlDcY5S8A7jEngIDiqvzlmLjFRuFIOoRQLEHmQG5sjVl6mDtMwtHt7GYoPiwUYmgWUqiebl5vdMs4Pe1y9gKcLZY9vbE6A_AE9xkgkWhswHfT1MpcLaNz1pYpip3fMvshrsSHIKrOAGcwZQIwTc-Rc0dcUdIVqZea3dY0ZSb1H0zSNtrcggqcZBIFgSCYx_g4NP8U9BT07N3eBy97AjEAhmtZpU6U2dOxrV3R1qhQxRZFw_dGhgDkVEbvETqQBaJ2NNIEhu6wapymhHknHqrC.7b989798-a09e-4dae-8235-400d0edba37d-39094317-3dc6-4070-9c28-09d26df5aee3",
+            "Format": "TEXT",
+            "Id": "7d989798-a09e-4dae-8235-400d0edba37d-39094317-3dc6-4070-9c28-09d26df5aee3",
+            "ScoreAttributes": {
+                "ScoreConfidence": "MEDIUM"
+            },
+            "Type": "DOCUMENT"
+        }
+    ],
+    "TotalNumberOfResults": 1
+}

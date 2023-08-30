@@ -1,0 +1,23 @@
+{
+    "phrases": [
+        {
+            "text": "to blenders Seattle",
+            "pages": [
+                1,
+                2
+            ]
+        },
+        {
+            "text": "Seattle",
+            "pages": [
+                1
+            ]
+        },
+        {
+            "text": "not a phrase",
+            "pages": [
+                1
+            ]
+        }
+    ]
+}

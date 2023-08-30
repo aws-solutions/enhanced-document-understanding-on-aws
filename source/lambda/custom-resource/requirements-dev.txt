@@ -1,0 +1,11 @@
+pytest-cov==4.1.0
+pytest-env==0.8.2
+moto==4.1.14
+pytest==7.4.0
+botocore
+mock==5.1.0
+setuptools==68.0.0
+freezegun==1.2.2
+PyYAML
+-e ../layers/custom_boto3_init
+-r ../layers/aws_boto3/requirements.txt

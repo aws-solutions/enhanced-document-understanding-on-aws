@@ -1,0 +1,1407 @@
+{
+    "results": [
+        {
+            "Page": 1,
+            "Entities": [
+                {
+                    "Score": 0.8919363021850586,
+                    "Type": "DATE",
+                    "Text": "10/23/20, 3:28 PM",
+                    "BeginOffset": 54,
+                    "EndOffset": 71
+                },
+                {
+                    "Score": 0.8900869488716125,
+                    "Type": "OTHER",
+                    "Text": "type 2",
+                    "BeginOffset": 288,
+                    "EndOffset": 294
+                },
+                {
+                    "Score": 0.9038220047950745,
+                    "Type": "OTHER",
+                    "Text": "type 2",
+                    "BeginOffset": 343,
+                    "EndOffset": 349
+                },
+                {
+                    "Score": 0.7336651086807251,
+                    "Type": "OTHER",
+                    "Text": "Type 1",
+                    "BeginOffset": 1030,
+                    "EndOffset": 1036
+                },
+                {
+                    "Score": 0.5598312616348267,
+                    "Type": "OTHER",
+                    "Text": "type",
+                    "BeginOffset": 1058,
+                    "EndOffset": 1062
+                },
+                {
+                    "Score": 0.9994651675224304,
+                    "Type": "ORGANIZATION",
+                    "Text": "National Institute of Diabetes and Digestive and Kidney Diseases",
+                    "BeginOffset": 1327,
+                    "EndOffset": 1391
+                },
+                {
+                    "Score": 0.9910317659378052,
+                    "Type": "ORGANIZATION",
+                    "Text": "NIDDK",
+                    "BeginOffset": 1393,
+                    "EndOffset": 1398
+                },
+                {
+                    "Score": 0.9949480891227722,
+                    "Type": "ORGANIZATION",
+                    "Text": "U.S. Government",
+                    "BeginOffset": 1479,
+                    "EndOffset": 1494
+                },
+                {
+                    "Score": 0.9977951049804688,
+                    "Type": "ORGANIZATION",
+                    "Text": "HHS",
+                    "BeginOffset": 1496,
+                    "EndOffset": 1499
+                },
+                {
+                    "Score": 0.9990106821060181,
+                    "Type": "ORGANIZATION",
+                    "Text": "NIH",
+                    "BeginOffset": 1501,
+                    "EndOffset": 1504
+                },
+                {
+                    "Score": 0.9037812948226929,
+                    "Type": "ORGANIZATION",
+                    "Text": "NIDDK",
+                    "BeginOffset": 1509,
+                    "EndOffset": 1514
+                },
+                {
+                    "Score": 0.9924692511558533,
+                    "Type": "OTHER",
+                    "Text": "https://www.niddk.nih.gov/health-information/diabetes/overview/insulin-medicines-treatments",
+                    "BeginOffset": 1516,
+                    "EndOffset": 1607
+                },
+                {
+                    "Score": 0.8226835131645203,
+                    "Type": "QUANTITY",
+                    "Text": "Page 1",
+                    "BeginOffset": 1608,
+                    "EndOffset": 1614
+                },
+                {
+                    "Score": 0.8660756349563599,
+                    "Type": "QUANTITY",
+                    "Text": "10",
+                    "BeginOffset": 1618,
+                    "EndOffset": 1620
+                }
+            ]
+        },
+        {
+            "Page": 2,
+            "Entities": [
+                {
+                    "Score": 0.9485940337181091,
+                    "Type": "DATE",
+                    "Text": "10/23/20, 3:28 PM",
+                    "BeginOffset": 54,
+                    "EndOffset": 71
+                },
+                { "Score": 0.5639591813087463, "Type": "OTHER", "Text": "Type", "BeginOffset": 72, "EndOffset": 76 },
+                {
+                    "Score": 0.7960730195045471,
+                    "Type": "OTHER",
+                    "Text": "type 2",
+                    "BeginOffset": 105,
+                    "EndOffset": 111
+                },
+                {
+                    "Score": 0.8712689876556396,
+                    "Type": "OTHER",
+                    "Text": "type 2",
+                    "BeginOffset": 228,
+                    "EndOffset": 234
+                },
+                {
+                    "Score": 0.9063174724578857,
+                    "Type": "QUANTITY",
+                    "Text": "more than one diabetes medicine",
+                    "BeginOffset": 400,
+                    "EndOffset": 431
+                },
+                {
+                    "Score": 0.9870350956916809,
+                    "Type": "QUANTITY",
+                    "Text": "first",
+                    "BeginOffset": 652,
+                    "EndOffset": 657
+                },
+                {
+                    "Score": 0.9794559478759766,
+                    "Type": "QUANTITY",
+                    "Text": "Each type",
+                    "BeginOffset": 1418,
+                    "EndOffset": 1427
+                },
+                {
+                    "Score": 0.9184675216674805,
+                    "Type": "QUANTITY",
+                    "Text": "About 15 minutes",
+                    "BeginOffset": 1833,
+                    "EndOffset": 1849
+                },
+                {
+                    "Score": 0.9978331327438354,
+                    "Type": "QUANTITY",
+                    "Text": "1 hour",
+                    "BeginOffset": 1869,
+                    "EndOffset": 1875
+                },
+                {
+                    "Score": 0.9887447357177734,
+                    "Type": "QUANTITY",
+                    "Text": "2",
+                    "BeginOffset": 1876,
+                    "EndOffset": 1877
+                },
+                {
+                    "Score": 0.9918981790542603,
+                    "Type": "QUANTITY",
+                    "Text": "4 hours",
+                    "BeginOffset": 1881,
+                    "EndOffset": 1888
+                },
+                {
+                    "Score": 0.9913085699081421,
+                    "Type": "QUANTITY",
+                    "Text": "30 minutes",
+                    "BeginOffset": 1925,
+                    "EndOffset": 1935
+                },
+                {
+                    "Score": 0.9595391750335693,
+                    "Type": "QUANTITY",
+                    "Text": "2",
+                    "BeginOffset": 1942,
+                    "EndOffset": 1943
+                },
+                { "Score": 0.941055178642273, "Type": "QUANTITY", "Text": "3", "BeginOffset": 1947, "EndOffset": 1948 },
+                {
+                    "Score": 0.9909900426864624,
+                    "Type": "QUANTITY",
+                    "Text": "3",
+                    "BeginOffset": 1949,
+                    "EndOffset": 1950
+                },
+                {
+                    "Score": 0.9830698370933533,
+                    "Type": "QUANTITY",
+                    "Text": "6 hours",
+                    "BeginOffset": 1954,
+                    "EndOffset": 1961
+                },
+                {
+                    "Score": 0.9844021797180176,
+                    "Type": "QUANTITY",
+                    "Text": "2",
+                    "BeginOffset": 1993,
+                    "EndOffset": 1994
+                },
+                {
+                    "Score": 0.9674264788627625,
+                    "Type": "QUANTITY",
+                    "Text": "4 hours",
+                    "BeginOffset": 1998,
+                    "EndOffset": 2005
+                },
+                { "Score": 0.959689199924469, "Type": "QUANTITY", "Text": "4", "BeginOffset": 2012, "EndOffset": 2013 },
+                {
+                    "Score": 0.9487652778625488,
+                    "Type": "QUANTITY",
+                    "Text": "12",
+                    "BeginOffset": 2017,
+                    "EndOffset": 2019
+                },
+                {
+                    "Score": 0.9908434152603149,
+                    "Type": "OTHER",
+                    "Text": "https://www.niddk.nih.gov/health-information/diabetes/overview/insulin-medicines-treatments",
+                    "BeginOffset": 2020,
+                    "EndOffset": 2111
+                },
+                {
+                    "Score": 0.9585963487625122,
+                    "Type": "QUANTITY",
+                    "Text": "Page 2",
+                    "BeginOffset": 2112,
+                    "EndOffset": 2118
+                },
+                {
+                    "Score": 0.6214289665222168,
+                    "Type": "QUANTITY",
+                    "Text": "10",
+                    "BeginOffset": 2122,
+                    "EndOffset": 2124
+                },
+                {
+                    "Score": 0.9993358850479126,
+                    "Type": "ORGANIZATION",
+                    "Text": "National Institute of Diabetes and Digestive and Kidney Diseases",
+                    "BeginOffset": 2133,
+                    "EndOffset": 2197
+                },
+                {
+                    "Score": 0.9871048927307129,
+                    "Type": "ORGANIZATION",
+                    "Text": "NIDDK",
+                    "BeginOffset": 2199,
+                    "EndOffset": 2204
+                },
+                {
+                    "Score": 0.9736790060997009,
+                    "Type": "ORGANIZATION",
+                    "Text": "U.S. Government",
+                    "BeginOffset": 2285,
+                    "EndOffset": 2300
+                },
+                {
+                    "Score": 0.9805117249488831,
+                    "Type": "ORGANIZATION",
+                    "Text": "HHS",
+                    "BeginOffset": 2302,
+                    "EndOffset": 2305
+                },
+                {
+                    "Score": 0.9952621459960938,
+                    "Type": "ORGANIZATION",
+                    "Text": "NIH",
+                    "BeginOffset": 2307,
+                    "EndOffset": 2310
+                },
+                {
+                    "Score": 0.8874284029006958,
+                    "Type": "ORGANIZATION",
+                    "Text": "NIDDK",
+                    "BeginOffset": 2315,
+                    "EndOffset": 2320
+                }
+            ]
+        },
+        {
+            "Page": 3,
+            "Entities": [
+                {
+                    "Score": 0.9774267077445984,
+                    "Type": "DATE",
+                    "Text": "10/23/20, 3:28 PM",
+                    "BeginOffset": 54,
+                    "EndOffset": 71
+                },
+                { "Score": 0.9826971888542175, "Type": "QUANTITY", "Text": "12", "BeginOffset": 108, "EndOffset": 110 },
+                {
+                    "Score": 0.9934012293815613,
+                    "Type": "QUANTITY",
+                    "Text": "18 hours",
+                    "BeginOffset": 114,
+                    "EndOffset": 122
+                },
+                {
+                    "Score": 0.9479162096977234,
+                    "Type": "QUANTITY",
+                    "Text": "Several hours",
+                    "BeginOffset": 123,
+                    "EndOffset": 136
+                },
+                {
+                    "Score": 0.9922852516174316,
+                    "Type": "QUANTITY",
+                    "Text": "24 hours",
+                    "BeginOffset": 152,
+                    "EndOffset": 160
+                },
+                {
+                    "Score": 0.998759388923645,
+                    "Type": "ORGANIZATION",
+                    "Text": "American Diabetes Association",
+                    "BeginOffset": 230,
+                    "EndOffset": 259
+                },
+                { "Score": 0.999485969543457, "Type": "DATE", "Text": "2015", "BeginOffset": 281, "EndOffset": 285 },
+                {
+                    "Score": 0.9996793866157532,
+                    "Type": "DATE",
+                    "Text": "August 25, 2016",
+                    "BeginOffset": 296,
+                    "EndOffset": 311
+                },
+                {
+                    "Score": 0.9875597953796387,
+                    "Type": "QUANTITY",
+                    "Text": "two types",
+                    "BeginOffset": 480,
+                    "EndOffset": 489
+                },
+                {
+                    "Score": 0.7206834554672241,
+                    "Type": "QUANTITY",
+                    "Text": "insulin",
+                    "BeginOffset": 493,
+                    "EndOffset": 500
+                },
+                {
+                    "Score": 0.9965131878852844,
+                    "Type": "QUANTITY",
+                    "Text": "two",
+                    "BeginOffset": 1467,
+                    "EndOffset": 1470
+                },
+                {
+                    "Score": 0.8728162050247192,
+                    "Type": "QUANTITY",
+                    "Text": "four shots a day",
+                    "BeginOffset": 1474,
+                    "EndOffset": 1490
+                },
+                {
+                    "Score": 0.839495837688446,
+                    "Type": "QUANTITY",
+                    "Text": "single shot",
+                    "BeginOffset": 1547,
+                    "EndOffset": 1558
+                },
+                {
+                    "Score": 0.999367356300354,
+                    "Type": "ORGANIZATION",
+                    "Text": "National Institute of Diabetes and Digestive and Kidney Diseases",
+                    "BeginOffset": 1568,
+                    "EndOffset": 1632
+                },
+                {
+                    "Score": 0.9872755408287048,
+                    "Type": "ORGANIZATION",
+                    "Text": "NIDDK",
+                    "BeginOffset": 1634,
+                    "EndOffset": 1639
+                },
+                {
+                    "Score": 0.9960294365882874,
+                    "Type": "ORGANIZATION",
+                    "Text": "U.S. Government",
+                    "BeginOffset": 1720,
+                    "EndOffset": 1735
+                },
+                {
+                    "Score": 0.9990749359130859,
+                    "Type": "ORGANIZATION",
+                    "Text": "HHS",
+                    "BeginOffset": 1737,
+                    "EndOffset": 1740
+                },
+                {
+                    "Score": 0.9985789060592651,
+                    "Type": "ORGANIZATION",
+                    "Text": "NIH",
+                    "BeginOffset": 1742,
+                    "EndOffset": 1745
+                },
+                {
+                    "Score": 0.99857497215271,
+                    "Type": "ORGANIZATION",
+                    "Text": "NIDDK",
+                    "BeginOffset": 1750,
+                    "EndOffset": 1755
+                },
+                {
+                    "Score": 0.9880654215812683,
+                    "Type": "OTHER",
+                    "Text": "https://www.niddk.nih.gov/health-information/diabetes/overview/insulin-medicines-treatments",
+                    "BeginOffset": 1757,
+                    "EndOffset": 1848
+                },
+                {
+                    "Score": 0.9366570115089417,
+                    "Type": "QUANTITY",
+                    "Text": "Page 3",
+                    "BeginOffset": 1849,
+                    "EndOffset": 1855
+                },
+                { "Score": 0.512438178062439, "Type": "QUANTITY", "Text": "10", "BeginOffset": 1859, "EndOffset": 1861 }
+            ]
+        },
+        {
+            "Page": 4,
+            "Entities": [
+                {
+                    "Score": 0.7483953237533569,
+                    "Type": "TITLE",
+                    "Text": "Medicines, & Other Diabetes Treatments",
+                    "BeginOffset": 9,
+                    "EndOffset": 47
+                },
+                {
+                    "Score": 0.5062291622161865,
+                    "Type": "ORGANIZATION",
+                    "Text": "NIDDK",
+                    "BeginOffset": 50,
+                    "EndOffset": 55
+                },
+                { "Score": 0.974824070930481, "Type": "DATE", "Text": "10/23/20", "BeginOffset": 56, "EndOffset": 64 },
+                { "Score": 0.7870502471923828, "Type": "DATE", "Text": "3:28 PM", "BeginOffset": 66, "EndOffset": 73 },
+                {
+                    "Score": 0.9992393851280212,
+                    "Type": "ORGANIZATION",
+                    "Text": "National Institute of Diabetes and Digestive and Kidney Diseases",
+                    "BeginOffset": 493,
+                    "EndOffset": 557
+                },
+                {
+                    "Score": 0.9880945086479187,
+                    "Type": "ORGANIZATION",
+                    "Text": "NIDDK",
+                    "BeginOffset": 559,
+                    "EndOffset": 564
+                },
+                {
+                    "Score": 0.9975388646125793,
+                    "Type": "ORGANIZATION",
+                    "Text": "U.S. Government",
+                    "BeginOffset": 645,
+                    "EndOffset": 660
+                },
+                {
+                    "Score": 0.9965723752975464,
+                    "Type": "ORGANIZATION",
+                    "Text": "HHS",
+                    "BeginOffset": 662,
+                    "EndOffset": 665
+                },
+                {
+                    "Score": 0.9979616403579712,
+                    "Type": "ORGANIZATION",
+                    "Text": "NIH",
+                    "BeginOffset": 667,
+                    "EndOffset": 670
+                },
+                {
+                    "Score": 0.9464728832244873,
+                    "Type": "ORGANIZATION",
+                    "Text": "NIDDK",
+                    "BeginOffset": 675,
+                    "EndOffset": 680
+                },
+                {
+                    "Score": 0.9835582375526428,
+                    "Type": "OTHER",
+                    "Text": "https://www.niddk.nih.gov/health-information/diabetes/overview/insulin-medicines-treatments",
+                    "BeginOffset": 682,
+                    "EndOffset": 773
+                },
+                {
+                    "Score": 0.7867572903633118,
+                    "Type": "QUANTITY",
+                    "Text": "Page 4",
+                    "BeginOffset": 774,
+                    "EndOffset": 780
+                },
+                { "Score": 0.7648142576217651, "Type": "QUANTITY", "Text": "10", "BeginOffset": 784, "EndOffset": 786 }
+            ]
+        },
+        {
+            "Page": 5,
+            "Entities": [
+                {
+                    "Score": 0.6528478264808655,
+                    "Type": "ORGANIZATION",
+                    "Text": "NIDDK",
+                    "BeginOffset": 48,
+                    "EndOffset": 53
+                },
+                {
+                    "Score": 0.8130210638046265,
+                    "Type": "DATE",
+                    "Text": "10/23/20, 3:28 PM",
+                    "BeginOffset": 54,
+                    "EndOffset": 71
+                },
+                {
+                    "Score": 0.9402298927307129,
+                    "Type": "QUANTITY",
+                    "Text": "one type of pump",
+                    "BeginOffset": 238,
+                    "EndOffset": 254
+                },
+                {
+                    "Score": 0.8095676302909851,
+                    "Type": "QUANTITY",
+                    "Text": "days",
+                    "BeginOffset": 455,
+                    "EndOffset": 459
+                },
+                {
+                    "Score": 0.9737730622291565,
+                    "Type": "QUANTITY",
+                    "Text": "24 hours a day",
+                    "BeginOffset": 529,
+                    "EndOffset": 543
+                },
+                {
+                    "Score": 0.9990334510803223,
+                    "Type": "ORGANIZATION",
+                    "Text": "National Institute of Diabetes and Digestive and Kidney Diseases",
+                    "BeginOffset": 727,
+                    "EndOffset": 791
+                },
+                {
+                    "Score": 0.9882404804229736,
+                    "Type": "ORGANIZATION",
+                    "Text": "NIDDK",
+                    "BeginOffset": 793,
+                    "EndOffset": 798
+                },
+                {
+                    "Score": 0.995407223701477,
+                    "Type": "ORGANIZATION",
+                    "Text": "U.S. Government",
+                    "BeginOffset": 879,
+                    "EndOffset": 894
+                },
+                {
+                    "Score": 0.9980134963989258,
+                    "Type": "ORGANIZATION",
+                    "Text": "HHS",
+                    "BeginOffset": 896,
+                    "EndOffset": 899
+                },
+                {
+                    "Score": 0.9993270635604858,
+                    "Type": "ORGANIZATION",
+                    "Text": "NIH",
+                    "BeginOffset": 901,
+                    "EndOffset": 904
+                },
+                {
+                    "Score": 0.9964224100112915,
+                    "Type": "ORGANIZATION",
+                    "Text": "NIDDK",
+                    "BeginOffset": 909,
+                    "EndOffset": 914
+                },
+                {
+                    "Score": 0.9750751852989197,
+                    "Type": "OTHER",
+                    "Text": "https://www.niddk.nih.gov/health-information/diabetes/overview/insulin-medicines-treatments",
+                    "BeginOffset": 916,
+                    "EndOffset": 1007
+                },
+                {
+                    "Score": 0.8555126786231995,
+                    "Type": "QUANTITY",
+                    "Text": "Page 5",
+                    "BeginOffset": 1008,
+                    "EndOffset": 1014
+                },
+                { "Score": 0.749091386795044, "Type": "QUANTITY", "Text": "10", "BeginOffset": 1018, "EndOffset": 1020 }
+            ]
+        },
+        {
+            "Page": 6,
+            "Entities": [
+                {
+                    "Score": 0.8802947998046875,
+                    "Type": "ORGANIZATION",
+                    "Text": "NIDDK",
+                    "BeginOffset": 48,
+                    "EndOffset": 53
+                },
+                {
+                    "Score": 0.7411302924156189,
+                    "Type": "DATE",
+                    "Text": "10/23/20, 3:28 PM",
+                    "BeginOffset": 54,
+                    "EndOffset": 71
+                },
+                {
+                    "Score": 0.9953474998474121,
+                    "Type": "QUANTITY",
+                    "Text": "24 hours a day",
+                    "BeginOffset": 102,
+                    "EndOffset": 116
+                },
+                {
+                    "Score": 0.9662834405899048,
+                    "Type": "OTHER",
+                    "Text": "type 1",
+                    "BeginOffset": 335,
+                    "EndOffset": 341
+                },
+                {
+                    "Score": 0.9444788694381714,
+                    "Type": "OTHER",
+                    "Text": "type 2 diabetes",
+                    "BeginOffset": 345,
+                    "EndOffset": 360
+                },
+                {
+                    "Score": 0.7546972036361694,
+                    "Type": "QUANTITY",
+                    "Text": "few days",
+                    "BeginOffset": 652,
+                    "EndOffset": 660
+                },
+                {
+                    "Score": 0.9865419268608093,
+                    "Type": "QUANTITY",
+                    "Text": "each shot",
+                    "BeginOffset": 754,
+                    "EndOffset": 763
+                },
+                {
+                    "Score": 0.9790325164794922,
+                    "Type": "OTHER",
+                    "Text": "https://www.niddk.nih.gov/health-information/diabetes/overview/insulin-medicines-treatments",
+                    "BeginOffset": 932,
+                    "EndOffset": 1023
+                },
+                {
+                    "Score": 0.7966687083244324,
+                    "Type": "QUANTITY",
+                    "Text": "Page 6",
+                    "BeginOffset": 1024,
+                    "EndOffset": 1030
+                },
+                {
+                    "Score": 0.9061200022697449,
+                    "Type": "QUANTITY",
+                    "Text": "10",
+                    "BeginOffset": 1034,
+                    "EndOffset": 1036
+                },
+                {
+                    "Score": 0.9993549585342407,
+                    "Type": "ORGANIZATION",
+                    "Text": "National Institute of Diabetes and Digestive and Kidney Diseases",
+                    "BeginOffset": 1045,
+                    "EndOffset": 1109
+                },
+                {
+                    "Score": 0.990452766418457,
+                    "Type": "ORGANIZATION",
+                    "Text": "NIDDK",
+                    "BeginOffset": 1111,
+                    "EndOffset": 1116
+                },
+                {
+                    "Score": 0.9890056848526001,
+                    "Type": "ORGANIZATION",
+                    "Text": "U.S. Government",
+                    "BeginOffset": 1197,
+                    "EndOffset": 1212
+                },
+                {
+                    "Score": 0.9942485094070435,
+                    "Type": "ORGANIZATION",
+                    "Text": "HHS",
+                    "BeginOffset": 1214,
+                    "EndOffset": 1217
+                },
+                {
+                    "Score": 0.9969820380210876,
+                    "Type": "ORGANIZATION",
+                    "Text": "NIH",
+                    "BeginOffset": 1219,
+                    "EndOffset": 1222
+                },
+                {
+                    "Score": 0.9633789658546448,
+                    "Type": "ORGANIZATION",
+                    "Text": "NIDDK",
+                    "BeginOffset": 1227,
+                    "EndOffset": 1232
+                }
+            ]
+        },
+        {
+            "Page": 7,
+            "Entities": [
+                {
+                    "Score": 0.9521666169166565,
+                    "Type": "DATE",
+                    "Text": "10/23/20, 3:28 PM",
+                    "BeginOffset": 54,
+                    "EndOffset": 71
+                },
+                { "Score": 0.6844871640205383, "Type": "OTHER", "Text": "type 2", "BeginOffset": 98, "EndOffset": 104 },
+                {
+                    "Score": 0.6591675281524658,
+                    "Type": "OTHER",
+                    "Text": "type 2",
+                    "BeginOffset": 208,
+                    "EndOffset": 214
+                },
+                {
+                    "Score": 0.7621349692344666,
+                    "Type": "OTHER",
+                    "Text": "type 2 diabetes",
+                    "BeginOffset": 332,
+                    "EndOffset": 347
+                },
+                {
+                    "Score": 0.48327767848968506,
+                    "Type": "OTHER",
+                    "Text": "metformin",
+                    "BeginOffset": 377,
+                    "EndOffset": 386
+                },
+                {
+                    "Score": 0.921639084815979,
+                    "Type": "ORGANIZATION",
+                    "Text": "NIH",
+                    "BeginOffset": 387,
+                    "EndOffset": 390
+                },
+                {
+                    "Score": 0.8517031073570251,
+                    "Type": "OTHER",
+                    "Text": "Metformin",
+                    "BeginOffset": 398,
+                    "EndOffset": 407
+                },
+                {
+                    "Score": 0.855623722076416,
+                    "Type": "OTHER",
+                    "Text": "Metformin",
+                    "BeginOffset": 432,
+                    "EndOffset": 441
+                },
+                {
+                    "Score": 0.9987485408782959,
+                    "Type": "QUANTITY",
+                    "Text": "two",
+                    "BeginOffset": 763,
+                    "EndOffset": 766
+                },
+                {
+                    "Score": 0.9830707907676697,
+                    "Type": "QUANTITY",
+                    "Text": "three kinds",
+                    "BeginOffset": 770,
+                    "EndOffset": 781
+                },
+                {
+                    "Score": 0.9239711165428162,
+                    "Type": "QUANTITY",
+                    "Text": "one",
+                    "BeginOffset": 857,
+                    "EndOffset": 860
+                },
+                {
+                    "Score": 0.9989652633666992,
+                    "Type": "ORGANIZATION",
+                    "Text": "Food and Drug Administration",
+                    "BeginOffset": 920,
+                    "EndOffset": 948
+                },
+                {
+                    "Score": 0.9948022365570068,
+                    "Type": "ORGANIZATION",
+                    "Text": "FDA",
+                    "BeginOffset": 950,
+                    "EndOffset": 953
+                },
+                {
+                    "Score": 0.6823102235794067,
+                    "Type": "OTHER",
+                    "Text": "type 2 diabetes",
+                    "BeginOffset": 994,
+                    "EndOffset": 1009
+                },
+                {
+                    "Score": 0.9024803638458252,
+                    "Type": "OTHER",
+                    "Text": "hypoglycemia",
+                    "BeginOffset": 1491,
+                    "EndOffset": 1503
+                },
+                {
+                    "Score": 0.9213271141052246,
+                    "Type": "OTHER",
+                    "Text": "hypoglycemia",
+                    "BeginOffset": 1653,
+                    "EndOffset": 1665
+                },
+                {
+                    "Score": 0.99077308177948,
+                    "Type": "OTHER",
+                    "Text": "https://www.niddk.nih.gov/health-information/diabetes/overview/insulin-medicines-treatments",
+                    "BeginOffset": 1765,
+                    "EndOffset": 1856
+                },
+                {
+                    "Score": 0.9086317420005798,
+                    "Type": "QUANTITY",
+                    "Text": "Page 7",
+                    "BeginOffset": 1857,
+                    "EndOffset": 1863
+                },
+                {
+                    "Score": 0.8906444907188416,
+                    "Type": "QUANTITY",
+                    "Text": "10",
+                    "BeginOffset": 1867,
+                    "EndOffset": 1869
+                },
+                {
+                    "Score": 0.9992611408233643,
+                    "Type": "ORGANIZATION",
+                    "Text": "National Institute of Diabetes and Digestive and Kidney Diseases",
+                    "BeginOffset": 1878,
+                    "EndOffset": 1942
+                },
+                {
+                    "Score": 0.9601318836212158,
+                    "Type": "ORGANIZATION",
+                    "Text": "NIDDK",
+                    "BeginOffset": 1944,
+                    "EndOffset": 1949
+                },
+                {
+                    "Score": 0.9846612811088562,
+                    "Type": "ORGANIZATION",
+                    "Text": "U.S. Government",
+                    "BeginOffset": 2030,
+                    "EndOffset": 2045
+                },
+                {
+                    "Score": 0.9947547912597656,
+                    "Type": "ORGANIZATION",
+                    "Text": "HHS",
+                    "BeginOffset": 2047,
+                    "EndOffset": 2050
+                },
+                {
+                    "Score": 0.9972678422927856,
+                    "Type": "ORGANIZATION",
+                    "Text": "NIH",
+                    "BeginOffset": 2052,
+                    "EndOffset": 2055
+                },
+                {
+                    "Score": 0.9950757622718811,
+                    "Type": "ORGANIZATION",
+                    "Text": "NIDDK",
+                    "BeginOffset": 2060,
+                    "EndOffset": 2065
+                }
+            ]
+        },
+        {
+            "Page": 8,
+            "Entities": [
+                {
+                    "Score": 0.918263852596283,
+                    "Type": "DATE",
+                    "Text": "10/23/20, 3:28 PM",
+                    "BeginOffset": 54,
+                    "EndOffset": 71
+                },
+                {
+                    "Score": 0.7862789034843445,
+                    "Type": "OTHER",
+                    "Text": "type 1",
+                    "BeginOffset": 406,
+                    "EndOffset": 412
+                },
+                {
+                    "Score": 0.7215654253959656,
+                    "Type": "OTHER",
+                    "Text": "type 2 diabetes",
+                    "BeginOffset": 416,
+                    "EndOffset": 431
+                },
+                { "Score": 0.536778450012207, "Type": "OTHER", "Text": "type 1", "BeginOffset": 520, "EndOffset": 526 },
+                {
+                    "Score": 0.7468151450157166,
+                    "Type": "OTHER",
+                    "Text": "type 2",
+                    "BeginOffset": 665,
+                    "EndOffset": 671
+                },
+                { "Score": 0.619914710521698, "Type": "OTHER", "Text": "1", "BeginOffset": 1328, "EndOffset": 1329 },
+                {
+                    "Score": 0.6942179799079895,
+                    "Type": "OTHER",
+                    "Text": "type",
+                    "BeginOffset": 1334,
+                    "EndOffset": 1338
+                },
+                {
+                    "Score": 0.4969812035560608,
+                    "Type": "OTHER",
+                    "Text": "2 diabetes",
+                    "BeginOffset": 1339,
+                    "EndOffset": 1349
+                },
+                {
+                    "Score": 0.9892948269844055,
+                    "Type": "ORGANIZATION",
+                    "Text": "NIDDK",
+                    "BeginOffset": 1375,
+                    "EndOffset": 1380
+                },
+                {
+                    "Score": 0.933058500289917,
+                    "Type": "QUANTITY",
+                    "Text": "single system",
+                    "BeginOffset": 1561,
+                    "EndOffset": 1574
+                },
+                {
+                    "Score": 0.9813787341117859,
+                    "Type": "QUANTITY",
+                    "Text": "second hormone",
+                    "BeginOffset": 1677,
+                    "EndOffset": 1691
+                },
+                { "Score": 0.9995042085647583, "Type": "DATE", "Text": "2016", "BeginOffset": 1805, "EndOffset": 1809 },
+                {
+                    "Score": 0.9992172718048096,
+                    "Type": "ORGANIZATION",
+                    "Text": "FDA",
+                    "BeginOffset": 1815,
+                    "EndOffset": 1818
+                },
+                {
+                    "Score": 0.9456579089164734,
+                    "Type": "QUANTITY",
+                    "Text": "every 5 minutes",
+                    "BeginOffset": 1938,
+                    "EndOffset": 1953
+                },
+                {
+                    "Score": 0.9259698390960693,
+                    "Type": "OTHER",
+                    "Text": "https://www.niddk.nih.gov/health-information/diabetes/overview/insulin-medicines-treatment",
+                    "BeginOffset": 1984,
+                    "EndOffset": 2074
+                },
+                {
+                    "Score": 0.7917030453681946,
+                    "Type": "QUANTITY",
+                    "Text": "Page 8",
+                    "BeginOffset": 2075,
+                    "EndOffset": 2081
+                },
+                {
+                    "Score": 0.8681644797325134,
+                    "Type": "QUANTITY",
+                    "Text": "10",
+                    "BeginOffset": 2085,
+                    "EndOffset": 2087
+                },
+                {
+                    "Score": 0.9996268153190613,
+                    "Type": "ORGANIZATION",
+                    "Text": "National Institute of Diabetes and Digestive and Kidney Diseases",
+                    "BeginOffset": 2096,
+                    "EndOffset": 2160
+                },
+                {
+                    "Score": 0.9916017651557922,
+                    "Type": "ORGANIZATION",
+                    "Text": "NIDDK",
+                    "BeginOffset": 2162,
+                    "EndOffset": 2167
+                },
+                {
+                    "Score": 0.9966203570365906,
+                    "Type": "ORGANIZATION",
+                    "Text": "U.S. Government",
+                    "BeginOffset": 2248,
+                    "EndOffset": 2263
+                },
+                {
+                    "Score": 0.9965283274650574,
+                    "Type": "ORGANIZATION",
+                    "Text": "HHS",
+                    "BeginOffset": 2265,
+                    "EndOffset": 2268
+                },
+                {
+                    "Score": 0.9980481863021851,
+                    "Type": "ORGANIZATION",
+                    "Text": "NIH",
+                    "BeginOffset": 2270,
+                    "EndOffset": 2273
+                },
+                {
+                    "Score": 0.980008602142334,
+                    "Type": "ORGANIZATION",
+                    "Text": "NIDDK",
+                    "BeginOffset": 2278,
+                    "EndOffset": 2283
+                }
+            ]
+        },
+        {
+            "Page": 9,
+            "Entities": [
+                { "Score": 0.7378231883049011, "Type": "TITLE", "Text": "NIDDK", "BeginOffset": 48, "EndOffset": 53 },
+                { "Score": 0.9912393689155579, "Type": "DATE", "Text": "10/23/20", "BeginOffset": 54, "EndOffset": 62 },
+                { "Score": 0.9505975842475891, "Type": "DATE", "Text": "3:28 PM", "BeginOffset": 64, "EndOffset": 71 },
+                { "Score": 0.99870765209198, "Type": "LOCATION", "Text": "U.S.", "BeginOffset": 495, "EndOffset": 499 },
+                { "Score": 0.9997101426124573, "Type": "DATE", "Text": "2017", "BeginOffset": 503, "EndOffset": 507 },
+                {
+                    "Score": 0.9656085968017578,
+                    "Type": "ORGANIZATION",
+                    "Text": "NIDDK",
+                    "BeginOffset": 599,
+                    "EndOffset": 604
+                },
+                {
+                    "Score": 0.6643091440200806,
+                    "Type": "QUANTITY",
+                    "Text": "several important studies",
+                    "BeginOffset": 616,
+                    "EndOffset": 641
+                },
+                {
+                    "Score": 0.6656296253204346,
+                    "Type": "OTHER",
+                    "Text": "Pancreatic islet",
+                    "BeginOffset": 837,
+                    "EndOffset": 853
+                },
+                {
+                    "Score": 0.7176267504692078,
+                    "Type": "OTHER",
+                    "Text": "Pancreatic islet",
+                    "BeginOffset": 870,
+                    "EndOffset": 886
+                },
+                {
+                    "Score": 0.6274818181991577,
+                    "Type": "OTHER",
+                    "Text": "Pancreatic",
+                    "BeginOffset": 971,
+                    "EndOffset": 981
+                },
+                {
+                    "Score": 0.9977033734321594,
+                    "Type": "PERSON",
+                    "Text": "Cordera R",
+                    "BeginOffset": 1552,
+                    "EndOffset": 1561
+                },
+                {
+                    "Score": 0.9871956706047058,
+                    "Type": "PERSON",
+                    "Text": "Adami GF",
+                    "BeginOffset": 1563,
+                    "EndOffset": 1571
+                },
+                {
+                    "Score": 0.9047970771789551,
+                    "Type": "TITLE",
+                    "Text": "World Journal of Diabetes",
+                    "BeginOffset": 1672,
+                    "EndOffset": 1697
+                },
+                { "Score": 0.9825639128684998, "Type": "DATE", "Text": "2016", "BeginOffset": 1699, "EndOffset": 1703 },
+                {
+                    "Score": 0.9962912797927856,
+                    "Type": "PERSON",
+                    "Text": "Kirwan JP",
+                    "BeginOffset": 1720,
+                    "EndOffset": 1729
+                },
+                {
+                    "Score": 0.9976294636726379,
+                    "Type": "PERSON",
+                    "Text": "Aminian A",
+                    "BeginOffset": 1731,
+                    "EndOffset": 1740
+                },
+                {
+                    "Score": 0.994983434677124,
+                    "Type": "PERSON",
+                    "Text": "Kashyap SR",
+                    "BeginOffset": 1742,
+                    "EndOffset": 1752
+                },
+                {
+                    "Score": 0.9883358478546143,
+                    "Type": "PERSON",
+                    "Text": "Burguera B",
+                    "BeginOffset": 1754,
+                    "EndOffset": 1764
+                },
+                {
+                    "Score": 0.9905458688735962,
+                    "Type": "PERSON",
+                    "Text": "Brethauer SA",
+                    "BeginOffset": 1766,
+                    "EndOffset": 1778
+                },
+                {
+                    "Score": 0.9611393213272095,
+                    "Type": "PERSON",
+                    "Text": "Schauer PR.",
+                    "BeginOffset": 1780,
+                    "EndOffset": 1791
+                },
+                {
+                    "Score": 0.7497918009757996,
+                    "Type": "OTHER",
+                    "Text": "type 1 diabetes",
+                    "BeginOffset": 1833,
+                    "EndOffset": 1848
+                },
+                {
+                    "Score": 0.5138098001480103,
+                    "Type": "TITLE",
+                    "Text": "Diabetes",
+                    "BeginOffset": 1850,
+                    "EndOffset": 1858
+                },
+                { "Score": 0.9379131197929382, "Type": "DATE", "Text": "2016", "BeginOffset": 1865, "EndOffset": 1869 },
+                { "Score": 0.6316604018211365, "Type": "OTHER", "Text": "39", "BeginOffset": 1870, "EndOffset": 1872 },
+                {
+                    "Score": 0.7455793619155884,
+                    "Type": "OTHER",
+                    "Text": "6):941-948",
+                    "BeginOffset": 1873,
+                    "EndOffset": 1883
+                },
+                {
+                    "Score": 0.9960238337516785,
+                    "Type": "DATE",
+                    "Text": "December 2016",
+                    "BeginOffset": 1885,
+                    "EndOffset": 1898
+                },
+                {
+                    "Score": 0.9995989203453064,
+                    "Type": "ORGANIZATION",
+                    "Text": "National Institute of Diabetes and Digestive and Kidney Diseases",
+                    "BeginOffset": 1907,
+                    "EndOffset": 1971
+                },
+                {
+                    "Score": 0.9911229610443115,
+                    "Type": "ORGANIZATION",
+                    "Text": "NIDDK",
+                    "BeginOffset": 1973,
+                    "EndOffset": 1978
+                },
+                {
+                    "Score": 0.9978330135345459,
+                    "Type": "ORGANIZATION",
+                    "Text": "U.S. Government",
+                    "BeginOffset": 2059,
+                    "EndOffset": 2074
+                },
+                {
+                    "Score": 0.9976195693016052,
+                    "Type": "ORGANIZATION",
+                    "Text": "HHS",
+                    "BeginOffset": 2076,
+                    "EndOffset": 2079
+                },
+                {
+                    "Score": 0.9985336065292358,
+                    "Type": "ORGANIZATION",
+                    "Text": "NIH",
+                    "BeginOffset": 2081,
+                    "EndOffset": 2084
+                },
+                {
+                    "Score": 0.9906120896339417,
+                    "Type": "ORGANIZATION",
+                    "Text": "NIDDK",
+                    "BeginOffset": 2089,
+                    "EndOffset": 2094
+                },
+                {
+                    "Score": 0.9811904430389404,
+                    "Type": "OTHER",
+                    "Text": "https://www.niddk.nih.gov/health-information/diabetes/overview/insulin-medicines-treatments",
+                    "BeginOffset": 2096,
+                    "EndOffset": 2187
+                },
+                {
+                    "Score": 0.8459987640380859,
+                    "Type": "QUANTITY",
+                    "Text": "Page 9",
+                    "BeginOffset": 2188,
+                    "EndOffset": 2194
+                },
+                {
+                    "Score": 0.7355502843856812,
+                    "Type": "QUANTITY",
+                    "Text": "10",
+                    "BeginOffset": 2198,
+                    "EndOffset": 2200
+                }
+            ]
+        },
+        {
+            "Page": 10,
+            "Entities": [
+                {
+                    "Score": 0.9051888585090637,
+                    "Type": "ORGANIZATION",
+                    "Text": "NIDDK",
+                    "BeginOffset": 48,
+                    "EndOffset": 53
+                },
+                {
+                    "Score": 0.8875932097434998,
+                    "Type": "DATE",
+                    "Text": "10/23/20, 3:28 PM",
+                    "BeginOffset": 54,
+                    "EndOffset": 71
+                },
+                {
+                    "Score": 0.9997639656066895,
+                    "Type": "ORGANIZATION",
+                    "Text": "National Institute of Diabetes and Digestive and Kidney Diseases",
+                    "BeginOffset": 117,
+                    "EndOffset": 181
+                },
+                {
+                    "Score": 0.9720679521560669,
+                    "Type": "ORGANIZATION",
+                    "Text": "NIDDK",
+                    "BeginOffset": 183,
+                    "EndOffset": 188
+                },
+                {
+                    "Score": 0.9996819496154785,
+                    "Type": "ORGANIZATION",
+                    "Text": "National Institutes of Health",
+                    "BeginOffset": 203,
+                    "EndOffset": 232
+                },
+                {
+                    "Score": 0.9844073057174683,
+                    "Type": "ORGANIZATION",
+                    "Text": "NIDDK",
+                    "BeginOffset": 238,
+                    "EndOffset": 243
+                },
+                {
+                    "Score": 0.9920507073402405,
+                    "Type": "ORGANIZATION",
+                    "Text": "NIDDK",
+                    "BeginOffset": 433,
+                    "EndOffset": 438
+                },
+                {
+                    "Score": 0.9817490577697754,
+                    "Type": "ORGANIZATION",
+                    "Text": "NIDDK",
+                    "BeginOffset": 464,
+                    "EndOffset": 469
+                },
+                {
+                    "Score": 0.990391731262207,
+                    "Type": "ORGANIZATION",
+                    "Text": "National Institute of Diabetes and Digestive and Kidney Diseases Health Information Center",
+                    "BeginOffset": 515,
+                    "EndOffset": 605
+                },
+                {
+                    "Score": 0.998765230178833,
+                    "Type": "OTHER",
+                    "Text": "1-800-860-8747",
+                    "BeginOffset": 613,
+                    "EndOffset": 627
+                },
+                {
+                    "Score": 0.9979013204574585,
+                    "Type": "OTHER",
+                    "Text": "",
+                    "BeginOffset": 635,
+                    "EndOffset": 659
+                },
+                {
+                    "Score": 0.9987385869026184,
+                    "Type": "OTHER",
+                    "Text": "1-866-569-1162",
+                    "BeginOffset": 665,
+                    "EndOffset": 679
+                },
+                {
+                    "Score": 0.9885669946670532,
+                    "Type": "DATE",
+                    "Text": "8:30 a.m.",
+                    "BeginOffset": 687,
+                    "EndOffset": 696
+                },
+                {
+                    "Score": 0.9177068471908569,
+                    "Type": "DATE",
+                    "Text": "5 p.m. eastern time",
+                    "BeginOffset": 700,
+                    "EndOffset": 719
+                },
+                {
+                    "Score": 0.9995763897895813,
+                    "Type": "ORGANIZATION",
+                    "Text": "National Institute of Diabetes and Digestive and Kidney Diseases",
+                    "BeginOffset": 733,
+                    "EndOffset": 797
+                },
+                {
+                    "Score": 0.9533339738845825,
+                    "Type": "ORGANIZATION",
+                    "Text": "NIDDK",
+                    "BeginOffset": 799,
+                    "EndOffset": 804
+                },
+                {
+                    "Score": 0.9966814517974854,
+                    "Type": "ORGANIZATION",
+                    "Text": "U.S. Government",
+                    "BeginOffset": 885,
+                    "EndOffset": 900
+                },
+                {
+                    "Score": 0.9981903433799744,
+                    "Type": "ORGANIZATION",
+                    "Text": "HHS",
+                    "BeginOffset": 902,
+                    "EndOffset": 905
+                },
+                {
+                    "Score": 0.9981972575187683,
+                    "Type": "ORGANIZATION",
+                    "Text": "NIH",
+                    "BeginOffset": 907,
+                    "EndOffset": 910
+                },
+                {
+                    "Score": 0.9977853298187256,
+                    "Type": "ORGANIZATION",
+                    "Text": "NIDDK",
+                    "BeginOffset": 915,
+                    "EndOffset": 920
+                },
+                {
+                    "Score": 0.9198448061943054,
+                    "Type": "QUANTITY",
+                    "Text": "Page 10",
+                    "BeginOffset": 1011,
+                    "EndOffset": 1018
+                },
+                { "Score": 0.806312084197998, "Type": "QUANTITY", "Text": "10", "BeginOffset": 1022, "EndOffset": 1024 }
+            ]
+        }
+    ]
+}

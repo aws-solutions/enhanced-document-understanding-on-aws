@@ -1,0 +1,33 @@
+// Jest Snapshot v1, https://goo.gl/fbAQLP
+
+exports[`DocumentRenderer component DocumentRenderer snapshot test 1`] = `
+<div>
+  <div
+    className="pdf-viewer"
+    data-testid="pdf-box"
+  >
+    <div
+      className="react-pdf__Document document"
+    >
+      <div
+        className="react-pdf__message react-pdf__message--loading"
+      >
+        Loading PDF…
+      </div>
+    </div>
+    <Pagination
+      ariaLabels={
+        Object {
+          "nextPageLabel": "Next page",
+          "pageLabel": [Function],
+          "previousPageLabel": "Previous page",
+        }
+      }
+      currentPageIndex={1}
+      data-testid="pdf-pagination"
+      onChange={[Function]}
+      pagesCount={0}
+    />
+  </div>
+</div>
+`;

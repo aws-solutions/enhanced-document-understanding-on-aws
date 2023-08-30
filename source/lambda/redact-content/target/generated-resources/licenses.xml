@@ -1,0 +1,258 @@
+<?xml version="1.0" encoding="UTF-8" standalone="no"?>
+<licenseSummary>
+  <dependencies>
+    <dependency>
+      <groupId>com.adobe.xmp</groupId>
+      <artifactId>xmpcore</artifactId>
+      <version>6.1.11</version>
+      <licenses>
+        <license>
+          <name>The BSD 3-Clause License (BSD3)</name>
+          <url>https://opensource.org/licenses/BSD-3-Clause</url>
+        </license>
+      </licenses>
+    </dependency>
+    <dependency>
+      <groupId>com.amazonaws</groupId>
+      <artifactId>aws-lambda-java-events</artifactId>
+      <version>3.11.2</version>
+      <licenses>
+        <license>
+          <name>Apache License, Version 2.0</name>
+          <url>https://aws.amazon.com/apache2.0</url>
+          <distribution>repo</distribution>
+          <file>apache license, version 2.0 - apache2.0.html</file>
+        </license>
+      </licenses>
+    </dependency>
+    <dependency>
+      <groupId>com.drewnoakes</groupId>
+      <artifactId>metadata-extractor</artifactId>
+      <version>2.18.0</version>
+      <licenses>
+        <license>
+          <name>The Apache Software License, Version 2.0</name>
+          <url>http://www.apache.org/licenses/LICENSE-2.0.txt</url>
+          <distribution>repo</distribution>
+          <file>the apache software license, version 2.0 - license-2.0.txt</file>
+        </license>
+      </licenses>
+    </dependency>
+    <dependency>
+      <groupId>com.google.code.gson</groupId>
+      <artifactId>gson</artifactId>
+      <version>2.10.1</version>
+      <licenses>
+        <license>
+          <name>Apache-2.0</name>
+          <url>https://www.apache.org/licenses/LICENSE-2.0.txt</url>
+          <file>apache-2.0 - license-2.0.txt</file>
+        </license>
+      </licenses>
+    </dependency>
+    <dependency>
+      <groupId>commons-logging</groupId>
+      <artifactId>commons-logging</artifactId>
+      <version>1.2</version>
+      <licenses>
+        <license>
+          <name>The Apache Software License, Version 2.0</name>
+          <url>http://www.apache.org/licenses/LICENSE-2.0.txt</url>
+          <distribution>repo</distribution>
+          <file>the apache software license, version 2.0 - license-2.0.txt</file>
+        </license>
+      </licenses>
+    </dependency>
+    <dependency>
+      <groupId>joda-time</groupId>
+      <artifactId>joda-time</artifactId>
+      <version>2.10.8</version>
+      <licenses>
+        <license>
+          <name>Apache License, Version 2.0</name>
+          <url>https://www.apache.org/licenses/LICENSE-2.0.txt</url>
+          <distribution>repo</distribution>
+          <file>apache-2.0 - license-2.0.txt</file>
+        </license>
+      </licenses>
+    </dependency>
+    <dependency>
+      <groupId>net.bytebuddy</groupId>
+      <artifactId>byte-buddy-agent</artifactId>
+      <version>1.14.5</version>
+      <licenses>
+        <license>
+          <name>Apache License, Version 2.0</name>
+          <url>https://www.apache.org/licenses/LICENSE-2.0.txt</url>
+          <distribution>repo</distribution>
+          <file>apache-2.0 - license-2.0.txt</file>
+          <comments>A business-friendly OSS license</comments>
+        </license>
+      </licenses>
+    </dependency>
+    <dependency>
+      <groupId>net.bytebuddy</groupId>
+      <artifactId>byte-buddy</artifactId>
+      <version>1.14.5</version>
+      <licenses>
+        <license>
+          <name>Apache License, Version 2.0</name>
+          <url>https://www.apache.org/licenses/LICENSE-2.0.txt</url>
+          <distribution>repo</distribution>
+          <file>apache-2.0 - license-2.0.txt</file>
+          <comments>A business-friendly OSS license</comments>
+        </license>
+      </licenses>
+    </dependency>
+    <dependency>
+      <groupId>org.apache.pdfbox</groupId>
+      <artifactId>fontbox</artifactId>
+      <version>2.0.27</version>
+      <licenses>
+        <license>
+          <name>Apache License, Version 2.0</name>
+          <url>https://www.apache.org/licenses/LICENSE-2.0.txt</url>
+          <distribution>repo</distribution>
+          <file>apache-2.0 - license-2.0.txt</file>
+        </license>
+      </licenses>
+    </dependency>
+    <dependency>
+      <groupId>org.apache.pdfbox</groupId>
+      <artifactId>pdfbox</artifactId>
+      <version>2.0.27</version>
+      <licenses>
+        <license>
+          <name>Apache License, Version 2.0</name>
+          <url>https://www.apache.org/licenses/LICENSE-2.0.txt</url>
+          <distribution>repo</distribution>
+          <file>apache-2.0 - license-2.0.txt</file>
+        </license>
+      </licenses>
+    </dependency>
+    <dependency>
+      <groupId>org.apiguardian</groupId>
+      <artifactId>apiguardian-api</artifactId>
+      <version>1.1.2</version>
+      <licenses>
+        <license>
+          <name>The Apache License, Version 2.0</name>
+          <url>http://www.apache.org/licenses/LICENSE-2.0.txt</url>
+          <file>the apache software license, version 2.0 - license-2.0.txt</file>
+        </license>
+      </licenses>
+    </dependency>
+    <dependency>
+      <groupId>org.junit.jupiter</groupId>
+      <artifactId>junit-jupiter-api</artifactId>
+      <version>5.9.3</version>
+      <licenses>
+        <license>
+          <name>Eclipse Public License v2.0</name>
+          <url>https://www.eclipse.org/legal/epl-v20.html</url>
+          <file>eclipse public license v2.0 - epl-v20.html</file>
+        </license>
+      </licenses>
+    </dependency>
+    <dependency>
+      <groupId>org.junit.platform</groupId>
+      <artifactId>junit-platform-commons</artifactId>
+      <version>1.9.3</version>
+      <licenses>
+        <license>
+          <name>Eclipse Public License v2.0</name>
+          <url>https://www.eclipse.org/legal/epl-v20.html</url>
+          <file>eclipse public license v2.0 - epl-v20.html</file>
+        </license>
+      </licenses>
+    </dependency>
+    <dependency>
+      <groupId>org.mockito</groupId>
+      <artifactId>mockito-core</artifactId>
+      <version>5.4.0</version>
+      <licenses>
+        <license>
+          <name>The MIT License</name>
+          <url>https://github.com/mockito/mockito/blob/main/LICENSE</url>
+          <distribution>repo</distribution>
+          <file>the mit license - license.html</file>
+        </license>
+      </licenses>
+    </dependency>
+    <dependency>
+      <groupId>org.mockito</groupId>
+      <artifactId>mockito-inline</artifactId>
+      <version>3.12.4</version>
+      <licenses>
+        <license>
+          <name>The MIT License</name>
+          <url>https://github.com/mockito/mockito/blob/main/LICENSE</url>
+          <distribution>repo</distribution>
+          <file>the mit license - license.html</file>
+        </license>
+      </licenses>
+    </dependency>
+    <dependency>
+      <groupId>org.mockito</groupId>
+      <artifactId>mockito-junit-jupiter</artifactId>
+      <version>5.4.0</version>
+      <licenses>
+        <license>
+          <name>The MIT License</name>
+          <url>https://github.com/mockito/mockito/blob/main/LICENSE</url>
+          <distribution>repo</distribution>
+          <file>the mit license - license.html</file>
+        </license>
+      </licenses>
+    </dependency>
+    <dependency>
+      <groupId>org.objenesis</groupId>
+      <artifactId>objenesis</artifactId>
+      <version>3.3</version>
+      <licenses>
+        <license>
+          <name>Apache License, Version 2.0</name>
+          <url>http://www.apache.org/licenses/LICENSE-2.0.txt</url>
+          <distribution>repo</distribution>
+          <file>the apache software license, version 2.0 - license-2.0.txt</file>
+        </license>
+      </licenses>
+    </dependency>
+    <dependency>
+      <groupId>org.opentest4j</groupId>
+      <artifactId>opentest4j</artifactId>
+      <version>1.2.0</version>
+      <licenses>
+        <license>
+          <name>The Apache License, Version 2.0</name>
+          <url>http://www.apache.org/licenses/LICENSE-2.0.txt</url>
+          <file>the apache software license, version 2.0 - license-2.0.txt</file>
+        </license>
+      </licenses>
+    </dependency>
+    <dependency>
+      <groupId>uk.org.webcompere</groupId>
+      <artifactId>system-stubs-core</artifactId>
+      <version>2.0.2</version>
+      <licenses>
+        <license>
+          <name>MIT License</name>
+          <url>http://opensource.org/licenses/MIT</url>
+          <distribution>repo</distribution>
+        </license>
+      </licenses>
+    </dependency>
+    <dependency>
+      <groupId>uk.org.webcompere</groupId>
+      <artifactId>system-stubs-jupiter</artifactId>
+      <version>2.0.2</version>
+      <licenses>
+        <license>
+          <name>MIT License</name>
+          <url>http://opensource.org/licenses/MIT</url>
+          <distribution>repo</distribution>
+        </license>
+      </licenses>
+    </dependency>
+  </dependencies>
+</licenseSummary>

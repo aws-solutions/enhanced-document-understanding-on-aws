@@ -1,0 +1,24 @@
+{
+  "Name": "single-doc-textract-entity-pii",
+  "WorkflowSequence": [
+    "textract",
+    "entity-pii"
+  ],
+  "MinRequiredDocuments": [
+    {
+      "DocumentType": "generic",
+      "FileTypes": [
+        ".pdf",
+        ".png",
+        ".jpeg",
+        ".jpg"
+      ],
+      "MaxSize": "5",
+      "WorkflowsToProcess": [
+        "textract",
+        "entity-pii"
+      ],
+      "NumDocuments": "1"
+    }
+  ]
+}

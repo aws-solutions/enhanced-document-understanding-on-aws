@@ -1,0 +1,138 @@
+{
+  "SingleDocFirstInferenceTest": {
+    "ExpectedOutput": {
+      "case": {
+        "id": "fake-case-id-0",
+        "status": "success",
+        "stage": "redaction",
+        "workflows": [
+          "redaction"
+        ],
+        "documentList": [
+          {
+            "stage": "redaction",
+            "document": {
+              "id": "fake-doc-id-1",
+              "selfCertifiedDocType": "passport",
+              "s3Prefix": "s3-prefix",
+              "processingType": "sync"
+            },
+            "inferences": {
+              "redaction": {
+                "Redacts": [
+                  {
+                    "Name": "fake-class",
+                    "Score": 0.99
+                  }
+                ]
+              }
+            }
+          }
+        ]
+      }
+    }
+  },
+  "SingleDocMultiInferenceTest": {
+    "ExpectedOutput": {
+      "id": "fake-case-id-1",
+      "status": "success",
+      "stage": "redaction",
+      "workflows": [
+        "redaction"
+      ],
+      "documentList": [
+        {
+          "stage": "redaction",
+          "document": {
+            "id": "fake-doc-id-1",
+            "selfCertifiedDocType": "passport",
+            "s3Prefix": "s3-prefix",
+            "processingType": "sync"
+          },
+          "inferences": {
+            "textract-analyzeDoc": "mocked-textract-analyzeDoc-response",
+            "redaction": {
+              "Redacts": [
+                {
+                  "Name": "fake-class",
+                  "Score": 0.99
+                }
+              ]
+            }
+          }
+        },
+        {
+          "stage": "redaction",
+          "document": {
+            "id": "fake-doc-id-1",
+            "selfCertifiedDocType": "passport",
+            "s3Prefix": "s3-prefix",
+            "processingType": "sync"
+          },
+          "inferences": {
+            "textract-analyzeDoc": "mocked-textract-analyzeDoc-response",
+            "redaction": {
+              "Redacts": [
+                {
+                  "Name": "fake-class",
+                  "Score": 0.99
+                }
+              ]
+            }
+          }
+        },
+        {
+          "stage": "redaction",
+          "document": {
+            "id": "fake-doc-id-1",
+            "selfCertifiedDocType": "passport",
+            "s3Prefix": "s3-prefix",
+            "processingType": "sync"
+          },
+          "inferences": {
+            "textract-analyzeDoc": "mocked-textract-analyzeDoc-response",
+            "redaction": {
+              "Redacts": [
+                {
+                  "Name": "fake-class",
+                  "Score": 0.99
+                }
+              ]
+            }
+          }
+        }
+      ]
+    }
+  },
+  "RedactionTestRetryWithSuccess": {
+    "ExpectedOutput": {
+      "id": "fake-case-id-3",
+      "status": "success",
+      "stage": "redaction",
+      "workflows": [
+        "redaction"
+      ],
+      "documentList": [
+        {
+          "stage": "redaction",
+          "document": {
+            "id": "fake-doc-id-1",
+            "selfCertifiedDocType": "passport",
+            "s3Prefix": "s3-prefix",
+            "processingType": "sync"
+          },
+          "inferences": {
+            "redaction": {
+              "Redacts": [
+                {
+                  "Name": "fake-class",
+                  "Score": 0.99
+                }
+              ]
+            }
+          }
+        }
+      ]
+    }
+  }
+}

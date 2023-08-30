@@ -1,0 +1,23 @@
+// Jest Snapshot v1, https://goo.gl/fbAQLP
+
+exports[`PDF component renders document with navigation buttons 1`] = `
+<div
+  className="pdf-viewer"
+  data-testid="pdf-box"
+>
+  <div />
+  <Pagination
+    ariaLabels={
+      Object {
+        "nextPageLabel": "Next page",
+        "pageLabel": [Function],
+        "previousPageLabel": "Previous page",
+      }
+    }
+    currentPageIndex={1}
+    data-testid="pdf-pagination"
+    onChange={[Function]}
+    pagesCount={4}
+  />
+</div>
+`;

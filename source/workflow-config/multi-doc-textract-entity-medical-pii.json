@@ -1,0 +1,22 @@
+{
+  "Name": "multi-doc-textract-entity-medical-pii",
+  "WorkflowSequence": ["textract", "entity-standard", "entity-medical", "entity-pii"],
+  "MinRequiredDocuments": [
+    {
+      "DocumentType": "health-insurance-card",
+      "FileTypes": [".pdf", ".png", ".jpeg", ".jpg"],
+      "MaxSize": "5",
+      "WorkflowsToProcess": ["textract", "entity-standard", "entity-medical", "entity-pii"],
+      "RunTextractAnalyzeAction": true,
+      "NumDocuments": "1"
+    },
+    {
+      "DocumentType": "vaccination-card",
+      "FileTypes": [".pdf", ".png", ".jpeg", ".jpg"],
+      "MaxSize": "5",
+      "WorkflowsToProcess": ["textract", "entity-standard", "entity-medical", "entity-pii"],
+      "RunTextractAnalyzeAction": true,
+      "NumDocuments": "1"
+    }
+  ]
+}

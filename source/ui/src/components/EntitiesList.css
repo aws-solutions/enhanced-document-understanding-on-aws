@@ -1,0 +1,20 @@
+.ObjectDisplay {
+    display: flex;
+    flex-direction: row;
+    justify-content: space-between;
+  }
+  
+  .ColumnHeader {
+    font-weight: bold;
+  }
+  
+  .ObjectRow {
+    display: flex;
+    flex-direction: row;
+    justify-content: space-between;
+  }
+  
+  .ObjectCell {
+    margin: 5px;
+  }
+  

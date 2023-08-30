@@ -1,0 +1,1184 @@
+// Jest Snapshot v1, https://goo.gl/fbAQLP
+
+exports[`Renders entities 1`] = `
+<div>
+  <SpaceBetween
+    direction="horizontal"
+    size="xs"
+  >
+    <Button
+      data-testid="select-all-entities"
+      onClick={[Function]}
+    >
+      Select All
+    </Button>
+    <Button
+      data-testid="deselect-all-entities"
+      onClick={[Function]}
+    >
+      Deselect All
+    </Button>
+    <Button
+      data-testid="redact-all-entities"
+      onClick={[Function]}
+    >
+      Download Redacted Document  
+    </Button>
+    <Toggle
+      checked={false}
+      data-testid="toggle-preview-redaction"
+      onChange={[Function]}
+    >
+       
+      Preview Redacted Document
+       
+    </Toggle>
+  </SpaceBetween>
+  <Tabs
+    tabs={
+      Array [
+        Object {
+          "content": <Box
+            data-testid="box-parent-view-entity-title"
+          >
+            <SpaceBetween
+              direction="horizontal"
+              size="xs"
+            >
+              <Checkbox
+                checked={false}
+                onChange={[Function]}
+              />
+              <Box
+                display="inline"
+                variant="h4"
+              >
+                All Detected 
+                DATE
+                 Entities
+              </Box>
+            </SpaceBetween>
+            <EntityItem
+              entityKey="10/23/20, 3:28 PM"
+              entityObject={
+                Object {
+                  "1": Array [
+                    Object {
+                      "BoundingBoxes": Array [
+                        Object {
+                          "Height": 0.008878546766936779,
+                          "Left": 0.86385178565979,
+                          "Top": 0.022900670766830444,
+                          "Width": 0.10552194342017174,
+                        },
+                      ],
+                      "Score": 0.8919363021850586,
+                    },
+                  ],
+                  "2": Array [
+                    Object {
+                      "BoundingBoxes": Array [
+                        Object {
+                          "Height": 0.008942456915974617,
+                          "Left": 0.8642183542251587,
+                          "Top": 0.02289346233010292,
+                          "Width": 0.10547907836735249,
+                        },
+                      ],
+                      "Score": 0.9485940337181091,
+                    },
+                  ],
+                }
+              }
+              entityPath={
+                Array [
+                  "DATE",
+                  "10/23/20, 3:28 PM",
+                ]
+              }
+              entityType="entity-standard"
+              handleEntitySelect={[Function]}
+              selectedEntities={Array []}
+              switchPage={[MockFunction]}
+            />
+          </Box>,
+          "id": "DATE",
+          "label": <div>
+            DATE
+             
+            <Badge
+              color="blue"
+              data-testid="badge-entity-count"
+            >
+              0
+            </Badge>
+          </div>,
+        },
+        Object {
+          "content": <Box
+            data-testid="box-parent-view-entity-title"
+          >
+            <SpaceBetween
+              direction="horizontal"
+              size="xs"
+            >
+              <Checkbox
+                checked={false}
+                onChange={[Function]}
+              />
+              <Box
+                display="inline"
+                variant="h4"
+              >
+                All Detected 
+                OTHER
+                 Entities
+              </Box>
+            </SpaceBetween>
+            <EntityItem
+              entityKey="type 2"
+              entityObject={
+                Object {
+                  "1": Array [
+                    Object {
+                      "BoundingBoxes": Array [
+                        Object {
+                          "Height": 0.013889942318201065,
+                          "Left": 0.3480696678161621,
+                          "Top": 0.3248501121997833,
+                          "Width": 0.05389057006686926,
+                        },
+                      ],
+                      "Score": 0.8900869488716125,
+                    },
+                    Object {
+                      "BoundingBoxes": Array [
+                        Object {
+                          "Height": 0.014080277644097805,
+                          "Left": 0.4535020887851715,
+                          "Top": 0.3502127230167389,
+                          "Width": 0.053887657821178436,
+                        },
+                      ],
+                      "Score": 0.9038220047950745,
+                    },
+                  ],
+                  "2": Array [
+                    Object {
+                      "BoundingBoxes": Array [
+                        Object {
+                          "Height": 0.014393876306712627,
+                          "Left": 0.2511792778968811,
+                          "Top": 0.10318874567747116,
+                          "Width": 0.05389551538974047,
+                        },
+                      ],
+                      "Score": 0.7960730195045471,
+                    },
+                    Object {
+                      "BoundingBoxes": Array [
+                        Object {
+                          "Height": 0.014388022013008595,
+                          "Left": 0.5558194518089294,
+                          "Top": 0.12837538123130798,
+                          "Width": 0.05399103555828333,
+                        },
+                      ],
+                      "Score": 0.8712689876556396,
+                    },
+                  ],
+                }
+              }
+              entityPath={
+                Array [
+                  "OTHER",
+                  "type 2",
+                ]
+              }
+              entityType="entity-standard"
+              handleEntitySelect={[Function]}
+              selectedEntities={Array []}
+              switchPage={[MockFunction]}
+            />
+            <EntityItem
+              entityKey="Type 1"
+              entityObject={
+                Object {
+                  "1": Array [
+                    Object {
+                      "BoundingBoxes": Array [
+                        Object {
+                          "Height": 0.020937375724315643,
+                          "Left": 0.08632709830999374,
+                          "Top": 0.6895765066146851,
+                          "Width": 0.0822468101978302,
+                        },
+                      ],
+                      "Score": 0.7336651086807251,
+                    },
+                  ],
+                }
+              }
+              entityPath={
+                Array [
+                  "OTHER",
+                  "Type 1",
+                ]
+              }
+              entityType="entity-standard"
+              handleEntitySelect={[Function]}
+              selectedEntities={Array []}
+              switchPage={[MockFunction]}
+            />
+            <EntityItem
+              entityKey="type"
+              entityObject={
+                Object {
+                  "1": Array [
+                    Object {
+                      "BoundingBoxes": Array [
+                        Object {
+                          "Height": 0.014065195806324482,
+                          "Left": 0.1903296411037445,
+                          "Top": 0.7322471141815186,
+                          "Width": 0.03872048854827881,
+                        },
+                      ],
+                      "Score": 0.5598312616348267,
+                    },
+                  ],
+                }
+              }
+              entityPath={
+                Array [
+                  "OTHER",
+                  "type",
+                ]
+              }
+              entityType="entity-standard"
+              handleEntitySelect={[Function]}
+              selectedEntities={Array []}
+              switchPage={[MockFunction]}
+            />
+            <EntityItem
+              entityKey="https://www.niddk.nih.gov/health-information/diabetes/overview/insulin-medicines-treatments"
+              entityObject={
+                Object {
+                  "1": Array [
+                    Object {
+                      "BoundingBoxes": Array [
+                        Object {
+                          "Height": 0.009421877562999725,
+                          "Left": 0.035508979111909866,
+                          "Top": 0.9383252263069153,
+                          "Width": 0.5339186787605286,
+                        },
+                      ],
+                      "Score": 0.9924692511558533,
+                    },
+                  ],
+                  "2": Array [
+                    Object {
+                      "BoundingBoxes": Array [
+                        Object {
+                          "Height": 0.009870187379419804,
+                          "Left": 0.03043067455291748,
+                          "Top": 0.9381237626075745,
+                          "Width": 0.5440027117729187,
+                        },
+                      ],
+                      "Score": 0.9908434152603149,
+                    },
+                  ],
+                }
+              }
+              entityPath={
+                Array [
+                  "OTHER",
+                  "https://www.niddk.nih.gov/health-information/diabetes/overview/insulin-medicines-treatments",
+                ]
+              }
+              entityType="entity-standard"
+              handleEntitySelect={[Function]}
+              selectedEntities={Array []}
+              switchPage={[MockFunction]}
+            />
+            <EntityItem
+              entityKey="Type"
+              entityObject={
+                Object {
+                  "2": Array [
+                    Object {
+                      "BoundingBoxes": Array [
+                        Object {
+                          "Height": 0.020820338279008865,
+                          "Left": 0.08637390285730362,
+                          "Top": 0.06082107126712799,
+                          "Width": 0.06242794170975685,
+                        },
+                      ],
+                      "Score": 0.5639591813087463,
+                    },
+                  ],
+                }
+              }
+              entityPath={
+                Array [
+                  "OTHER",
+                  "Type",
+                ]
+              }
+              entityType="entity-standard"
+              handleEntitySelect={[Function]}
+              selectedEntities={Array []}
+              switchPage={[MockFunction]}
+            />
+          </Box>,
+          "id": "OTHER",
+          "label": <div>
+            OTHER
+             
+            <Badge
+              color="blue"
+              data-testid="badge-entity-count"
+            >
+              0
+            </Badge>
+          </div>,
+        },
+        Object {
+          "content": <Box
+            data-testid="box-parent-view-entity-title"
+          >
+            <SpaceBetween
+              direction="horizontal"
+              size="xs"
+            >
+              <Checkbox
+                checked={false}
+                onChange={[Function]}
+              />
+              <Box
+                display="inline"
+                variant="h4"
+              >
+                All Detected 
+                ORGANIZATION
+                 Entities
+              </Box>
+            </SpaceBetween>
+            <EntityItem
+              entityKey="National Institute of Diabetes and Digestive and Kidney Diseases"
+              entityObject={
+                Object {
+                  "1": Array [
+                    Object {
+                      "BoundingBoxes": Array [
+                        Object {
+                          "Height": 0.010149835608899593,
+                          "Left": 0.08180448412895203,
+                          "Top": 0.8846619129180908,
+                          "Width": 0.3759935013949871,
+                        },
+                      ],
+                      "Score": 0.9994651675224304,
+                    },
+                  ],
+                  "2": Array [
+                    Object {
+                      "BoundingBoxes": Array [
+                        Object {
+                          "Height": 0.010238399729132652,
+                          "Left": 0.08183760941028595,
+                          "Top": 0.9604963660240173,
+                          "Width": 0.37597523257136345,
+                        },
+                      ],
+                      "Score": 0.9993358850479126,
+                    },
+                  ],
+                }
+              }
+              entityPath={
+                Array [
+                  "ORGANIZATION",
+                  "National Institute of Diabetes and Digestive and Kidney Diseases",
+                ]
+              }
+              entityType="entity-standard"
+              handleEntitySelect={[Function]}
+              selectedEntities={Array []}
+              switchPage={[MockFunction]}
+            />
+            <EntityItem
+              entityKey="NIDDK"
+              entityObject={
+                Object {
+                  "1": Array [
+                    Object {
+                      "BoundingBoxes": Array [
+                        Object {
+                          "Height": 0.009927762672305107,
+                          "Left": 0.46177950501441956,
+                          "Top": 0.8847051858901978,
+                          "Width": 0.052133601158857346,
+                        },
+                      ],
+                      "Score": 0.9910317659378052,
+                    },
+                    Object {
+                      "BoundingBoxes": Array [
+                        Object {
+                          "Height": 0.008275030180811882,
+                          "Left": 0.36147740483283997,
+                          "Top": 0.8983390927314758,
+                          "Width": 0.043409429490566254,
+                        },
+                      ],
+                      "Score": 0.9037812948226929,
+                    },
+                  ],
+                  "2": Array [
+                    Object {
+                      "BoundingBoxes": Array [
+                        Object {
+                          "Height": 0.009995872154831886,
+                          "Left": 0.46185776591300964,
+                          "Top": 0.9606045484542847,
+                          "Width": 0.05230835825204849,
+                        },
+                      ],
+                      "Score": 0.9871048927307129,
+                    },
+                    Object {
+                      "BoundingBoxes": Array [
+                        Object {
+                          "Height": 0.008231394924223423,
+                          "Left": 0.3616192042827606,
+                          "Top": 0.9741417169570923,
+                          "Width": 0.043524131178855896,
+                        },
+                      ],
+                      "Score": 0.8874284029006958,
+                    },
+                  ],
+                }
+              }
+              entityPath={
+                Array [
+                  "ORGANIZATION",
+                  "NIDDK",
+                ]
+              }
+              entityType="entity-standard"
+              handleEntitySelect={[Function]}
+              selectedEntities={Array []}
+              switchPage={[MockFunction]}
+            />
+            <EntityItem
+              entityKey="U.S. Government"
+              entityObject={
+                Object {
+                  "1": Array [
+                    Object {
+                      "BoundingBoxes": Array [
+                        Object {
+                          "Height": 0.0094399843364954,
+                          "Left": 0.1733912229537964,
+                          "Top": 0.8980084657669067,
+                          "Width": 0.10356565564870834,
+                        },
+                      ],
+                      "Score": 0.9949480891227722,
+                    },
+                  ],
+                  "2": Array [
+                    Object {
+                      "BoundingBoxes": Array [
+                        Object {
+                          "Height": 0.009321463294327259,
+                          "Left": 0.17332343757152557,
+                          "Top": 0.9741197228431702,
+                          "Width": 0.10373178869485855,
+                        },
+                      ],
+                      "Score": 0.9736790060997009,
+                    },
+                  ],
+                }
+              }
+              entityPath={
+                Array [
+                  "ORGANIZATION",
+                  "U.S. Government",
+                ]
+              }
+              entityType="entity-standard"
+              handleEntitySelect={[Function]}
+              selectedEntities={Array []}
+              switchPage={[MockFunction]}
+            />
+            <EntityItem
+              entityKey="HHS"
+              entityObject={
+                Object {
+                  "1": Array [
+                    Object {
+                      "BoundingBoxes": Array [
+                        Object {
+                          "Height": 0.00947714876383543,
+                          "Left": 0.28164926171302795,
+                          "Top": 0.8982468843460083,
+                          "Width": 0.030303074046969414,
+                        },
+                      ],
+                      "Score": 0.9977951049804688,
+                    },
+                  ],
+                  "2": Array [
+                    Object {
+                      "BoundingBoxes": Array [
+                        Object {
+                          "Height": 0.009173440746963024,
+                          "Left": 0.2816435396671295,
+                          "Top": 0.97417151927948,
+                          "Width": 0.03015240840613842,
+                        },
+                      ],
+                      "Score": 0.9805117249488831,
+                    },
+                  ],
+                }
+              }
+              entityPath={
+                Array [
+                  "ORGANIZATION",
+                  "HHS",
+                ]
+              }
+              entityType="entity-standard"
+              handleEntitySelect={[Function]}
+              selectedEntities={Array []}
+              switchPage={[MockFunction]}
+            />
+            <EntityItem
+              entityKey="NIH"
+              entityObject={
+                Object {
+                  "1": Array [
+                    Object {
+                      "BoundingBoxes": Array [
+                        Object {
+                          "Height": 0.009578598663210869,
+                          "Left": 0.31637564301490784,
+                          "Top": 0.8982349634170532,
+                          "Width": 0.025267114862799644,
+                        },
+                      ],
+                      "Score": 0.9990106821060181,
+                    },
+                  ],
+                  "2": Array [
+                    Object {
+                      "BoundingBoxes": Array [
+                        Object {
+                          "Height": 0.009317233227193356,
+                          "Left": 0.3164917230606079,
+                          "Top": 0.9741648435592651,
+                          "Width": 0.025053730234503746,
+                        },
+                      ],
+                      "Score": 0.9952621459960938,
+                    },
+                  ],
+                }
+              }
+              entityPath={
+                Array [
+                  "ORGANIZATION",
+                  "NIH",
+                ]
+              }
+              entityType="entity-standard"
+              handleEntitySelect={[Function]}
+              selectedEntities={Array []}
+              switchPage={[MockFunction]}
+            />
+          </Box>,
+          "id": "ORGANIZATION",
+          "label": <div>
+            ORGANIZATION
+             
+            <Badge
+              color="blue"
+              data-testid="badge-entity-count"
+            >
+              0
+            </Badge>
+          </div>,
+        },
+        Object {
+          "content": <Box
+            data-testid="box-parent-view-entity-title"
+          >
+            <SpaceBetween
+              direction="horizontal"
+              size="xs"
+            >
+              <Checkbox
+                checked={false}
+                onChange={[Function]}
+              />
+              <Box
+                display="inline"
+                variant="h4"
+              >
+                All Detected 
+                QUANTITY
+                 Entities
+              </Box>
+            </SpaceBetween>
+            <EntityItem
+              entityKey="2"
+              entityObject={
+                Object {
+                  "2": Array [
+                    Object {
+                      "BoundingBoxes": Array [
+                        Object {
+                          "Height": 0.009906122460961342,
+                          "Left": 0.7171330451965332,
+                          "Top": 0.8136228322982788,
+                          "Width": 0.01039495412260294,
+                        },
+                      ],
+                      "Score": 0.9887447357177734,
+                    },
+                    Object {
+                      "BoundingBoxes": Array [
+                        Object {
+                          "Height": 0.009567677974700928,
+                          "Left": 0.5977944731712341,
+                          "Top": 0.8502328395843506,
+                          "Width": 0.0101395258679986,
+                        },
+                      ],
+                      "Score": 0.9595391750335693,
+                    },
+                    Object {
+                      "BoundingBoxes": Array [
+                        Object {
+                          "Height": 0.009947454556822777,
+                          "Left": 0.34798651933670044,
+                          "Top": 0.8956213593482971,
+                          "Width": 0.01052072923630476,
+                        },
+                      ],
+                      "Score": 0.9844021797180176,
+                    },
+                  ],
+                }
+              }
+              entityPath={
+                Array [
+                  "QUANTITY",
+                  "2",
+                ]
+              }
+              entityType="entity-standard"
+              handleEntitySelect={[Function]}
+              selectedEntities={Array []}
+              switchPage={[MockFunction]}
+            />
+            <EntityItem
+              entityKey="3"
+              entityObject={
+                Object {
+                  "2": Array [
+                    Object {
+                      "BoundingBoxes": Array [
+                        Object {
+                          "Height": 0.012031951919198036,
+                          "Left": 0.6359239816665649,
+                          "Top": 0.8500364422798157,
+                          "Width": 0.009232582524418831,
+                        },
+                      ],
+                      "Score": 0.941055178642273,
+                    },
+                    Object {
+                      "BoundingBoxes": Array [
+                        Object {
+                          "Height": 0.012125308625400066,
+                          "Left": 0.7171798944473267,
+                          "Top": 0.859142541885376,
+                          "Width": 0.00931690912693739,
+                        },
+                      ],
+                      "Score": 0.9909900426864624,
+                    },
+                  ],
+                }
+              }
+              entityPath={
+                Array [
+                  "QUANTITY",
+                  "3",
+                ]
+              }
+              entityType="entity-standard"
+              handleEntitySelect={[Function]}
+              selectedEntities={Array []}
+              switchPage={[MockFunction]}
+            />
+            <EntityItem
+              entityKey="4"
+              entityObject={
+                Object {
+                  "2": Array [
+                    Object {
+                      "BoundingBoxes": Array [
+                        Object {
+                          "Height": 0.012411089614033699,
+                          "Left": 0.5974767804145813,
+                          "Top": 0.8951147794723511,
+                          "Width": 0.011025403626263142,
+                        },
+                      ],
+                      "Score": 0.959689199924469,
+                    },
+                  ],
+                }
+              }
+              entityPath={
+                Array [
+                  "QUANTITY",
+                  "4",
+                ]
+              }
+              entityType="entity-standard"
+              handleEntitySelect={[Function]}
+              selectedEntities={Array []}
+              switchPage={[MockFunction]}
+            />
+            <EntityItem
+              entityKey="10"
+              entityObject={
+                Object {
+                  "1": Array [
+                    Object {
+                      "BoundingBoxes": Array [
+                        Object {
+                          "Height": 0.007650964427739382,
+                          "Left": 0.9567983746528625,
+                          "Top": 0.9384483098983765,
+                          "Width": 0.01304927933961153,
+                        },
+                      ],
+                      "Score": 0.8660756349563599,
+                    },
+                  ],
+                  "2": Array [
+                    Object {
+                      "BoundingBoxes": Array [
+                        Object {
+                          "Height": 0.0074538555927574635,
+                          "Left": 0.956968367099762,
+                          "Top": 0.9384286403656006,
+                          "Width": 0.012656530365347862,
+                        },
+                      ],
+                      "Score": 0.6214289665222168,
+                    },
+                  ],
+                }
+              }
+              entityPath={
+                Array [
+                  "QUANTITY",
+                  "10",
+                ]
+              }
+              entityType="entity-standard"
+              handleEntitySelect={[Function]}
+              selectedEntities={Array []}
+              switchPage={[MockFunction]}
+            />
+            <EntityItem
+              entityKey="12"
+              entityObject={
+                Object {
+                  "2": Array [
+                    Object {
+                      "BoundingBoxes": Array [
+                        Object {
+                          "Height": 0.00958269089460373,
+                          "Left": 0.6363021731376648,
+                          "Top": 0.8955987095832825,
+                          "Width": 0.01847921870648861,
+                        },
+                      ],
+                      "Score": 0.9487652778625488,
+                    },
+                  ],
+                }
+              }
+              entityPath={
+                Array [
+                  "QUANTITY",
+                  "12",
+                ]
+              }
+              entityType="entity-standard"
+              handleEntitySelect={[Function]}
+              selectedEntities={Array []}
+              switchPage={[MockFunction]}
+            />
+            <EntityItem
+              entityKey="Page 1"
+              entityObject={
+                Object {
+                  "1": Array [
+                    Object {
+                      "BoundingBoxes": Array [
+                        Object {
+                          "Height": 0.009489667601883411,
+                          "Left": 0.9008000493049622,
+                          "Top": 0.9383533000946045,
+                          "Width": 0.03649726137518883,
+                        },
+                      ],
+                      "Score": 0.8226835131645203,
+                    },
+                  ],
+                }
+              }
+              entityPath={
+                Array [
+                  "QUANTITY",
+                  "Page 1",
+                ]
+              }
+              entityType="entity-standard"
+              handleEntitySelect={[Function]}
+              selectedEntities={Array []}
+              switchPage={[MockFunction]}
+            />
+            <EntityItem
+              entityKey="more than one diabetes medicine"
+              entityObject={
+                Object {
+                  "2": Array [
+                    Object {
+                      "BoundingBoxes": Array [
+                        Object {
+                          "Height": 0.012482712045311928,
+                          "Left": 0.5868698954582214,
+                          "Top": 0.17744937539100647,
+                          "Width": 0.2983839511871338,
+                        },
+                      ],
+                      "Score": 0.9063174724578857,
+                    },
+                  ],
+                }
+              }
+              entityPath={
+                Array [
+                  "QUANTITY",
+                  "more than one diabetes medicine",
+                ]
+              }
+              entityType="entity-standard"
+              handleEntitySelect={[Function]}
+              selectedEntities={Array []}
+              switchPage={[MockFunction]}
+            />
+            <EntityItem
+              entityKey="first"
+              entityObject={
+                Object {
+                  "2": Array [
+                    Object {
+                      "BoundingBoxes": Array [
+                        Object {
+                          "Height": 0.012655126862227917,
+                          "Left": 0.48506584763526917,
+                          "Top": 0.30861425399780273,
+                          "Width": 0.038332730531692505,
+                        },
+                      ],
+                      "Score": 0.9870350956916809,
+                    },
+                  ],
+                }
+              }
+              entityPath={
+                Array [
+                  "QUANTITY",
+                  "first",
+                ]
+              }
+              entityType="entity-standard"
+              handleEntitySelect={[Function]}
+              selectedEntities={Array []}
+              switchPage={[MockFunction]}
+            />
+            <EntityItem
+              entityKey="Each type"
+              entityObject={
+                Object {
+                  "2": Array [
+                    Object {
+                      "BoundingBoxes": Array [
+                        Object {
+                          "Height": 0.015551361255347729,
+                          "Left": 0.42323219776153564,
+                          "Top": 0.6119845509529114,
+                          "Width": 0.08664331212639809,
+                        },
+                      ],
+                      "Score": 0.9794559478759766,
+                    },
+                  ],
+                }
+              }
+              entityPath={
+                Array [
+                  "QUANTITY",
+                  "Each type",
+                ]
+              }
+              entityType="entity-standard"
+              handleEntitySelect={[Function]}
+              selectedEntities={Array []}
+              switchPage={[MockFunction]}
+            />
+            <EntityItem
+              entityKey="About 15 minutes"
+              entityObject={
+                Object {
+                  "2": Array [
+                    Object {
+                      "BoundingBoxes": Array [
+                        Object {
+                          "Height": 0.014401831664144993,
+                          "Left": 0.347101628780365,
+                          "Top": 0.8023276925086975,
+                          "Width": 0.15629703551530838,
+                        },
+                      ],
+                      "Score": 0.9184675216674805,
+                    },
+                  ],
+                }
+              }
+              entityPath={
+                Array [
+                  "QUANTITY",
+                  "About 15 minutes",
+                ]
+              }
+              entityType="entity-standard"
+              handleEntitySelect={[Function]}
+              selectedEntities={Array []}
+              switchPage={[MockFunction]}
+            />
+            <EntityItem
+              entityKey="1 hour"
+              entityObject={
+                Object {
+                  "2": Array [
+                    Object {
+                      "BoundingBoxes": Array [
+                        Object {
+                          "Height": 0.012362648732960224,
+                          "Left": 0.5974429845809937,
+                          "Top": 0.811211109161377,
+                          "Width": 0.05558495223522186,
+                        },
+                      ],
+                      "Score": 0.9978331327438354,
+                    },
+                  ],
+                }
+              }
+              entityPath={
+                Array [
+                  "QUANTITY",
+                  "1 hour",
+                ]
+              }
+              entityType="entity-standard"
+              handleEntitySelect={[Function]}
+              selectedEntities={Array []}
+              switchPage={[MockFunction]}
+            />
+            <EntityItem
+              entityKey="4 hours"
+              entityObject={
+                Object {
+                  "2": Array [
+                    Object {
+                      "BoundingBoxes": Array [
+                        Object {
+                          "Height": 0.014383045956492424,
+                          "Left": 0.7551165223121643,
+                          "Top": 0.8114259243011475,
+                          "Width": 0.06802167743444443,
+                        },
+                      ],
+                      "Score": 0.9918981790542603,
+                    },
+                    Object {
+                      "BoundingBoxes": Array [
+                        Object {
+                          "Height": 0.014486236497759819,
+                          "Left": 0.3862510621547699,
+                          "Top": 0.8931238651275635,
+                          "Width": 0.06794086843729019,
+                        },
+                      ],
+                      "Score": 0.9674264788627625,
+                    },
+                  ],
+                }
+              }
+              entityPath={
+                Array [
+                  "QUANTITY",
+                  "4 hours",
+                ]
+              }
+              entityType="entity-standard"
+              handleEntitySelect={[Function]}
+              selectedEntities={Array []}
+              switchPage={[MockFunction]}
+            />
+            <EntityItem
+              entityKey="30 minutes"
+              entityObject={
+                Object {
+                  "2": Array [
+                    Object {
+                      "BoundingBoxes": Array [
+                        Object {
+                          "Height": 0.014619669876992702,
+                          "Left": 0.41469624638557434,
+                          "Top": 0.8478578925132751,
+                          "Width": 0.10021734982728958,
+                        },
+                      ],
+                      "Score": 0.9913085699081421,
+                    },
+                  ],
+                }
+              }
+              entityPath={
+                Array [
+                  "QUANTITY",
+                  "30 minutes",
+                ]
+              }
+              entityType="entity-standard"
+              handleEntitySelect={[Function]}
+              selectedEntities={Array []}
+              switchPage={[MockFunction]}
+            />
+            <EntityItem
+              entityKey="6 hours"
+              entityObject={
+                Object {
+                  "2": Array [
+                    Object {
+                      "BoundingBoxes": Array [
+                        Object {
+                          "Height": 0.012215577065944672,
+                          "Left": 0.7551319599151611,
+                          "Top": 0.8568243384361267,
+                          "Width": 0.06742136552929878,
+                        },
+                      ],
+                      "Score": 0.9830698370933533,
+                    },
+                  ],
+                }
+              }
+              entityPath={
+                Array [
+                  "QUANTITY",
+                  "6 hours",
+                ]
+              }
+              entityType="entity-standard"
+              handleEntitySelect={[Function]}
+              selectedEntities={Array []}
+              switchPage={[MockFunction]}
+            />
+            <EntityItem
+              entityKey="Page 2"
+              entityObject={
+                Object {
+                  "2": Array [
+                    Object {
+                      "BoundingBoxes": Array [
+                        Object {
+                          "Height": 0.009177501313388348,
+                          "Left": 0.8991856575012207,
+                          "Top": 0.9385843276977539,
+                          "Width": 0.03859133180230856,
+                        },
+                      ],
+                      "Score": 0.9585963487625122,
+                    },
+                  ],
+                }
+              }
+              entityPath={
+                Array [
+                  "QUANTITY",
+                  "Page 2",
+                ]
+              }
+              entityType="entity-standard"
+              handleEntitySelect={[Function]}
+              selectedEntities={Array []}
+              switchPage={[MockFunction]}
+            />
+          </Box>,
+          "id": "QUANTITY",
+          "label": <div>
+            QUANTITY
+             
+            <Badge
+              color="blue"
+              data-testid="badge-entity-count"
+            >
+              0
+            </Badge>
+          </div>,
+        },
+      ]
+    }
+  />
+</div>
+`;
+
+exports[`Renders without entities 1`] = `
+<p
+  data-testid="entities-nodata"
+>
+  No 
+   Entities detected
+</p>
+`;
+
+exports[`Renders without medical entities 1`] = `
+<p
+  data-testid="medical-entities-nodata"
+>
+  No 
+  Medical
+   Entities detected
+</p>
+`;

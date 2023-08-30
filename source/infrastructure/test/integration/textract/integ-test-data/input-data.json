@@ -1,0 +1,206 @@
+{
+  "testcases": [
+    {
+      "name": "AnalyzeDocTestSuccess",
+      "input": {
+        "detail": {
+          "case": {
+            "id": "fake-case-id-1",
+            "status": "initiate",
+            "stage": "textract",
+            "workflows": [
+              "classification",
+              "textract",
+              "entity-pii"
+            ],
+            "documentList": [
+              {
+                "stage": "textract",
+                "document": {
+                  "caseId": "fake-case-id-1",
+                  "id": "fake-doc-id-1",
+                  "selfCertifiedDocType": "passport",
+                  "s3Prefix": "s3-prefix",
+                  "processingType": "sync",
+                  "documentWorkflow": [
+                    "textract"
+                  ]
+                },
+                "inferences": {}
+              },
+              {
+                "stage": "textract",
+                "document": {
+                  "caseId": "fake-case-id-1",
+                  "id": "fake-doc-id-2",
+                  "selfCertifiedDocType": "passport",
+                  "s3Prefix": "s3-prefix",
+                  "processingType": "sync",
+                  "documentWorkflow": [
+                    "textract"
+                  ]
+                },
+                "inferences": {}
+              }
+            ]
+          }
+        }
+      }
+    },
+    {
+      "name": "AnalyzeDocTestSkipDoc",
+      "input": {
+        "detail": {
+          "case": {
+            "id": "fake-case-id-1",
+            "status": "initiate",
+            "stage": "textract",
+            "workflows": [
+              "classification",
+              "textract",
+              "entity-pii"
+            ],
+            "documentList": [
+              {
+                "stage": "textract",
+                "document": {
+                  "caseId": "fake-case-id-1",
+                  "id": "fake-doc-id-1-skip",
+                  "selfCertifiedDocType": "passport",
+                  "s3Prefix": "s3-prefix",
+                  "processingType": "sync",
+                  "documentWorkflow": [
+                    "entity-pii"
+                  ]
+                },
+                "inferences": {}
+              },
+              {
+                "stage": "textract",
+                "document": {
+                  "caseId": "fake-case-id-1",
+                  "id": "fake-doc-id-2",
+                  "selfCertifiedDocType": "passport",
+                  "s3Prefix": "s3-prefix",
+                  "processingType": "sync",
+                  "documentWorkflow": [
+                    "textract"
+                  ]
+                },
+                "inferences": {}
+              }
+            ]
+          }
+        }
+      }
+    },
+    {
+      "name": "AnalyzeDocTestRetryWithSuccess",
+      "input": {
+        "detail": {
+          "case": {
+            "id": "fake-case-id-2",
+            "status": "initiate",
+            "stage": "textract",
+            "workflows": [
+              "classification",
+              "textract",
+              "entity-pii"
+            ],
+            "documentList": [
+              {
+                "stage": "textract",
+                "document": {
+                  "id": "fake-doc-id-1",
+                  "selfCertifiedDocType": "passport",
+                  "s3Prefix": "s3-prefix",
+                  "processingType": "sync",
+                  "documentWorkflow": [
+                    "textract"
+                  ]
+                },
+                "inferences": {}
+              }
+            ]
+          }
+        }
+      }
+    },
+    {
+      "name": "AnalyzeDocTestFail",
+      "input": {
+        "detail": {
+          "case": {
+            "id": "fake-case-id-3",
+            "status": "initiate",
+            "stage": "textract",
+            "workflows": [
+              "textract",
+              "entity-pii"
+            ],
+            "documentList": [
+              {
+                "stage": "textract",
+                "document": {
+                  "caseId": "fake-case-id-3",
+                  "id": "fake-doc-id-1",
+                  "selfCertifiedDocType": "passport",
+                  "s3Prefix": "s3-prefix",
+                  "processingType": "sync",
+                  "documentWorkflow": [
+                    "textract"
+                  ]
+                },
+                "inferences": {}
+              },
+              {
+                "stage": "textract",
+                "document": {
+                  "caseId": "fake-case-id-3",
+                  "id": "fake-doc-id-2",
+                  "selfCertifiedDocType": "passport",
+                  "s3Prefix": "s3-prefix",
+                  "processingType": "sync",
+                  "documentWorkflow": [
+                    "textract"
+                  ]
+                },
+                "inferences": {}
+              }
+            ]
+          }
+        }
+      }
+    },
+    {
+      "name": "AnalyzeDocTestFailSimple",
+      "input": {
+        "detail": {
+          "case": {
+            "id": "fake-case-id-3",
+            "status": "initiate",
+            "stage": "textract",
+            "workflows": [
+              "textract",
+              "entity-pii"
+            ],
+            "documentList": [
+              {
+                "document": {
+                  "caseId": "fake-case-id-3",
+                  "id": "fake-doc-id-1",
+                  "selfCertifiedDocType": "passport",
+                  "s3Prefix": "s3-prefix",
+                  "processingType": "sync",
+                  "documentWorkflow": [
+                    "textract"
+                  ]
+                }
+              }
+            ]
+          }
+        }
+      }
+    }
+  ]
+}

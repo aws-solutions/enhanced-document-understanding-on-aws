@@ -1,0 +1,57 @@
+/**********************************************************************************************************************
+ *  Copyright Amazon.com, Inc. or its affiliates. All Rights Reserved.                                                *
+ *                                                                                                                    *
+ *  Licensed under the Apache License, Version 2.0 (the "License"). You may not use this file except in compliance    *
+ *  with the License. A copy of the License is located at                                                             *
+ *                                                                                                                    *
+ *      http://www.apache.org/licenses/LICENSE-2.0                                                                    *
+ *                                                                                                                    *
+ *  or in the 'license' file accompanying this file. This file is distributed on an 'AS IS' BASIS, WITHOUT WARRANTIES *
+ *  OR CONDITIONS OF ANY KIND, express or implied. See the License for the specific language governing permissions    *
+ *  and limitations under the License.                                                                                *
+ *********************************************************************************************************************/
+
+package com.builder.lambda.model;
+
+import com.google.gson.Gson;
+import org.junit.jupiter.api.BeforeAll;
+import org.junit.jupiter.api.Test;
+
+import java.nio.file.Files;
+import java.nio.file.Path;
+
+import static org.junit.jupiter.api.Assertions.assertEquals;
+import static org.junit.jupiter.api.Assertions.assertFalse;
+import static org.junit.jupiter.api.Assertions.assertTrue;
+
+class PhraseRedactionTest {
+    static String eventBody;
+
+    @BeforeAll
+    public static void setup() throws Exception {
+        Path eventBodyFilePath = Path.of("src/test/java/resources/apiRequestBody.json");
+        eventBody = Files.readString(eventBodyFilePath);
+    }
+
+    @Test
+    public void testPhraseRedactionData() {
+        ApiRequestBody apiRequestBody = new Gson().fromJson(eventBody, ApiRequestBody.class);
+        PhraseRedaction phraseRedaction = apiRequestBody.getPhrases().get(0);
+        assertEquals("to blenders Seattle", phraseRedaction.getText());
+        assertEquals(2, phraseRedaction.getPages().size());
+    }
+
+    @Test
+    public void testEqualsAndHashCode() throws Exception {
+        PhraseRedaction phraseRedaction = new PhraseRedaction();
+        assertFalse(phraseRedaction.equals(null));
+        assertFalse(phraseRedaction.equals(new Object()));
+
+        ApiRequestBody apiRequestBody = new Gson().fromJson(eventBody, ApiRequestBody.class);
+        phraseRedaction = apiRequestBody.getPhrases().get(0);
+        PhraseRedaction anotherPhraseRedaction = apiRequestBody.getPhrases().get(0);
+
+        assertTrue(phraseRedaction.equals(anotherPhraseRedaction) && anotherPhraseRedaction.equals(phraseRedaction));
+        assertEquals(phraseRedaction.hashCode(), anotherPhraseRedaction.hashCode());
+    }
+}
