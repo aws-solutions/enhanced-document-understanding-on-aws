@@ -1,0 +1,146 @@
+// Jest Snapshot v1, https://goo.gl/fbAQLP
+
+exports[`Snapshot test 1`] = `
+<div
+  style={
+    Object {
+      "minHeight": "320rem",
+      "paddingBottom": "32rem",
+      "position": "relative",
+    }
+  }
+>
+  <p
+    style={
+      Object {
+        "color": "gray",
+        "fontWeight": "bold",
+        "margin": "2em 0",
+        "textAlign": "center",
+      }
+    }
+  >
+    No documents found. 
+    <br />
+    <Button
+      onClick={[Function]}
+      variant="normal"
+    >
+      Add a new Document
+    </Button>
+  </p>
+</div>
+`;
+
+exports[`Snapshot test with cases 1`] = `
+<AppLayout
+  content={
+    <ContentLayout
+      data-testid="kendra-search-contentlayout"
+      header={
+        <SpaceBetween
+          size="m"
+        >
+          <Header
+            variant="h1"
+          >
+            Kendra search
+          </Header>
+        </SpaceBetween>
+      }
+    >
+      <form
+        onSubmit={[Function]}
+      >
+        <Form
+          actions={
+            <SpaceBetween
+              direction="horizontal"
+              size="xs"
+            >
+              <Button
+                data-testid="kendra-search-button"
+                onClick={[Function]}
+                variant="primary"
+              >
+                Search
+              </Button>
+            </SpaceBetween>
+          }
+          data-testid="search-view-form"
+          errorIconAriaLabel="Error"
+        >
+          <Container>
+            <SpaceBetween
+              direction="vertical"
+              size="l"
+            >
+              <FormField
+                data-testid="search-field"
+                errorText=""
+                i18nStrings={
+                  Object {
+                    "errorIconAriaLabel": "Error",
+                  }
+                }
+                label="Search query"
+              >
+                <Input
+                  data-testid="search-view-search"
+                  onChange={[Function]}
+                  onKeyDown={[Function]}
+                  placeholder="Search"
+                  type="search"
+                  value=""
+                />
+              </FormField>
+              <FormField
+                data-testid="case-selection-field"
+                i18nStrings={
+                  Object {
+                    "errorIconAriaLabel": "Error",
+                  }
+                }
+                label="Case selection"
+              >
+                <Multiselect
+                  data-testid="search-case-multiselect"
+                  filteringType="auto"
+                  onChange={[Function]}
+                  options={
+                    Array [
+                      Object {
+                        "label": "case1",
+                        "value": undefined,
+                      },
+                    ]
+                  }
+                  placeholder="Choose to specify cases"
+                  selectedAriaLabel="Selected"
+                  selectedOptions={Array []}
+                />
+              </FormField>
+            </SpaceBetween>
+          </Container>
+        </Form>
+      </form>
+      <div
+        style={
+          Object {
+            "minHeight": "320rem",
+            "paddingBottom": "32rem",
+            "position": "relative",
+          }
+        }
+      >
+        
+      </div>
+    </ContentLayout>
+  }
+  contentType="form"
+  date-testid="search-view-applayout"
+  headerSelector="#header"
+  navigationHide={true}
+  toolsHide={true}
+/>
+`;

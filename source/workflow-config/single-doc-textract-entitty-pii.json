@@ -1,0 +1,14 @@
+{
+  "Name": "single-doc-textract-entity-pii",
+  "WorkflowSequence": ["textract", "entity-standard", "entity-pii"],
+  "MinRequiredDocuments": [
+    {
+      "DocumentType": "passport",
+      "FileTypes": [".pdf", ".png", ".jpeg", ".jpg"],
+      "MaxSize": "5",
+      "WorkflowsToProcess": ["textract", "entity-standard", "entity-pii"],
+      "RunTextractAnalyzeAction": true,
+      "NumDocuments": "1"
+    }
+  ]
+}

@@ -1,0 +1,15 @@
+{
+  "Name": "multi-doc-textract-with-feature-type",
+  "WorkflowSequence": ["textract"],
+  "MinRequiredDocuments": [
+    {
+      "DocumentType": "generic",
+      "FileTypes": [".pdf", ".png", ".jpeg", ".jpg"],
+      "MaxSize": "5",
+      "WorkflowsToProcess": ["textract"],
+      "RunTextractAnalyzeAction": true,
+      "AnalyzeDocFeatureType": ["TABLES", "FORMS", "SIGNATURES"],
+      "NumDocuments": "3"
+    }
+  ]
+}

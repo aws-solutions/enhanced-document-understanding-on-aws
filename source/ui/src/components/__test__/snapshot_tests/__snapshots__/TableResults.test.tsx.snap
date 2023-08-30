@@ -1,0 +1,130 @@
+// Jest Snapshot v1, https://goo.gl/fbAQLP
+
+exports[`Renders error message when currentStatus is error 1`] = `
+<p
+  data-testid="tables-status-only"
+>
+   
+  <span
+    className="awsui_root_1cbgc_1u3x7_147 awsui_status-error_1cbgc_1u3x7_156"
+  >
+    <span
+      className="awsui_container_1cbgc_1u3x7_125"
+    >
+      <span
+        className="awsui_icon_1cbgc_1u3x7_97"
+      >
+        <span
+          className="awsui_icon_h11ix_ttpon_98 awsui_size-normal-mapped-height_h11ix_ttpon_151 awsui_size-normal_h11ix_ttpon_147 awsui_variant-normal_h11ix_ttpon_219"
+          dangerouslySetInnerHTML={
+            Object {
+              "__html": "<svg xmlns=\\"http://www.w3.org/2000/svg\\" viewBox=\\"0 0 16 16\\" focusable=\\"false\\" aria-hidden=\\"true\\"><circle class=\\"stroke-linejoin-round\\" cx=\\"8\\" cy=\\"8\\" r=\\"7\\"/><path d=\\"m10.828 5.172-5.656 5.656M10.828 10.828 5.172 5.172\\"/></svg>",
+            }
+          }
+          style={Object {}}
+        />
+      </span>
+      An error occurred loading table results.
+    </span>
+  </span>
+   
+</p>
+`;
+
+exports[`Renders loading message when currentStatus is loading 1`] = `
+<p
+  data-testid="tables-status-only"
+>
+   
+  <span
+    className="awsui_root_1cbgc_1u3x7_147 awsui_status-loading_1cbgc_1u3x7_177"
+  >
+    <span
+      className="awsui_container_1cbgc_1u3x7_125"
+    >
+      <span
+        className="awsui_icon_1cbgc_1u3x7_97"
+      >
+        <span
+          className="awsui_root_1612d_qodmh_127 awsui_size-normal_1612d_qodmh_135 awsui_variant-normal_1612d_qodmh_159"
+        >
+          <span
+            className="awsui_circle_1612d_qodmh_169 awsui_circle-left_1612d_qodmh_193"
+          />
+          <span
+            className="awsui_circle_1612d_qodmh_169 awsui_circle-right_1612d_qodmh_198"
+          />
+        </span>
+      </span>
+      Loading
+    </span>
+  </span>
+   
+</p>
+`;
+
+exports[`Renders tables with page numbers shown for multi-page 1`] = `
+<div>
+  <Box
+    display="inline"
+    variant="h3"
+  >
+    Tables: 
+    2
+     Found
+  </Box>
+  <ul
+    data-testid="tables-with-data"
+  >
+    <ExpandableSection
+      headerText="Page 1"
+    >
+      <div
+        onClick={[Function]}
+        style={
+          Object {
+            "cursor": "pointer",
+          }
+        }
+      >
+        <h5>
+          Table 
+          1
+           : 
+          2
+           rows
+        </h5>
+      </div>
+    </ExpandableSection>
+    <ExpandableSection
+      headerText="Page 2"
+    >
+      <div
+        onClick={[Function]}
+        style={
+          Object {
+            "cursor": "pointer",
+          }
+        }
+      >
+        <h5>
+          Table 
+          1
+           : 
+          1
+           rows
+        </h5>
+      </div>
+    </ExpandableSection>
+  </ul>
+  <footer />
+</div>
+`;
+
+exports[`Renders without tables 1`] = `
+<p
+  data-testid="tables-nodata"
+>
+  No Tables detected
+</p>
+`;

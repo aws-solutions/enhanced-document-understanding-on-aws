@@ -1,0 +1,31 @@
+// Jest Snapshot v1, https://goo.gl/fbAQLP
+
+exports[`Snapshot test 1`] = `
+<div>
+  <AppLayout
+    content={
+      <ContentLayout
+        data-testid="create-case-view-contentlayout"
+        header={
+          <SpaceBetween
+            size="m"
+          >
+            <FormHeader />
+          </SpaceBetween>
+        }
+      >
+        <FormContent
+          caseNameError=""
+          currentStatus=""
+          handleButtonClick={[Function]}
+        />
+      </ContentLayout>
+    }
+    contentType="form"
+    date-testid="create-case-view-applayout"
+    headerSelector="#header"
+    navigationHide={true}
+    toolsHide={true}
+  />
+</div>
+`;

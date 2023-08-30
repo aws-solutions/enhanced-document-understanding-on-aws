@@ -1,0 +1,51 @@
+// Jest Snapshot v1, https://goo.gl/fbAQLP
+
+exports[`Snapshot test 1`] = `
+<AppLayout
+  ariaLabels={
+    Object {
+      "navigation": "Side navigation",
+      "navigationClose": "Close side navigation",
+      "navigationToggle": "Open side navigation",
+      "notifications": "Notifications",
+      "tools": "Help panel",
+      "toolsClose": "Close help panel",
+      "toolsToggle": "Open help panel",
+    }
+  }
+  content={null}
+  contentType="table"
+  data-testid="document-table-applayout"
+  headerSelector="#header"
+  navigationHide={true}
+  onSplitPanelResize={[Function]}
+  onSplitPanelToggle={[Function]}
+  onToolsChange={[Function]}
+  splitPanel={
+    <SplitPanel
+      data-testid="document-table-splitpanel"
+      header="No case selected"
+      i18nStrings={
+        Object {
+          "closeButtonAriaLabel": "Close panel",
+          "openButtonAriaLabel": "Open panel",
+          "preferencesCancel": "Cancel",
+          "preferencesConfirm": "Confirm",
+          "preferencesPositionBottom": "Bottom",
+          "preferencesPositionDescription": "Choose the default split panel position for the service.",
+          "preferencesPositionLabel": "Split panel position",
+          "preferencesPositionSide": "Side",
+          "preferencesTitle": "Split panel preferences",
+          "resizeHandleAriaLabel": "Resize split panel",
+        }
+      }
+    >
+      Select a case to see its documents.
+    </SplitPanel>
+  }
+  splitPanelOpen={false}
+  splitPanelSize={500}
+  tools={<CaseTableInfoPanelContent />}
+  toolsOpen={false}
+/>
+`;

@@ -1,0 +1,118 @@
+// Jest Snapshot v1, https://goo.gl/fbAQLP
+
+exports[`Textract tab snapshot test 1`] = `
+<div
+  style={
+    Object {
+      "display": "flex",
+      "height": "100%",
+    }
+  }
+>
+  <div
+    style={
+      Object {
+        "float": "left",
+        "paddingLeft": "1%",
+        "paddingRight": "0.5%",
+        "width": "50%",
+      }
+    }
+  >
+    <Container
+      data-testid="textract-raw-text"
+    >
+      <div>
+        <div
+          className="pdf-viewer"
+          data-testid="pdf-box"
+        >
+          <div
+            className="react-pdf__Document document"
+          >
+            <div
+              className="react-pdf__message react-pdf__message--loading"
+            >
+              Loading PDF…
+            </div>
+          </div>
+          <Pagination
+            ariaLabels={
+              Object {
+                "nextPageLabel": "Next page",
+                "pageLabel": [Function],
+                "previousPageLabel": "Previous page",
+              }
+            }
+            currentPageIndex={1}
+            data-testid="pdf-pagination"
+            onChange={[Function]}
+            pagesCount={0}
+          />
+        </div>
+      </div>
+    </Container>
+  </div>
+  <div
+    style={
+      Object {
+        "float": "left",
+        "height": "100%",
+        "paddingLeft": "0.5%",
+        "paddingRight": "1%",
+        "width": "50%",
+      }
+    }
+  >
+    <Container
+      fitHeight={true}
+    >
+      <div>
+        <Box>
+          <div>
+            <Box
+              display="inline"
+              variant="h3"
+            >
+               
+              Detected Raw Text:
+               
+            </Box>
+            <ul
+              data-testid="raw-text-data"
+            >
+              <ExpandableSection
+                headerText="Page 1"
+              >
+                <ol>
+                  <li
+                    onClick={[Function]}
+                    style={
+                      Object {
+                        "cursor": "pointer",
+                      }
+                    }
+                  >
+                    fake text 1
+                  </li>
+                  <li
+                    onClick={[Function]}
+                    style={
+                      Object {
+                        "cursor": "pointer",
+                      }
+                    }
+                  >
+                    fake text 2
+                  </li>
+                </ol>
+              </ExpandableSection>
+            </ul>
+            <footer />
+          </div>
+        </Box>
+      </div>
+    </Container>
+  </div>
+</div>
+`;

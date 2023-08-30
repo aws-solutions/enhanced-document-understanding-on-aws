@@ -1,0 +1,98 @@
+{
+  "testcase1": {
+    "case": {
+      "id": "fake-case-id-2",
+      "status": "success",
+      "stage": "entity-pii",
+      "workflows": [
+        "classification",
+        "textract",
+        "entity-pii"
+      ],
+      "documentList": [
+        {
+          "stage": "entity-pii",
+          "document": {
+            "caseId": "fake-case-id-2",
+            "id": "fake-doc-id-1",
+            "selfCertifiedDocType": "passport",
+            "s3Prefix": "s3-prefix",
+            "processingType": "sync"
+          },
+          "inferences": {
+            "entity-pii": "mocked-pii-detect-entities-response"
+          }
+        }
+      ]
+    }
+  },
+  "testcase2": {
+    "case": {
+      "id": "fake-case-id-2",
+      "status": "success",
+      "stage": "entity-pii",
+      "workflows": [
+        "classification",
+        "textract",
+        "entity-pii"
+      ],
+      "documentList": [
+        {
+          "stage": "entity-medical",
+          "document": {
+            "caseId": "fake-case-id-2",
+            "id": "fake-doc-id-1",
+            "selfCertifiedDocType": "credit-card",
+            "s3Prefix": "s3-prefix",
+            "processingType": "sync"
+          },
+          "inferences": {
+            "textract-detectText": "mocked-textract-detectText-response",
+            "entity-medical": "mocked-pii-detect-medical-entities-response"
+          }
+        }
+      ]
+    }
+  },
+  "testcase3": {
+    "case": {
+      "id": "fake-case-id-2",
+      "status": "success",
+      "stage": "entity-pii",
+      "workflows": [
+        "classification",
+        "textract",
+        "entity-pii"
+      ],
+      "documentList": [
+        {
+          "stage": "entity-standard",
+          "document": {
+            "caseId": "fake-case-id-2",
+            "id": "fake-doc-id-1",
+            "selfCertifiedDocType": "passport",
+            "s3Prefix": "s3-prefix",
+            "processingType": "sync"
+          },
+          "inferences": {
+            "textract-detectText": "mocked-textract-detectText-response",
+            "entity-standard": "mocked-pii-detect-entities-response"
+          }
+        },
+        {
+          "stage": "entity-standard",
+          "document": {
+            "caseId": "fake-case-id-2",
+            "id": "fake-doc-id-2",
+            "selfCertifiedDocType": "credit-card",
+            "s3Prefix": "s3-prefix",
+            "processingType": "sync"
+          },
+          "inferences": {
+            "entity-standard": "mocked-pii-detect-entities-response"
+          }
+        }
+      ]
+    }
+  }
+}

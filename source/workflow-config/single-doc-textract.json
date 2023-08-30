@@ -1,0 +1,13 @@
+{
+  "Name": "single-doc-textract",
+  "WorkflowSequence": ["textract"],
+  "MinRequiredDocuments": [
+    {
+      "DocumentType": "Passport",
+      "FileTypes": [".pdf", ".png", ".jpeg", ".jpg"],
+      "MaxSize": "5",
+      "WorkflowsToProcess": ["textract"],
+      "NumDocuments": "1"
+    }
+  ]
+}

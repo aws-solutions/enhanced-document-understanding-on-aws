@@ -1,0 +1,129 @@
+{
+  "StateMachines": {
+    "StateMachine1": {
+      "TestCases": {
+        "SingleDocFirstInferenceTest": {
+          "EntityDetectionWorkflowStepFunctionCallbackSendMessage": "MockedEntityDetectionSuccess",
+          "EventBridgePublishEvents": "MockedPublishEventSuccess"
+        },
+        "SingleDocMultiInferenceTest": {
+          "EntityDetectionWorkflowStepFunctionCallbackSendMessage": "MockedEntityDetectionWithExistingInferenceSuccess",
+          "EventBridgePublishEvents": "MockedPublishEventSuccess"
+        },
+        "MultiDocMultiInferenceTest": {
+          "EntityDetectionWorkflowStepFunctionCallbackSendMessage": "MockedEntityDetectionMultiDocSuccess",
+          "EventBridgePublishEvents": "MockedPublishEventSuccess"
+        }
+      }
+    }
+  },
+  "MockedResponses": {
+    "MockedSQSSuccess": {
+      "0-2": {
+        "Return": {
+          "MD5OfMessageBody": "fake-message-body",
+          "MessageId": "fake-message-id"
+        }
+      }
+    },
+    "MockedEntityDetectionSuccess": {
+      "0-3": {
+        "Return": {
+          "stage": "entity-pii",
+          "document": {
+            "caseId": "fake-case-id-2",
+            "id": "fake-doc-id-1",
+            "selfCertifiedDocType": "passport",
+            "s3Prefix": "s3-prefix",
+            "processingType": "sync"
+          },
+          "inferences": {
+            "entity-pii": "mocked-pii-detect-entities-response"
+          }
+        }
+      }
+    },
+    "MockedEntityDetectionWithExistingInferenceSuccess": {
+      "0": {
+        "Throw": {
+          "Cause": "mocked-error-cause",
+          "Error": "States.Runtime"
+        }
+      },
+      "1": {
+        "Return": {
+          "stage": "entity-medical",
+          "document": {
+            "caseId": "fake-case-id-2",
+            "id": "fake-doc-id-1",
+            "selfCertifiedDocType": "credit-card",
+            "s3Prefix": "s3-prefix",
+            "processingType": "sync"
+          },
+          "inferences": {
+            "textract-detectText": "mocked-textract-detectText-response",
+            "entity-medical": "mocked-pii-detect-medical-entities-response"
+          }
+        }
+      }
+    },
+    "MockedEntityDetectionMultiDocSuccess": {
+      "0": {
+        "Return": {
+          "stage": "entity-pii",
+          "document": {
+            "caseId": "fake-case-id-2",
+            "id": "fake-doc-id-1",
+            "selfCertifiedDocType": "passport",
+            "s3Prefix": "s3-prefix",
+            "processingType": "sync"
+          },
+          "inferences": {
+            "textract-detectText": "mocked-textract-detectText-response",
+            "entity-pii": "mocked-pii-detect-entities-response"
+          }
+        }
+      },
+      "1": {
+        "Return": {
+          "stage": "entity-pii",
+          "document": {
+            "id": "fake-doc-id-2",
+            "selfCertifiedDocType": "credit-card",
+            "s3Prefix": "s3-prefix",
+            "processingType": "sync"
+          },
+          "inferences": {
+            "entity-pii": "mocked-pii-detect-entities-response"
+          }
+        }
+      }
+    },
+    "MockedPublishEventSuccess": {
+      "0-2": {
+        "Return": {
+          "FailedEntryCount": 0,
+          "Entries": [
+            {
+              "EventId": "fake-event-id-1"
+            }
+          ]
+        }
+      }
+    },
+    "MockedPublishEventFailure": {
+      "0": {
+        "Return": {
+          "FailedEntryCount": 1,
+          "Entries": [
+            {
+              "ErrorCode": 500,
+              "ErrorMessage": "FAKE: Internal Error",
+              "EventId": "fake-event-id-2"
+            }
+          ]
+        }
+      }
+    }
+  }
+}

@@ -1,0 +1,154 @@
+{
+  "StateMachines": {
+    "StateMachine1": {
+      "TestCases": {
+        "SingleDocFirstInferenceTest": {
+          "RedactionWorkflowStepFunctionCallbackSendMessage": "MockedRedactionSuccess",
+          "EventBridgePublishEvents": "MockedPublishEventSuccess"
+        },
+        "SingleDocMultiInferenceTest": {
+          "RedactionWorkflowStepFunctionCallbackSendMessage": "MockedRedactionWithExistingInferenceSuccess",
+          "EventBridgePublishEvents": "MockedPublishEventSuccess"
+        },
+        "RedactionTestRetryWithSuccess": {
+          "RedactionWorkflowStepFunctionCallbackSendMessage": "MockedRedactionRetryWithSuccess",
+          "EventBridgePublishEvents": "MockedPublishEventSuccess"
+        },
+        "RedactionTestFail": {
+          "RedactionWorkflowStepFunctionCallbackSendMessage": "MockedRedactionThrowException",
+          "FailureEventBridgePublishFailureEvents": "MockedPublishEventSuccess",
+          "FailureSendMessagetoDLQ": "PublishEventToDLQSuccess"
+        },
+        "AlternatePathTest": {
+          "RedactionWorkflowStepFunctionCallbackSendMessage": "GenericSuccess",
+          "EventBridgePublishEvents": "GenericSuccess"
+        }
+      }
+    }
+  },
+  "MockedResponses": {
+    "MockedRedactionSuccess": {
+      "0-3": {
+        "Return": {
+          "stage": "redaction",
+          "document": {
+            "id": "fake-doc-id-1",
+            "selfCertifiedDocType": "passport",
+            "s3Prefix": "s3-prefix",
+            "processingType": "sync"
+          },
+          "inferences": {
+            "redaction": {
+              "Redacts": [
+                {
+                  "Name": "fake-class",
+                  "Score": 0.99
+                }
+              ]
+            }
+          }
+        }
+      }
+    },
+    "MockedRedactionWithExistingInferenceSuccess": {
+      "0-3": {
+        "Return": {
+          "stage": "redaction",
+          "document": {
+            "id": "fake-doc-id-1",
+            "selfCertifiedDocType": "passport",
+            "s3Prefix": "s3-prefix",
+            "processingType": "sync"
+          },
+          "inferences": {
+            "textract-analyzeDoc": "mocked-textract-analyzeDoc-response",
+            "redaction": {
+              "Redacts": [
+                {
+                  "Name": "fake-class",
+                  "Score": 0.99
+                }
+              ]
+            }
+          }
+        }
+      }
+    },
+    "MockedRedactionRetryWithSuccess": {
+      "0": {
+        "Throw": {
+          "Cause": "mocked-error-cause",
+          "Error": "States.Runtime"
+        }
+      },
+      "1": {
+        "Return": {
+          "stage": "redaction",
+          "document": {
+            "id": "fake-doc-id-1",
+            "selfCertifiedDocType": "passport",
+            "s3Prefix": "s3-prefix",
+            "processingType": "sync"
+          },
+          "inferences": {
+            "redaction": {
+              "Redacts": [
+                {
+                  "Name": "fake-class",
+                  "Score": 0.99
+                }
+              ]
+            }
+          }
+        }
+      }
+    },
+    "MockedRedactionThrowException": {
+      "0": {
+        "Throw": {
+          "Cause": "mocked-error-cause",
+          "Error": "States.Runtime"
+        }
+      }
+    },
+    "MockedPublishEventSuccess": {
+      "0-2": {
+        "Return": {
+          "FailedEntryCount": 0,
+          "Entries": [
+            {
+              "EventId": "fake-event-id-1"
+            }
+          ]
+        }
+      }
+    },
+    "GenericSuccess": {
+      "0": {
+        "Return": "Success"
+      }
+    },
+    "MockedPublishEventFailure": {
+      "0": {
+        "Return": {
+          "FailedEntryCount": 1,
+          "Entries": [
+            {
+              "ErrorCode": 500,
+              "ErrorMessage": "FAKE: Internal Error",
+              "EventId": "fake-event-id-2"
+            }
+          ]
+        }
+      }
+    },
+    "PublishEventToDLQSuccess": {
+      "0": {
+        "Return": {
+          "MD50ofMessageBody": "fake-md50-sqs",
+          "MessageId": "fake-msg-id"
+        }
+      }
+    }
+  }
+}

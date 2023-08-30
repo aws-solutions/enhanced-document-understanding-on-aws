@@ -1,0 +1,114 @@
+{
+  "testcase1": {
+    "name": "SingleDocFirstInferenceTest",
+    "input": {
+      "detail": {
+        "case": {
+          "id": "fake-case-id-2",
+          "status": "initiate",
+          "stage": "entity-pii",
+          "workflows": [
+            "classification",
+            "textract",
+            "entity-pii"
+          ],
+          "documentList": [
+            {
+              "stage": "entity-pii",
+              "document": {
+                "id": "fake-doc-id-1",
+                "selfCertifiedDocType": "passport",
+                "s3Prefix": "s3-prefix",
+                "processingType": "sync",
+                "documentWorkflow": [
+                  "entity-pii"
+                ]
+              },
+              "inferences": {}
+            }
+          ]
+        }
+      }
+    }
+  },
+  "testcase2": {
+    "name": "SingleDocMultiInferenceTest",
+    "input": {
+      "detail": {
+        "case": {
+          "id": "fake-case-id-2",
+          "status": "initiate",
+          "stage": "entity-pii",
+          "workflows": [
+            "classification",
+            "textract",
+            "entity-pii"
+          ],
+          "documentList": [
+            {
+              "stage": "entity-pii",
+              "document": {
+                "id": "fake-doc-id-1",
+                "selfCertifiedDocType": "credit-card",
+                "s3Prefix": "s3-prefix",
+                "processingType": "sync",
+                "documentWorkflow": [
+                  "entity-pii"
+                ]
+              },
+              "inferences": {
+                "textract-detectText": "mocked-textract-detectText-response"
+              }
+            }
+          ]
+        }
+      }
+    }
+  },
+  "testcase3": {
+    "name": "MultiDocMultiInferenceTest",
+    "input": {
+      "detail": {
+        "case": {
+          "id": "fake-case-id-2",
+          "status": "initiate",
+          "stage": "entity-pii",
+          "workflows": [
+            "classification",
+            "textract",
+            "entity-pii"
+          ],
+          "documentList": [
+            {
+              "stage": "entity-pii",
+              "document": {
+                "id": "fake-doc-id-1",
+                "selfCertifiedDocType": "passport",
+                "s3Prefix": "s3-prefix",
+                "processingType": "sync",
+                "documentWorkflow": [
+                  "entity-pii"
+                ]
+              },
+              "inferences": {
+                "textract-detectText": "mocked-textract-detectText-response"
+              }
+            },
+            {
+              "stage": "entity-pii",
+              "document": {
+                "id": "fake-doc-id-2",
+                "selfCertifiedDocType": "credit-card",
+                "s3Prefix": "s3-prefix",
+                "processingType": "sync",
+                "documentWorkflow": [
+                  "entity-pii"
+                ]
+              }
+            }
+          ]
+        }
+      }
+    }
+  }
+}

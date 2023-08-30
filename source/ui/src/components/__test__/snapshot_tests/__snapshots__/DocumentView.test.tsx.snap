@@ -1,0 +1,221 @@
+// Jest Snapshot v1, https://goo.gl/fbAQLP
+
+exports[`Snapshot test 1`] = `
+<AppLayout
+  content={
+    <ContentLayout
+      header={
+        <div
+          className="document-view-header"
+        >
+          <DocResultsPageHeader
+            breadCrumbItems={
+              Object {
+                "selectedCaseName": "fake-case-name",
+                "selectedDocumentName": "fake-doc-name",
+              }
+            }
+            onInfoLinkClick={[Function]}
+          />
+        </div>
+      }
+    >
+      <div
+        className="document-view-box"
+        data-testid="document-view-box"
+      >
+        <Tabs
+          data-testid="document-view-tabs"
+          tabs={
+            Array [
+              Object {
+                "content": <EntityDetectionTab
+                  comprehendService="COMPREHEND"
+                  currentPageNumber={1}
+                  dataTestId="entity-detection-tab"
+                  documentPageCount={0}
+                  entityType="entity-standard"
+                  medicalEntities={
+                    Object {
+                      "results": Array [],
+                    }
+                  }
+                  piiEntities={
+                    Object {
+                      "results": Array [],
+                    }
+                  }
+                  previewRedaction=""
+                  retrieveSignedUrl={[Function]}
+                  selectedCaseId="fake-case-id"
+                  selectedDocumentFileType="jpg"
+                  selectedDocumentId="fake-doc-id"
+                  selectedDocumentUrl=""
+                  selectedEntities={
+                    Object {
+                      "entity-medical": Array [],
+                      "entity-pii": Array [],
+                      "entity-standard": Array [],
+                    }
+                  }
+                  setPreviewRedaction={[Function]}
+                  setSelectedEntities={[Function]}
+                  standardEntities={
+                    Object {
+                      "results": Array [],
+                    }
+                  }
+                  switchPage={[Function]}
+                />,
+                "id": "entityDetection",
+                "label": "Entity Detection",
+              },
+              Object {
+                "content": <EntityDetectionTab
+                  comprehendService="COMPREHEND_MEDICAL"
+                  currentPageNumber={1}
+                  dataTestId="medical-entity-detection-tab"
+                  documentPageCount={0}
+                  entityType="entity-medical"
+                  medicalEntities={
+                    Object {
+                      "results": Array [],
+                    }
+                  }
+                  piiEntities={
+                    Object {
+                      "results": Array [],
+                    }
+                  }
+                  previewRedaction=""
+                  retrieveSignedUrl={[Function]}
+                  selectedCaseId="fake-case-id"
+                  selectedDocumentFileType="jpg"
+                  selectedDocumentId="fake-doc-id"
+                  selectedDocumentUrl=""
+                  selectedEntities={
+                    Object {
+                      "entity-medical": Array [],
+                      "entity-pii": Array [],
+                      "entity-standard": Array [],
+                    }
+                  }
+                  setPreviewRedaction={[Function]}
+                  setSelectedEntities={[Function]}
+                  standardEntities={
+                    Object {
+                      "results": Array [],
+                    }
+                  }
+                  switchPage={[Function]}
+                />,
+                "id": "medicalEntityDetection",
+                "label": "Medical Entity Detection",
+              },
+              Object {
+                "content": <EntityDetectionTab
+                  comprehendService="COMPREHEND"
+                  currentPageNumber={1}
+                  dataTestId="pii-detection-tab"
+                  documentPageCount={0}
+                  entityType="entity-pii"
+                  medicalEntities={
+                    Object {
+                      "results": Array [],
+                    }
+                  }
+                  piiEntities={
+                    Object {
+                      "results": Array [],
+                    }
+                  }
+                  previewRedaction=""
+                  retrieveSignedUrl={[Function]}
+                  selectedCaseId="fake-case-id"
+                  selectedDocumentFileType="jpg"
+                  selectedDocumentId="fake-doc-id"
+                  selectedDocumentUrl=""
+                  selectedEntities={
+                    Object {
+                      "entity-medical": Array [],
+                      "entity-pii": Array [],
+                      "entity-standard": Array [],
+                    }
+                  }
+                  setPreviewRedaction={[Function]}
+                  setSelectedEntities={[Function]}
+                  standardEntities={
+                    Object {
+                      "results": Array [],
+                    }
+                  }
+                  switchPage={[Function]}
+                />,
+                "id": "piiDetection",
+                "label": "PII Detection",
+              },
+              Object {
+                "content": <TextractTab
+                  currentPageNumber={1}
+                  dataTestId="textract-raw-text-tab"
+                  documentLines={Array []}
+                  documentPageCount={0}
+                  kvPairs={Array []}
+                  retrieveSignedUrl={[Function]}
+                  selectedDocumentFileType="jpg"
+                  selectedDocumentUrl=""
+                  switchPage={[Function]}
+                  tables={Array []}
+                  textractOutputType="TEXTRACT_RAW_TEXT"
+                />,
+                "id": "textractRawText",
+                "label": "Raw Text",
+              },
+              Object {
+                "content": <TextractTab
+                  currentPageNumber={1}
+                  dataTestId="textract-key-value-pairs-tab"
+                  documentLines={Array []}
+                  documentPageCount={0}
+                  kvPairs={Array []}
+                  retrieveSignedUrl={[Function]}
+                  selectedDocumentFileType="jpg"
+                  selectedDocumentUrl=""
+                  switchPage={[Function]}
+                  tables={Array []}
+                  textractOutputType="TEXTRACT_KEY_VALUE_PAIRS"
+                />,
+                "id": "textractKeyValuePairs",
+                "label": "Key-Value Pairs",
+              },
+              Object {
+                "content": <TextractTab
+                  currentPageNumber={1}
+                  dataTestId="textract-tables-tab"
+                  documentLines={Array []}
+                  documentPageCount={0}
+                  kvPairs={Array []}
+                  retrieveSignedUrl={[Function]}
+                  selectedDocumentFileType="jpg"
+                  selectedDocumentUrl=""
+                  switchPage={[Function]}
+                  tables={Array []}
+                  textractOutputType="TEXTRACT_TABLES"
+                />,
+                "id": "textractTables",
+                "label": "Tables",
+              },
+            ]
+          }
+        />
+      </div>
+    </ContentLayout>
+  }
+  contentType="dashboard"
+  data-testid="document-view-app-layout"
+  navigationHide={true}
+  onToolsChange={[Function]}
+  tools={<DocumentResultsInfoPanelContent />}
+  toolsOpen={false}
+/>
+`;

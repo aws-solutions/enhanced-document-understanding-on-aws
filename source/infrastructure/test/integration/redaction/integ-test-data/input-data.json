@@ -1,0 +1,106 @@
+{
+  "testcases": [
+    {
+      "name": "SingleDocFirstInferenceTest",
+      "input": {
+        "detail": {
+          "case": {
+            "id": "fake-case-id-0",
+            "status": "initiate",
+            "stage": "redaction",
+            "workflows": ["redaction"],
+            "documentList": [
+              {
+                "document": {
+                  "id": "fake-doc-id-1",
+                  "selfCertifiedDocType": "passport",
+                  "s3Prefix": "s3-prefix",
+                  "processingType": "sync",
+                  "documentWorkflow": ["redaction"]
+                },
+                "inferences": {}
+              }
+            ]
+          }
+        }
+      }
+    },
+    {
+      "name": "SingleDocMultiInferenceTest",
+      "input": {
+        "detail": {
+          "case": {
+            "id": "fake-case-id-1",
+            "status": "initiate",
+            "stage": "redaction",
+            "workflows": ["redaction"],
+            "documentList": [
+              {
+                "document": {
+                  "id": "fake-doc-id-1",
+                  "selfCertifiedDocType": "passport",
+                  "s3Prefix": "s3-prefix",
+                  "processingType": "sync",
+                  "documentWorkflow": ["redaction"]
+                },
+                "inferences": {
+                  "textract-analyzeDoc": "mocked-textract-analyzeDoc-response"
+                }
+              }
+            ]
+          }
+        }
+      }
+    },
+    {
+      "name": "RedactionTestRetryWithSuccess",
+      "input": {
+        "detail": {
+          "case": {
+            "id": "fake-case-id-3",
+            "status": "initiate",
+            "stage": "redaction",
+            "workflows": ["redaction"],
+            "documentList": [
+              {
+                "document": {
+                  "id": "fake-doc-id-1",
+                  "selfCertifiedDocType": "passport",
+                  "s3Prefix": "s3-prefix",
+                  "processingType": "sync",
+                  "documentWorkflow": ["redaction"]
+                },
+                "inferences": {}
+              }
+            ]
+          }
+        }
+      }
+    },
+    {
+      "name": "RedactionTestFail",
+      "input": {
+        "detail": {
+          "case": {
+            "id": "fake-case-id-4",
+            "status": "initiate",
+            "stage": "redaction",
+            "workflows": ["redaction"],
+            "documentList": [
+              {
+                "document": {
+                  "id": "fake-doc-id-1",
+                  "selfCertifiedDocType": "passport",
+                  "s3Prefix": "s3-prefix",
+                  "processingType": "sync",
+                  "documentWorkflow": ["redaction"]
+                },
+                "inferences": {}
+              }
+            ]
+          }
+        }
+      }
+    }
+  ]
+}

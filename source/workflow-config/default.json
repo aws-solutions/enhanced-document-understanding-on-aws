@@ -1,0 +1,14 @@
+{
+  "Name": "default",
+  "WorkflowSequence": ["textract", "entity-standard", "entity-pii", "entity-medical", "redaction"],
+  "MinRequiredDocuments": [
+    {
+      "DocumentType": "generic",
+      "FileTypes": [".pdf", ".png", ".jpeg", ".jpg"],
+      "MaxSize": "5",
+      "WorkflowsToProcess": ["textract", "entity-standard", "entity-pii", "entity-medical", "redaction"],
+      "RunTextractAnalyzeAction": true,
+      "NumDocuments": "1"
+    }
+  ]
+}
