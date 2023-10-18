@@ -62,7 +62,7 @@ export class CustomInfraSetup extends Construct {
                         new iam.PolicyStatement({
                             actions: ['logs:PutLogEvents'],
                             resources: [
-                                `arn:${cdk.Aws.PARTITION}:logs:${cdk.Aws.REGION}:${cdk.Aws.ACCOUNT_ID}:log-group:/aws/lambda/*:log_stream:*`
+                                `arn:${cdk.Aws.PARTITION}:logs:${cdk.Aws.REGION}:${cdk.Aws.ACCOUNT_ID}:log-group:/aws/lambda/*:log-stream:*`
                             ]
                         })
                     ]
@@ -189,7 +189,7 @@ export class CustomInfraSetup extends Construct {
                 id: 'AwsSolutions-IAM5',
                 reason: 'Lambda function has the required permission to write CloudWatch Log streams. It uses custom policy instead of arn:aws:iam::aws:policy/service-role/AWSLambdaBasicExecutionRole with tighter permissions.',
                 appliesTo: [
-                    'Resource::arn:<AWS::Partition>:logs:<AWS::Region>:<AWS::AccountId>:log-group:/aws/lambda/*:log_stream:*'
+                    'Resource::arn:<AWS::Partition>:logs:<AWS::Region>:<AWS::AccountId>:log-group:/aws/lambda/*:log-stream:*'
                 ]
             }
         ]);

@@ -114,7 +114,7 @@ describe('When creating the custom resource infrastructure construct', () => {
                                             {
                                                 'Ref': 'AWS::AccountId'
                                             },
-                                            ':log-group:/aws/lambda/*:log_stream:*'
+                                            ':log-group:/aws/lambda/*:log-stream:*'
                                         ]
                                     ]
                                 }
