@@ -142,7 +142,7 @@ export function getJavaLayerLocalBundling(entry: string): ILocalBundling {
                 `cd ${entry}`,
                 'rm -fr target',
                 'echo "Trying local bundling of assets"',
-                'mvn clean package --quiet --no-transfer-progress',
+                'mvn clean package --quiet --no-transfer-progress -DskipTests',
                 'echo "--------------------------------------------------------------------------------"',
                 'echo "Reporting stale dependencies/ dependencies that need to be upgraded for Java runtimes"',
                 'echo "--------------------------------------------------------------------------------"',

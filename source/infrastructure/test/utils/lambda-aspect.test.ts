@@ -87,7 +87,7 @@ describe('When applying aspect to a Node based lambda function', () => {
             Environment: {
                 Variables: {
                     AWS_NODEJS_CONNECTION_REUSE_ENABLED: '1',
-                    AWS_SDK_USER_AGENT: `{ "customUserAgent": "AwsSolution/SO0281/v1.0.0" }`
+                    AWS_SDK_USER_AGENT: `{ "customUserAgent": "AwsSolution/SO0281/${rawCdkJson.context.solution_version}" }`
                 }
             }
         });

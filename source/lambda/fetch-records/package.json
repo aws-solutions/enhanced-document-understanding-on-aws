@@ -1,6 +1,6 @@
 {
   "name": "fetch-records",
-  "version": "1.0.0",
+  "version": "1.0.1",
   "description": "This lambda backs the ApiGateway REST endpoint to process record and document fetch requests",
   "main": "index.js",
   "scripts": {
@@ -26,5 +26,8 @@
     "eslint": "^8.38.0",
     "jest": "^29.5.0",
     "prettier": "^3.0.0"
+  },
+  "overrides": {
+    "@babel/traverse": "^7.23.2"
   }
 }
