@@ -1,6 +1,6 @@
 {
   "name": "send-notification",
-  "version": "1.0.0",
+  "version": "1.0.1",
   "description": "This lambda function sends notifications about document processing updates",
   "main": "index.js",
   "scripts": {
@@ -22,5 +22,8 @@
     "eslint": "^8.38.0",
     "jest": "^29.5.0",
     "prettier": "^3.0.0"
+  },
+  "overrides": {
+    "@babel/traverse": "^7.23.2"
   }
 }

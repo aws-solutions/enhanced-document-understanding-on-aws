@@ -1,9 +1,7 @@
 {
   "app": "../pre-build-jars.sh && npx ts-node --prefer-ts-exts bin/dus.ts",
   "watch": {
-    "include": [
-      "**"
-    ],
+    "include": ["**"],
     "exclude": [
       "README.md",
       "cdk*.json",
@@ -27,14 +25,10 @@
     "@aws-cdk/aws-ec2:uniqueImdsv2TemplateName": true,
     "@aws-cdk/core:checkSecretUsage": true,
     "@aws-cdk/aws-iam:minimizePolicies": true,
-    "@aws-cdk/core:target-partitions": [
-      "aws",
-      "aws-cn",
-      "aws-us-gov"
-    ],
+    "@aws-cdk/core:target-partitions": ["aws", "aws-cn", "aws-us-gov"],
     "solution_id": "SO0281",
     "solution_name": "enhanced-document-understanding-on-aws",
-    "solution_version": "v1.0.0",
+    "solution_version": "v1.0.1",
     "app_namespace": "app.idp",
     "app_registry_name": "enhanced-document-understanding",
     "application_type": "AWS-Solutions",

@@ -1,6 +1,6 @@
 {
   "name": "mock-react-app",
-  "version": "1.0.0",
+  "version": "1.0.1",
   "description": "Mock Reactjs app used for unit testing constructs",
   "main": "index.js",
   "scripts": {
@@ -14,7 +14,9 @@
     "react-scripts": "^5.0.1"
   },
   "overrides": {
-    "nth-check": "^2.0.1"
+    "nth-check": "^2.0.1",
+    "@babel/traverse": "^7.23.2",
+    "postcss": "^8.4.31"
   },
   "license": "Apache-2.0",
   "author": {

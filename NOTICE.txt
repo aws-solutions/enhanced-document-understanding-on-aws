@@ -56,6 +56,7 @@ aws-sdk-mock                                             Apache-2.0
 aws-xray-sdk                                             Apache-2.0
 awscli                                                   Apache-2.0 
 babel-jest                                               MIT
+boolean.py                                               BSD-2-Clause
 bootstrap                                                MIT
 boto3                                                    Apache-2.0
 botocore                                                 Apache-2.0
@@ -77,6 +78,7 @@ jest                                                     MIT
 jmespath                                                 MIT 
 jwt-decode                                               MIT
 lodash                                                   MIT
+license-expression                                       Apache-2.0
 mock                                                     BSD License
 mock-fs                                                  MIT
 moto                                                     Apache-2.0
@@ -118,6 +120,7 @@ tomli                                                    MIT
 ts-jest                                                  MIT
 ts-node                                                  MIT
 typescript                                               Apache-2.0
+typing-extensions                                        Python 2.0
 uk.org.webcompere>>system-stubs-core                     MIT
 uk.org.webcompere>>system-stubs-jupiter                  MIT
 uuid                                                     MIT

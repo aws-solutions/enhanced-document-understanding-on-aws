@@ -1,6 +1,6 @@
 {
   "name": "common-node-lib",
-  "version": "1.0.0",
+  "version": "1.0.1",
   "description": "Common libraries shared by all lambda node modules",
   "scripts": {
     "test": "jest --coverage --silent --verbose",
@@ -26,5 +26,8 @@
     "lodash": "^4.17.21",
     "pdf-lib": "1.17.1",
     "uuid": "9.0.0"
+  },
+  "overrides": {
+    "@babel/traverse": "^7.23.2"
   }
 }

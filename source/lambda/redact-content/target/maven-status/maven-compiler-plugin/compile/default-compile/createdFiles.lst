@@ -24,8 +24,8 @@ com/builder/lambda/model/TextractRelationship.class
 com/builder/lambda/utils/LambdaContextParser.class
 com/builder/lambda/model/TextractBlock.class
 com/builder/lambda/model/EventDataDocument.class
-com/builder/lambda/model/TextractDetectText.class
 com/builder/lambda/utils/CloudWatchMetrics.class
+com/builder/lambda/model/TextractDetectText.class
 com/builder/lambda/utils/StepFunctionConnector.class
 com/builder/lambda/utils/Redactor.class
 com/builder/lambda/utils/PdfRedactor.class
