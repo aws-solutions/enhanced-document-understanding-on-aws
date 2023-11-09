@@ -3,7 +3,7 @@
   "version": "1.0.0",
   "description": "AWS Nodejs SDK layer",
   "dependencies": {
-    "aws-sdk": "^2.1427.0"
+    "aws-sdk": "^2.1485.0"
   },
   "author": {
     "name": "Amazon Web Services",

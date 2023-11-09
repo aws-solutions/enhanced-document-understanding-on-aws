@@ -1,6 +1,6 @@
 {
   "name": "fetch-records",
-  "version": "1.0.1",
+  "version": "1.0.2",
   "description": "This lambda backs the ApiGateway REST endpoint to process record and document fetch requests",
   "main": "index.js",
   "scripts": {
@@ -19,7 +19,7 @@
   },
   "license": "Apache-2.0",
   "dependencies": {
-    "uuid": "^9.0.0"
+    "uuid": "^9.0.1"
   },
   "devDependencies": {
     "aws-sdk-mock": "^5.8.0",

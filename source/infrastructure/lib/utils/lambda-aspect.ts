@@ -147,7 +147,7 @@ export class LambdaAspects extends Construct implements cdk.IAspect {
             this.nodejsUserAgentLayer = new NodeUserAgentLayer(this, 'NodeUserAgentLayer', {
                 entry: '../lambda/layers/aws-node-user-agent-config',
                 description: 'This layer configures AWS Node SDK initialization to send user-agent information',
-                compatibleRuntimes: [lambda.Runtime.NODEJS_16_X, lambda.Runtime.NODEJS_18_X]
+                compatibleRuntimes: [lambda.Runtime.NODEJS_18_X]
             });
         }
 
@@ -204,7 +204,7 @@ export class LambdaAspects extends Construct implements cdk.IAspect {
                 entry: '../lambda/layers/common-node-lib',
                 description:
                     'This layer contains shared libraries and functions across all lambda functions to be bundled with the lambda function',
-                compatibleRuntimes: [lambda.Runtime.NODEJS_16_X, lambda.Runtime.NODEJS_18_X]
+                compatibleRuntimes: [lambda.Runtime.NODEJS_18_X]
             });
         }
 
@@ -221,7 +221,7 @@ export class LambdaAspects extends Construct implements cdk.IAspect {
             this.awsNodeSdkLibLayer = new AwsNodeSdkLibLayer(this, 'AwsNodeSdkLayer', {
                 entry: '../lambda/layers/aws-sdk-lib',
                 description: 'AWS Node SDK to be bundled with lambda functions',
-                compatibleRuntimes: [lambda.Runtime.NODEJS_16_X, lambda.Runtime.NODEJS_18_X]
+                compatibleRuntimes: [lambda.Runtime.NODEJS_18_X]
             });
         }
 
