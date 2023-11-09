@@ -51,7 +51,7 @@ describe('When applying aspect to a Node based lambda function', () => {
         const layerCapture = new Capture();
         template.resourceCountIs('AWS::Lambda::LayerVersion', 3);
         template.hasResourceProperties('AWS::Lambda::LayerVersion', {
-            CompatibleRuntimes: ['nodejs16.x', 'nodejs18.x'],
+            CompatibleRuntimes: ['nodejs18.x'],
             Content: Match.anyValue(),
             Description: 'This layer configures AWS Node SDK initialization to send user-agent information'
         });

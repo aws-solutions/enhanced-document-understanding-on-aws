@@ -12,8 +12,8 @@
  *  and limitations under the License.                                                                                *
  *********************************************************************************************************************/
 
-import * as api from 'aws-cdk-lib/aws-apigateway';
 import * as cdk from 'aws-cdk-lib';
+import * as api from 'aws-cdk-lib/aws-apigateway';
 import * as cognito from 'aws-cdk-lib/aws-cognito';
 import * as iam from 'aws-cdk-lib/aws-iam';
 import * as lambda from 'aws-cdk-lib/aws-lambda';
@@ -30,13 +30,13 @@ import {
 } from './model-schema';
 
 import { ApiGatewayToLambda } from '@aws-solutions-constructs/aws-apigateway-lambda';
-import { Construct } from 'constructs';
-import { NagSuppressions } from 'cdk-nag';
 import { WafwebaclToApiGateway } from '@aws-solutions-constructs/aws-wafwebacl-apigateway';
-import { addCfnSuppressRules } from '../utils/cfn-nag-suppressions';
-import { ApiDocumentation } from './rest-api-documentation/api-documentation';
 import { CfnUserPoolUser } from 'aws-cdk-lib/aws-cognito';
+import { NagSuppressions } from 'cdk-nag';
+import { Construct } from 'constructs';
+import { addCfnSuppressRules } from '../utils/cfn-nag-suppressions';
 import { PLACEHOLDER_EMAIL } from '../utils/constants';
+import { ApiDocumentation } from './rest-api-documentation/api-documentation';
 
 export interface RestEndpointProps {
     /**
