@@ -27,6 +27,12 @@ import {
     S3WebResourceObserver
 } from '../../lib/govcloud/cfn-resource-observer';
 import { AwsDeploymentPartitionAspects } from '../../lib/utils/aws-deployment-partition-aspects';
+import {
+    COMMERCIAL_REGION_LAMBDA_JAVA_RUNTIME,
+    COMMERCIAL_REGION_LAMBDA_PYTHON_RUNTIME,
+    GOV_CLOUD_REGION_LAMBDA_JAVA_RUNTIME,
+    GOV_CLOUD_REGION_LAMBDA_PYTHON_RUNTIME
+} from '../../lib/utils/constants';
 
 describe('add govcloud aspect', () => {
     let template: Template;
@@ -40,7 +46,11 @@ describe('add govcloud aspect', () => {
     it('should have a python runtime with a condition for a govcloud', () => {
         template.hasResourceProperties('AWS::Lambda::Function', {
             Runtime: {
-                'Fn::If': ['isGovCloudPartition', 'python3.9', 'python3.11']
+                'Fn::If': [
+                    'isGovCloudPartition',
+                    GOV_CLOUD_REGION_LAMBDA_PYTHON_RUNTIME.name,
+                    COMMERCIAL_REGION_LAMBDA_PYTHON_RUNTIME.name
+                ]
             }
         });
     });
@@ -48,14 +58,12 @@ describe('add govcloud aspect', () => {
     it('should have java runtime with a condition for a govcloud', () => {
         template.hasResourceProperties('AWS::Lambda::Function', {
             Runtime: {
-                'Fn::If': ['isGovCloudPartition', 'java11', 'java17']
+                'Fn::If': [
+                    'isGovCloudPartition',
+                    GOV_CLOUD_REGION_LAMBDA_JAVA_RUNTIME.name,
+                    COMMERCIAL_REGION_LAMBDA_JAVA_RUNTIME.name
+                ]
             }
-        });
-    });
-
-    it('should have a nodejs runtime without a condition for a govcloud', () => {
-        template.hasResourceProperties('AWS::Lambda::Function', {
-            Runtime: 'nodejs18.x'
         });
     });
 

@@ -14,7 +14,11 @@
 import * as cdk from 'aws-cdk-lib';
 
 import { Capture, Match, Template } from 'aws-cdk-lib/assertions';
-import { S3_REDACTED_PREFIX, S3_UPLOAD_PREFIX } from '../../../lib/utils/constants';
+import {
+    COMMERCIAL_REGION_LAMBDA_JAVA_RUNTIME,
+    S3_REDACTED_PREFIX,
+    S3_UPLOAD_PREFIX
+} from '../../../lib/utils/constants';
 
 import { RedactionWorkflow } from '../../../lib/workflow/redaction/redaction-workflow';
 
@@ -35,7 +39,7 @@ describe('When creating redaction Workflow', () => {
     it('should create the lambda function', () => {
         template.resourceCountIs('AWS::Lambda::Function', 1);
         template.hasResourceProperties('AWS::Lambda::Function', {
-            Runtime: 'java17',
+            Runtime: COMMERCIAL_REGION_LAMBDA_JAVA_RUNTIME.name,
             Handler: 'com.builder.lambda.RedactionSfnHandler',
             Code: {
                 S3Bucket: {

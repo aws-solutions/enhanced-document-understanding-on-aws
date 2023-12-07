@@ -17,6 +17,7 @@ import * as rawCdkJson from '../../../cdk.json';
 import { Capture, Match, Template } from 'aws-cdk-lib/assertions';
 
 import { DusStack } from '../../../lib/dus-stack';
+import { COMMERCIAL_REGION_LAMBDA_NODE_RUNTIME } from '../../../lib/utils/constants';
 import { EntityDetectionWorkflow } from '../../../lib/workflow/entity-detection/entity-detection-workflow';
 
 describe('When creating EntityDetection Workflow', () => {
@@ -212,7 +213,7 @@ describe('When creating EntityDetection Workflow', () => {
                 }
             },
             Handler: 'entity-detection-sync.handler',
-            Runtime: 'nodejs18.x',
+            Runtime: COMMERCIAL_REGION_LAMBDA_NODE_RUNTIME.name,
             Timeout: 900,
             TracingConfig: {
                 'Mode': 'Active'

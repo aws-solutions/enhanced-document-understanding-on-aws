@@ -22,7 +22,15 @@ import { NodeUserAgentLayer } from '../layers/node-user-agent';
 import { PythonUserAgentLayer } from '../layers/python-user-agent';
 import { AwsNodeSdkLibLayer, Boto3SdkLibLayer } from '../layers/runtime-libs';
 import { NodejsSharedLibLayer } from '../layers/shared-lib';
-import { CloudwatchNamespace } from '../utils/constants';
+import {
+    COMMERCIAL_REGION_LAMBDA_JAVA_RUNTIME,
+    COMMERCIAL_REGION_LAMBDA_NODE_RUNTIME,
+    COMMERCIAL_REGION_LAMBDA_PYTHON_RUNTIME,
+    CloudwatchNamespace,
+    GOV_CLOUD_REGION_LAMBDA_JAVA_RUNTIME,
+    GOV_CLOUD_REGION_LAMBDA_NODE_RUNTIME,
+    GOV_CLOUD_REGION_LAMBDA_PYTHON_RUNTIME
+} from '../utils/constants';
 
 export interface LambdaAspectProps {
     /**
@@ -147,7 +155,7 @@ export class LambdaAspects extends Construct implements cdk.IAspect {
             this.nodejsUserAgentLayer = new NodeUserAgentLayer(this, 'NodeUserAgentLayer', {
                 entry: '../lambda/layers/aws-node-user-agent-config',
                 description: 'This layer configures AWS Node SDK initialization to send user-agent information',
-                compatibleRuntimes: [lambda.Runtime.NODEJS_18_X]
+                compatibleRuntimes: [GOV_CLOUD_REGION_LAMBDA_NODE_RUNTIME, COMMERCIAL_REGION_LAMBDA_NODE_RUNTIME]
             });
         }
 
@@ -164,12 +172,7 @@ export class LambdaAspects extends Construct implements cdk.IAspect {
             this.pythonUserAgentLayer = new PythonUserAgentLayer(this, 'PythonUserAgentLayer', {
                 entry: '../lambda/layers/custom_boto3_init',
                 description: 'This layer configures AWS Python SDK initialization to send user-agent information',
-                compatibleRuntimes: [
-                    lambda.Runtime.PYTHON_3_8,
-                    lambda.Runtime.PYTHON_3_9,
-                    lambda.Runtime.PYTHON_3_10,
-                    lambda.Runtime.PYTHON_3_11
-                ]
+                compatibleRuntimes: [GOV_CLOUD_REGION_LAMBDA_PYTHON_RUNTIME, COMMERCIAL_REGION_LAMBDA_PYTHON_RUNTIME]
             });
         }
 
@@ -186,7 +189,7 @@ export class LambdaAspects extends Construct implements cdk.IAspect {
             this.javaUserAgentLayer = new JavaUserAgentLayer(this, 'JavaUserAgentLayer', {
                 entry: '../lambda/layers/custom-java-sdk-config',
                 description: 'This layer configures AWS Java SDK initialization to send user-agent information',
-                compatibleRuntimes: [lambda.Runtime.JAVA_11, lambda.Runtime.JAVA_17]
+                compatibleRuntimes: [GOV_CLOUD_REGION_LAMBDA_JAVA_RUNTIME, COMMERCIAL_REGION_LAMBDA_JAVA_RUNTIME]
             });
         }
 
@@ -204,7 +207,7 @@ export class LambdaAspects extends Construct implements cdk.IAspect {
                 entry: '../lambda/layers/common-node-lib',
                 description:
                     'This layer contains shared libraries and functions across all lambda functions to be bundled with the lambda function',
-                compatibleRuntimes: [lambda.Runtime.NODEJS_18_X]
+                compatibleRuntimes: [GOV_CLOUD_REGION_LAMBDA_NODE_RUNTIME, COMMERCIAL_REGION_LAMBDA_NODE_RUNTIME]
             });
         }
 
@@ -221,7 +224,7 @@ export class LambdaAspects extends Construct implements cdk.IAspect {
             this.awsNodeSdkLibLayer = new AwsNodeSdkLibLayer(this, 'AwsNodeSdkLayer', {
                 entry: '../lambda/layers/aws-sdk-lib',
                 description: 'AWS Node SDK to be bundled with lambda functions',
-                compatibleRuntimes: [lambda.Runtime.NODEJS_18_X]
+                compatibleRuntimes: [GOV_CLOUD_REGION_LAMBDA_NODE_RUNTIME, COMMERCIAL_REGION_LAMBDA_NODE_RUNTIME]
             });
         }
 
@@ -238,12 +241,7 @@ export class LambdaAspects extends Construct implements cdk.IAspect {
             this.boto3SdkLibLayer = new Boto3SdkLibLayer(this, 'Boto3Layer', {
                 entry: '../lambda/layers/aws_boto3',
                 description: 'Boto3 layer to be bundled with python lambda functions',
-                compatibleRuntimes: [
-                    lambda.Runtime.PYTHON_3_8,
-                    lambda.Runtime.PYTHON_3_9,
-                    lambda.Runtime.PYTHON_3_10,
-                    lambda.Runtime.PYTHON_3_11
-                ]
+                compatibleRuntimes: [GOV_CLOUD_REGION_LAMBDA_PYTHON_RUNTIME, COMMERCIAL_REGION_LAMBDA_PYTHON_RUNTIME]
             });
         }
 

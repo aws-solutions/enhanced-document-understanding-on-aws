@@ -1,12 +1,12 @@
 {
   "Name": "single-doc-entity-detection",
-  "WorkflowSequence": ["entity-standard"],
+  "WorkflowSequence": ["textract","entity-standard"],
   "MinRequiredDocuments": [
     {
       "DocumentType": "Passport",
       "FileTypes": [".pdf", ".png", ".jpeg", ".jpg"],
       "MaxSize": "5",
-      "WorkflowsToProcess": ["entity-standard"],
+      "WorkflowsToProcess": ["textract", "entity-standard"],
       "PiiFlag": true,
       "NumDocuments": "1"
     }

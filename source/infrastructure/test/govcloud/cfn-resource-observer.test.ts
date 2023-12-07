@@ -26,6 +26,12 @@ import {
     S3WebResourceObserver
 } from '../../lib/govcloud/cfn-resource-observer';
 import { UIAssets } from '../../lib/s3web/ui-asset';
+import {
+    COMMERCIAL_REGION_LAMBDA_JAVA_RUNTIME,
+    COMMERCIAL_REGION_LAMBDA_PYTHON_RUNTIME,
+    GOV_CLOUD_REGION_LAMBDA_JAVA_RUNTIME,
+    GOV_CLOUD_REGION_LAMBDA_PYTHON_RUNTIME
+} from '../../lib/utils/constants';
 
 describe('When lambda runtime observer is added to a resource', () => {
     let stack: cdk.Stack;
@@ -64,17 +70,12 @@ describe('When lambda runtime observer is added to a resource', () => {
 
         Template.fromStack(stack).hasResourceProperties('AWS::Lambda::Function', {
             Runtime: {
-                'Fn::If': ['isGovCloudPartition', 'python3.9', 'python3.11']
+                'Fn::If': [
+                    'isGovCloudPartition',
+                    GOV_CLOUD_REGION_LAMBDA_PYTHON_RUNTIME.name,
+                    COMMERCIAL_REGION_LAMBDA_PYTHON_RUNTIME.name
+                ]
             }
-        });
-    });
-
-    it('should keep the node runtime unchanged', () => {
-        const nodeObserver = new LambdaRuntimeResourceObserver();
-        nodeObserver.addConditionOnResource(nodeLambda, cfnCondition);
-
-        Template.fromStack(stack).hasResourceProperties('AWS::Lambda::Function', {
-            Runtime: 'nodejs18.x'
         });
     });
 
@@ -84,7 +85,11 @@ describe('When lambda runtime observer is added to a resource', () => {
 
         Template.fromStack(stack).hasResourceProperties('AWS::Lambda::Function', {
             Runtime: {
-                'Fn::If': ['isGovCloudPartition', 'java11', 'java17']
+                'Fn::If': [
+                    'isGovCloudPartition',
+                    GOV_CLOUD_REGION_LAMBDA_JAVA_RUNTIME.name,
+                    COMMERCIAL_REGION_LAMBDA_JAVA_RUNTIME.name
+                ]
             }
         });
     });

@@ -16,7 +16,11 @@ import { Capture, Match, Template } from 'aws-cdk-lib/assertions';
 import * as events from 'aws-cdk-lib/aws-events';
 import * as s3 from 'aws-cdk-lib/aws-s3';
 import * as rawCdkJson from '../../cdk.json';
-import { EventSources, WorkflowEventDetailTypes } from '../../lib/utils/constants';
+import {
+    COMMERCIAL_REGION_LAMBDA_NODE_RUNTIME,
+    EventSources,
+    WorkflowEventDetailTypes
+} from '../../lib/utils/constants';
 
 import { NotificationManager } from '../../lib/notifications/notification-manager';
 import { CustomInfraSetup } from '../../lib/utils/custom-infra-setup';
@@ -41,7 +45,7 @@ describe('When creating the notification manager construct', () => {
         template.resourceCountIs('AWS::Lambda::Function', 3);
         template.hasResourceProperties('AWS::Lambda::Function', {
             Code: Match.anyValue(),
-            Runtime: 'nodejs18.x',
+            Runtime: COMMERCIAL_REGION_LAMBDA_NODE_RUNTIME.name,
             Handler: 'index.handler',
             Timeout: 900,
             Description: 'This lambda function sends out SNS notification based on the input event received',

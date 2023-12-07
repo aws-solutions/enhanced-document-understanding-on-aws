@@ -13,7 +13,7 @@
 
 'use strict';
 
-const jwt_decode = require('jwt-decode');
+const jwt_decode = require('jwt-decode').jwtDecode;
 
 /**
  * Uses the Authorization header to decode the JWT token

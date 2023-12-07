@@ -15,6 +15,7 @@ import * as cdk from 'aws-cdk-lib';
 
 import { Capture, Match, Template } from 'aws-cdk-lib/assertions';
 import * as rawCdkJson from '../../cdk.json';
+import { COMMERCIAL_REGION_LAMBDA_PYTHON_RUNTIME } from '../../lib/utils/constants';
 import { CustomInfraSetup } from '../../lib/utils/custom-infra-setup';
 
 describe('When creating the custom resource infrastructure construct', () => {
@@ -42,7 +43,7 @@ describe('When creating the custom resource infrastructure construct', () => {
             },
             Description: 'A custom resource lambda function to perform operations based on operation type',
             Handler: 'lambda_func.handler',
-            Runtime: 'python3.11',
+            Runtime: COMMERCIAL_REGION_LAMBDA_PYTHON_RUNTIME.name,
             TracingConfig: {
                 Mode: 'Active'
             }
@@ -157,7 +158,7 @@ describe('When creating the custom resource infrastructure construct', () => {
             },
             Description: 'A lambda function that runs as per defined schedule to publish metrics',
             Handler: 'lambda_ops_metrics.handler',
-            Runtime: 'python3.11',
+            Runtime: COMMERCIAL_REGION_LAMBDA_PYTHON_RUNTIME.name,
             TracingConfig: {
                 Mode: 'Active'
             },

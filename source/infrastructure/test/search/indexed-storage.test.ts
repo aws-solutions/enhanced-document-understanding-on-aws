@@ -193,7 +193,7 @@ describe('When storage construct is created', () => {
                 }
             },
             Handler: 'index.handler',
-            Runtime: 'nodejs18.x'
+            Runtime: COMMERCIAL_REGION_LAMBDA_NODE_RUNTIME.name
         });
     });
 });
