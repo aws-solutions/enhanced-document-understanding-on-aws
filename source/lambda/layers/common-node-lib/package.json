@@ -1,6 +1,6 @@
 {
   "name": "common-node-lib",
-  "version": "1.0.2",
+  "version": "1.0.3",
   "description": "Common libraries shared by all lambda node modules",
   "scripts": {
     "test": "jest --coverage --silent --verbose",
@@ -22,7 +22,7 @@
   },
   "license": "Apache-2.0",
   "dependencies": {
-    "jwt-decode": "3.1.2",
+    "jwt-decode": "^4.0.0",
     "lodash": "^4.17.21",
     "pdf-lib": "1.17.1",
     "uuid": "^9.0.1"

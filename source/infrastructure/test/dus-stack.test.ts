@@ -17,7 +17,7 @@ import * as rawCdkJson from '../cdk.json';
 import { Capture, Match, Template } from 'aws-cdk-lib/assertions';
 
 import { DusStack } from '../lib/dus-stack';
-import { EventSources } from '../lib/utils/constants';
+import { COMMERCIAL_REGION_LAMBDA_NODE_RUNTIME, EventSources } from '../lib/utils/constants';
 
 describe('When App is created', () => {
     let template: Template;
@@ -117,7 +117,8 @@ describe('When App is created', () => {
             Type: 'String',
             AllowedPattern: "^$|[A-Za-z0-9_!#$%&'*+/=?`{|}~^.-]+@[A-Za-z0-9.-]+$",
             ConstraintDescription: 'Please provide a valid email, or leave blank',
-            Description: 'Optional email to create a Cognito user with access to the application, and to receive document processing notifications from the application.',
+            Description:
+                'Optional email to create a Cognito user with access to the application, and to receive document processing notifications from the application.'
         });
     });
 
@@ -257,7 +258,7 @@ describe('When App is created', () => {
                     }
                 },
                 Handler: 'index.handler',
-                Runtime: 'nodejs18.x',
+                Runtime: COMMERCIAL_REGION_LAMBDA_NODE_RUNTIME.name,
                 Timeout: 900,
                 TracingConfig: {
                     Mode: 'Active'

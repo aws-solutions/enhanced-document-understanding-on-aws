@@ -19,7 +19,10 @@ import {
     COMMERCIAL_REGION_LAMBDA_JAVA_RUNTIME,
     COMMERCIAL_REGION_LAMBDA_NODE_RUNTIME,
     COMMERCIAL_REGION_LAMBDA_PYTHON_RUNTIME,
-    CloudwatchNamespace
+    CloudwatchNamespace,
+    GOV_CLOUD_REGION_LAMBDA_JAVA_RUNTIME,
+    GOV_CLOUD_REGION_LAMBDA_NODE_RUNTIME,
+    GOV_CLOUD_REGION_LAMBDA_PYTHON_RUNTIME
 } from '../../lib/utils/constants';
 import { LambdaAspects } from '../../lib/utils/lambda-aspect';
 
@@ -51,7 +54,7 @@ describe('When applying aspect to a Node based lambda function', () => {
         const layerCapture = new Capture();
         template.resourceCountIs('AWS::Lambda::LayerVersion', 3);
         template.hasResourceProperties('AWS::Lambda::LayerVersion', {
-            CompatibleRuntimes: ['nodejs18.x'],
+            CompatibleRuntimes: [GOV_CLOUD_REGION_LAMBDA_NODE_RUNTIME.name, COMMERCIAL_REGION_LAMBDA_NODE_RUNTIME.name],
             Content: Match.anyValue(),
             Description: 'This layer configures AWS Node SDK initialization to send user-agent information'
         });
@@ -62,22 +65,22 @@ describe('When applying aspect to a Node based lambda function', () => {
 
         const jsonTemplate = template.toJSON();
 
-        expect(jsonTemplate['Resources'][layerCapture.asArray()[0]['Ref']]['Type']).toEqual(
-            'AWS::Lambda::LayerVersion'
-        );
-        expect(jsonTemplate['Resources'][layerCapture.asArray()[0]['Ref']]['Properties']['Description']).toEqual(
-            'This layer configures AWS Node SDK initialization to send user-agent information'
-        );
         expect(jsonTemplate['Resources'][layerCapture.asArray()[1]['Ref']]['Type']).toEqual(
             'AWS::Lambda::LayerVersion'
         );
         expect(jsonTemplate['Resources'][layerCapture.asArray()[1]['Ref']]['Properties']['Description']).toEqual(
-            'This layer contains shared libraries and functions across all lambda functions to be bundled with the lambda function'
+            'This layer configures AWS Node SDK initialization to send user-agent information'
         );
         expect(jsonTemplate['Resources'][layerCapture.asArray()[2]['Ref']]['Type']).toEqual(
             'AWS::Lambda::LayerVersion'
         );
         expect(jsonTemplate['Resources'][layerCapture.asArray()[2]['Ref']]['Properties']['Description']).toEqual(
+            'This layer contains shared libraries and functions across all lambda functions to be bundled with the lambda function'
+        );
+        expect(jsonTemplate['Resources'][layerCapture.asArray()[0]['Ref']]['Type']).toEqual(
+            'AWS::Lambda::LayerVersion'
+        );
+        expect(jsonTemplate['Resources'][layerCapture.asArray()[0]['Ref']]['Properties']['Description']).toEqual(
             'AWS Node SDK to be bundled with lambda functions'
         );
     });
@@ -143,7 +146,10 @@ describe('When applying aspect to a Python based lambda function', () => {
         const layerCapture = new Capture();
         template.resourceCountIs('AWS::Lambda::LayerVersion', 2);
         template.hasResourceProperties('AWS::Lambda::LayerVersion', {
-            CompatibleRuntimes: ['python3.8', 'python3.9', 'python3.10', 'python3.11'],
+            CompatibleRuntimes: [
+                GOV_CLOUD_REGION_LAMBDA_PYTHON_RUNTIME.name,
+                COMMERCIAL_REGION_LAMBDA_PYTHON_RUNTIME.name
+            ],
             Content: Match.anyValue(),
             Description: 'This layer configures AWS Python SDK initialization to send user-agent information'
         });
@@ -215,7 +221,7 @@ describe('When applying aspect to a Java based lambda function', () => {
         const layerCapture = new Capture();
         template.resourceCountIs('AWS::Lambda::LayerVersion', 1);
         template.hasResourceProperties('AWS::Lambda::LayerVersion', {
-            CompatibleRuntimes: [lambda.Runtime.JAVA_11.toString(), lambda.Runtime.JAVA_17.toString()],
+            CompatibleRuntimes: [GOV_CLOUD_REGION_LAMBDA_JAVA_RUNTIME.name, COMMERCIAL_REGION_LAMBDA_JAVA_RUNTIME.name],
             Content: Match.anyValue(),
             Description: 'This layer configures AWS Java SDK initialization to send user-agent information'
         });

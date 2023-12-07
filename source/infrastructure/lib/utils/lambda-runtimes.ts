@@ -45,7 +45,7 @@ export abstract class LambdaRuntimeCommand {
 export class PythonRuntimeCommand extends LambdaRuntimeCommand {
     public getLambdaRuntime(): string {
         let runtime: string;
-        if (GOV_CLOUD_REGION_LAMBDA_PYTHON_RUNTIME === COMMERCIAL_REGION_LAMBDA_PYTHON_RUNTIME) {
+        if (GOV_CLOUD_REGION_LAMBDA_PYTHON_RUNTIME.name === COMMERCIAL_REGION_LAMBDA_PYTHON_RUNTIME.name) {
             runtime = COMMERCIAL_REGION_LAMBDA_PYTHON_RUNTIME.name;
         } else {
             runtime = cdk.Fn.conditionIf(
@@ -64,7 +64,7 @@ export class PythonRuntimeCommand extends LambdaRuntimeCommand {
 export class NodejsRuntimeCommand extends LambdaRuntimeCommand {
     public getLambdaRuntime(): string {
         let runtime: string;
-        if (GOV_CLOUD_REGION_LAMBDA_NODE_RUNTIME === COMMERCIAL_REGION_LAMBDA_NODE_RUNTIME) {
+        if (GOV_CLOUD_REGION_LAMBDA_NODE_RUNTIME.name === COMMERCIAL_REGION_LAMBDA_NODE_RUNTIME.name) {
             runtime = COMMERCIAL_REGION_LAMBDA_NODE_RUNTIME.name;
         } else {
             runtime = cdk.Fn.conditionIf(
@@ -84,7 +84,7 @@ export class NodejsRuntimeCommand extends LambdaRuntimeCommand {
 export class JavaRuntimeCommand extends LambdaRuntimeCommand {
     public getLambdaRuntime(): string {
         let runtime: string;
-        if (GOV_CLOUD_REGION_LAMBDA_JAVA_RUNTIME === COMMERCIAL_REGION_LAMBDA_JAVA_RUNTIME) {
+        if (GOV_CLOUD_REGION_LAMBDA_JAVA_RUNTIME.name === COMMERCIAL_REGION_LAMBDA_JAVA_RUNTIME.name) {
             runtime = COMMERCIAL_REGION_LAMBDA_JAVA_RUNTIME.name;
         } else {
             runtime = cdk.Fn.conditionIf(

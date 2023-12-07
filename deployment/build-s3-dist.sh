@@ -189,3 +189,12 @@ echo "--------------------------------------------------------------------------
 echo "---------------------------------------"
 echo "Executing Build Complete"
 echo "---------------------------------------"
+echo "---------------------------------------"
+echo "Printing cdk-nag reports"
+echo "---------------------------------------"
+cd $source_dir/infrastructure/cdk.out
+for csv in `find . -name "*.csv"`; do
+    echo -e "File: $csv"
+    echo "---------------------------------------"
+    cat $csv | perl -pe 's/((?<=,)|(?<=^)),/ ,/g;' | column -t -s, | less -S    
+done

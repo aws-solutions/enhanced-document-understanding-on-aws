@@ -17,7 +17,7 @@
       "WorkflowsToProcess": [
         "textract"
       ],
-      "NumDocuments": "1" 
+      "NumDocuments": "1"
     },
     {
       "DocumentType": "receipt",
@@ -29,6 +29,7 @@
       ],
       "MaxSize": "5",
       "WorkflowsToProcess": [
+        "textract",
         "entity-standard"
       ],
       "NumDocuments": "1"

@@ -19,8 +19,8 @@ import * as util from '../../lib/utils/common-utils';
 import { Match, Template } from 'aws-cdk-lib/assertions';
 
 import { spawnSync } from 'child_process';
-import { CustomInfraSetup } from '../../lib/utils/custom-infra-setup';
 import * as rawCdkJson from '../../cdk.json';
+import { CustomInfraSetup } from '../../lib/utils/custom-infra-setup';
 
 import mock = require('mock-fs');
 import path = require('path');
@@ -320,8 +320,8 @@ describe('When listing the files in the workflow-config directory', () => {
                 'default.json': mock.file({
                     content: '{"Name":"default"}'
                 }),
-                'entity-detection.json': mock.file({
-                    content: '{"Name":"entityDetection"}'
+                'single-doc-entity-detection.json': mock.file({
+                    content: '{"Name":"single-doc-entity-detection"}'
                 })
             }
         });
@@ -333,17 +333,17 @@ describe('When listing the files in the workflow-config directory', () => {
         expect(files.length).toEqual(2);
         expect(files).toEqual([
             `${mockWorkflowConfigDir}/default.json`,
-            `${mockWorkflowConfigDir}/entity-detection.json`
+            `${mockWorkflowConfigDir}/single-doc-entity-detection.json`
         ]);
     });
 
     it('should extract the workflow config name from each file', () => {
         const files = util.extractWorkflowConfigNames();
         expect(files.length).toEqual(2);
-        expect(files).toEqual(['default', 'entityDetection']);
+        expect(files).toEqual(['default', 'single-doc-entity-detection']);
     });
 
-    afterEach(() => {
+    afterAll(() => {
         mock.restore();
     });
 });

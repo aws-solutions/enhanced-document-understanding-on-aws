@@ -15,7 +15,7 @@
 import '@aws-amplify/ui-react/styles.css';
 import './App.css';
 
-import React from 'react';
+import React, { useState } from 'react';
 import { Input, TopNavigation } from '@cloudscape-design/components';
 import { Navigate, Route, Routes, useNavigate } from 'react-router-dom';
 
@@ -25,7 +25,6 @@ import DocumentTable from './components/DocumentTable/DocumentTable.tsx';
 import DocumentView from './components/DocumentView/DocumentView.tsx';
 import SearchView from './components/SearchView/SearchView';
 import UploadDocumentView from './components/UploadDocumentView.tsx';
-import { useState } from 'react';
 import { withAuthenticator } from '@aws-amplify/ui-react';
 
 function App({ signOut, enableKendra, workflowConfig, requiredDocs }) {

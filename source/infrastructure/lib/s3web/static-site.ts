@@ -107,6 +107,7 @@ export class StaticWebsite extends Construct {
                 defaultRootObject: 'login.html'
             }
         });
+        cloudfrontToS3.cloudFrontLoggingBucket?.node.addDependency(bucketPolicyUpdateCustomResource);
 
         const cloudfrontFunction = cloudfrontToS3.node
             .tryFindChild('SetHttpSecurityHeaders')
