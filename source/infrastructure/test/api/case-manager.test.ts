@@ -12,12 +12,13 @@
  *********************************************************************************************************************/
 
 import * as cdk from 'aws-cdk-lib';
-import * as s3 from 'aws-cdk-lib/aws-s3';
 import * as dynamodb from 'aws-cdk-lib/aws-dynamodb';
+import * as s3 from 'aws-cdk-lib/aws-s3';
 
 import { Capture, Match, Template } from 'aws-cdk-lib/assertions';
 
 import { CaseManager } from '../../lib/api/case-manager';
+import { COMMERCIAL_REGION_LAMBDA_NODE_RUNTIME } from '../../lib/utils/constants';
 
 describe('When CaseManager construct is created', () => {
     let template: Template;
@@ -43,7 +44,7 @@ describe('When CaseManager construct is created', () => {
     it('should create 4 lambda functions', () => {
         template.resourceCountIs('AWS::Lambda::Function', 4);
         template.hasResourceProperties('AWS::Lambda::Function', {
-            Runtime: 'nodejs18.x',
+            Runtime: COMMERCIAL_REGION_LAMBDA_NODE_RUNTIME.name,
             Handler: 'index.handler',
             Code: {
                 S3Bucket: {
@@ -59,7 +60,7 @@ describe('When CaseManager construct is created', () => {
         const ddbTableCapture = new Capture();
         const configTableCapture = new Capture();
         const policyCapture = new Capture();
-        
+
         template.resourceCountIs('AWS::IAM::Policy', 4);
         template.hasResourceProperties('AWS::IAM::Policy', {
             PolicyDocument: {

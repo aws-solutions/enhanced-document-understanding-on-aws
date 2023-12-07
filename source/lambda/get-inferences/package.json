@@ -1,6 +1,6 @@
 {
   "name": "get-inferences",
-  "version": "1.0.2",
+  "version": "1.0.3",
   "description": "This lambda function is used to get inference results by backing the rest-endpoints",
   "main": "index.js",
   "scripts": {

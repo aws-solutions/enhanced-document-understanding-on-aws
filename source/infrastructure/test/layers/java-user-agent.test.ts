@@ -16,7 +16,7 @@ import { Capture, Match, Template } from 'aws-cdk-lib/assertions';
 import * as lambda from 'aws-cdk-lib/aws-lambda';
 import { JavaUserAgentLayer } from '../../lib/layers/java-user-agent';
 import * as util from '../../lib/utils/common-utils';
-import { COMMERCIAL_REGION_LAMBDA_JAVA_RUNTIME } from '../../lib/utils/constants';
+import { COMMERCIAL_REGION_LAMBDA_JAVA_RUNTIME, GOV_CLOUD_REGION_LAMBDA_JAVA_RUNTIME } from '../../lib/utils/constants';
 
 describe('When java user agent config layer is injected as an aspect', () => {
     let template: Template;
@@ -29,7 +29,7 @@ describe('When java user agent config layer is injected as an aspect', () => {
         const layerCapture = new Capture();
         template.resourceCountIs('AWS::Lambda::LayerVersion', 1);
         template.hasResourceProperties('AWS::Lambda::LayerVersion', {
-            CompatibleRuntimes: ['java11', 'java17'],
+            CompatibleRuntimes: [GOV_CLOUD_REGION_LAMBDA_JAVA_RUNTIME.name, COMMERCIAL_REGION_LAMBDA_JAVA_RUNTIME.name],
             Content: Match.anyValue(),
             Description: 'This layer configures AWS Java SDK initialization to send user-agent information'
         });
@@ -60,7 +60,7 @@ describe('When local build fails', () => {
     it('should use docker image to build assets when local build fails', () => {
         template.resourceCountIs('AWS::Lambda::LayerVersion', 1);
         template.hasResourceProperties('AWS::Lambda::LayerVersion', {
-            CompatibleRuntimes: ['java11', 'java17'],
+            CompatibleRuntimes: [GOV_CLOUD_REGION_LAMBDA_JAVA_RUNTIME.name, COMMERCIAL_REGION_LAMBDA_JAVA_RUNTIME.name],
             Content: Match.anyValue(),
             Description: 'This layer configures AWS Java SDK initialization to send user-agent information'
         });
@@ -88,7 +88,7 @@ describe('When a non-supported runtime is provided', () => {
             });
         } catch (error) {
             expect((error as Error).message).toEqual(
-                'This lambda function uses a runtime that is incompatible with this layer (dotnet6 is not in [java17])'
+                `This lambda function uses a runtime that is incompatible with this layer (dotnet6 is not in [${COMMERCIAL_REGION_LAMBDA_JAVA_RUNTIME.name}])`
             );
         }
     });
@@ -104,7 +104,7 @@ function buildStack(): cdk.Stack {
             new JavaUserAgentLayer(stack, 'AWSUserAgentConfigLayer', {
                 entry: '../lambda/layers/custom-java-sdk-config',
                 description: 'This layer configures AWS Java SDK initialization to send user-agent information',
-                compatibleRuntimes: [lambda.Runtime.JAVA_11, lambda.Runtime.JAVA_17]
+                compatibleRuntimes: [GOV_CLOUD_REGION_LAMBDA_JAVA_RUNTIME, COMMERCIAL_REGION_LAMBDA_JAVA_RUNTIME]
             })
         ]
     });

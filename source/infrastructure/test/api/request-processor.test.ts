@@ -18,6 +18,8 @@ import * as s3 from 'aws-cdk-lib/aws-s3';
 
 import { Capture, Match, Template } from 'aws-cdk-lib/assertions';
 import {
+    COMMERCIAL_REGION_LAMBDA_JAVA_RUNTIME,
+    COMMERCIAL_REGION_LAMBDA_NODE_RUNTIME,
     EventSources,
     S3_REDACTED_PREFIX,
     S3_UPLOAD_PREFIX,
@@ -212,7 +214,7 @@ describe('When RequestProcessor construct is created', () => {
 
         template.resourceCountIs('AWS::Lambda::Function', 9);
         template.hasResourceProperties('AWS::Lambda::Function', {
-            Runtime: 'nodejs18.x',
+            Runtime: COMMERCIAL_REGION_LAMBDA_NODE_RUNTIME.name,
             Handler: 'index.handler',
             Timeout: 900,
             Code: {
@@ -397,7 +399,7 @@ describe('When RequestProcessor construct is created', () => {
 
         template.resourceCountIs('AWS::Lambda::Function', 9);
         template.hasResourceProperties('AWS::Lambda::Function', {
-            Runtime: 'java17',
+            Runtime: COMMERCIAL_REGION_LAMBDA_JAVA_RUNTIME.name,
             Handler: 'com.builder.lambda.RedactionApiHandler',
             Timeout: 900,
             MemorySize: 1024,
@@ -501,7 +503,7 @@ describe('When RequestProcessor construct is created', () => {
     it('should create a lambda function for to back kendra or open search endpoing with correct role permissions', () => {
         template.resourceCountIs('AWS::Lambda::Function', 9);
         template.hasResourceProperties('AWS::Lambda::Function', {
-            Runtime: 'nodejs18.x',
+            Runtime: COMMERCIAL_REGION_LAMBDA_NODE_RUNTIME.name,
             Handler: 'index.handler',
             Timeout: 900,
             Code: {

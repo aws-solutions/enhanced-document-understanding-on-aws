@@ -1,6 +1,6 @@
 {
   "name": "create-presigned-url",
-  "version": "1.0.2",
+  "version": "1.0.3",
   "description": "This lambda has minimal permissions required to create downloadable presigned URLs for documents.",
   "main": "index.js",
   "scripts": {

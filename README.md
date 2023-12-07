@@ -62,9 +62,9 @@ There are two options for deployment into your AWS account:
 
 Following are pre-requisites to build and deploy locally:
 
-- [Nodejs 18.x](https://nodejs.org/en)
-- [CDK v2.36.0](https://github.com/aws/aws-cdk)
-- [Python 3.11](https://www.python.org/)
+- [Nodejs 20.x](https://nodejs.org/en)
+- [CDK v2.113.0](https://github.com/aws/aws-cdk)
+- [Python 3.12](https://www.python.org/)
   - _Note: normal python installations should include support for `ensurepip` and `pip`; however, if running in an environment without these packages you will need to manually install them (e.g. a minimal docker image). See [pip's installation guide](https://pip.pypa.io/en/stable/installation/) for details._
 - [Java 17](https://aws.amazon.com/corretto/)
 - [Maven](https://maven.apache.org/)

@@ -147,7 +147,7 @@ describe('Standard-Workflow SYNC processing task step-function test', () => {
                 'Fn::GetAtt': [lambdaRoleCapture, 'Arn']
             },
             Handler: 'index.hander',
-            Runtime: 'nodejs18.x',
+            Runtime: COMMERCIAL_REGION_LAMBDA_NODE_RUNTIME.name,
             TracingConfig: {
                 Mode: 'Active'
             }

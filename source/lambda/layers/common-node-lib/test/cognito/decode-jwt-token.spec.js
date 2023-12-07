@@ -20,7 +20,7 @@ jest.mock('jwt-decode');
 
 describe('When retrieving the UserId from a lambda event', () => {
     beforeEach(() => {
-        jest.spyOn(jwt_decode, 'default').mockImplementation((token) => {
+        jest.spyOn(jwt_decode, 'jwtDecode').mockImplementation((token) => {
             expect(token).toBeDefined();
             return {
                 'sub': '123456789012',
@@ -40,7 +40,7 @@ describe('When retrieving the UserId from a lambda event', () => {
 
     // create a test if the jwt_decode throws an error
     it('should throw an error if the jwt_decode throws an error', () => {
-        jwt_decode.mockImplementation(() => {
+        jwt_decode.jwtDecode.mockImplementation(() => {
             throw new Error('jwt_decode error');
         });
 
@@ -74,7 +74,7 @@ describe('When retrieving the cognito entity from a auth token', () => {
     });
 
     it('should have both the user id and group id', () => {
-        jest.spyOn(jwt_decode, 'default').mockImplementation((token) => {
+        jest.spyOn(jwt_decode, 'jwtDecode').mockImplementation((token) => {
             expect(token).toBeDefined();
             return {
                 'cognito:username': 'mock-user-id',
@@ -91,7 +91,7 @@ describe('When retrieving the cognito entity from a auth token', () => {
     });
 
     it('should have both the user id only', () => {
-        jest.spyOn(jwt_decode, 'default').mockImplementation((token) => {
+        jest.spyOn(jwt_decode, 'jwtDecode').mockImplementation((token) => {
             expect(token).toBeDefined();
             return {
                 'cognito:username': 'mock-user-id'
