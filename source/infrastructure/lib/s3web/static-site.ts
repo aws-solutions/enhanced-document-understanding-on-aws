@@ -19,7 +19,6 @@ import * as iam from 'aws-cdk-lib/aws-iam';
 import * as s3 from 'aws-cdk-lib/aws-s3';
 import { NagSuppressions } from 'cdk-nag';
 import { Construct } from 'constructs';
-import * as crypto from 'crypto';
 
 /**
  * Interface that defines properties required for the Static Website
@@ -82,18 +81,6 @@ export class StaticWebsite extends Construct {
             iam.Role.fromRoleArn(this, 'BucketPolicyLambdaRole', props.customResourceRoleArn)
         );
 
-        const bucketPolicyUpdateCustomResource = new cdk.CustomResource(this, 'UpdateBucketPolicy', {
-            resourceType: 'Custom::UpdateBucketPolicy',
-            serviceToken: props.customResourceLambdaArn,
-            properties: {
-                Resource: 'UPDATE_BUCKET_POLICY',
-                SOURCE_BUCKET_NAME: this.webS3Bucket.bucketName,
-                LOGGING_BUCKET_NAME: props.accessLoggingBucket.bucketName,
-                SOURCE_PREFIX: 'webappbucket'
-            }
-        });
-        bucketPolicyUpdateCustomResource.node.addDependency(bucketPolicyForLambda);
-
         const cloudfrontToS3 = new CloudFrontToS3(this, 'UI', {
             existingBucketObj: this.webS3Bucket,
             cloudFrontDistributionProps: {
@@ -107,7 +94,79 @@ export class StaticWebsite extends Construct {
                 defaultRootObject: 'login.html'
             }
         });
-        cloudfrontToS3.cloudFrontLoggingBucket?.node.addDependency(bucketPolicyUpdateCustomResource);
+
+        const cloudFrontLogsLoggingPrefix = 'cloudfrontlogs-logging';
+
+        const bucketPolicyUpdateCustomResource = new cdk.CustomResource(this, 'UpdateBucketPolicy', {
+            resourceType: 'Custom::UpdateBucketPolicy',
+            serviceToken: props.customResourceLambdaArn,
+            properties: {
+                Resource: 'UPDATE_BUCKET_POLICY',
+                SOURCE_BUCKET_NAME: this.webS3Bucket.bucketName,
+                LOGGING_BUCKET_NAME: props.accessLoggingBucket.bucketName,
+                SOURCE_PREFIX: 'webappbucket'
+            }
+        });
+        bucketPolicyUpdateCustomResource.node.addDependency(bucketPolicyForLambda);
+        bucketPolicyUpdateCustomResource.node.addDependency(this.webS3Bucket.policy!);
+        bucketPolicyUpdateCustomResource.node.addDependency(cloudfrontToS3.cloudFrontWebDistribution);
+
+        const cloudFrontLoggingUpdateBucketPolicyCustomResource = new cdk.CustomResource(
+            this,
+            'CloudFrontLoggingUpdateBucketPolicy',
+            {
+                resourceType: 'Custom::UpdateBucketPolicy',
+                serviceToken: props.customResourceLambdaArn,
+                properties: {
+                    Resource: 'UPDATE_BUCKET_POLICY',
+                    SOURCE_BUCKET_NAME: cloudfrontToS3.cloudFrontLoggingBucket?.bucketName,
+                    LOGGING_BUCKET_NAME: props.accessLoggingBucket.bucketName,
+                    SOURCE_PREFIX: cloudFrontLogsLoggingPrefix
+                }
+            }
+        );
+        cloudFrontLoggingUpdateBucketPolicyCustomResource.node.addDependency(bucketPolicyUpdateCustomResource);
+        cloudFrontLoggingUpdateBucketPolicyCustomResource.node.addDependency(
+            cloudfrontToS3.cloudFrontLoggingBucket!.policy!
+        );
+        cloudFrontLoggingUpdateBucketPolicyCustomResource.node.addDependency(cloudfrontToS3.cloudFrontWebDistribution);
+
+        const cfnCloudFrontLoggingBucket = cloudfrontToS3.cloudFrontLoggingBucket?.node.defaultChild as s3.CfnBucket;
+        cfnCloudFrontLoggingBucket.addPropertyOverride('LoggingConfiguration', {
+            DestinationBucketName: {
+                'Fn::Select': [
+                    0,
+                    {
+                        'Fn::Split': [
+                            '/',
+                            {
+                                'Fn::Select': [
+                                    5,
+                                    {
+                                        'Fn::Split': [
+                                            ':',
+                                            {
+                                                'Ref': 'AccessLoggingBucketArn'
+                                            }
+                                        ]
+                                    }
+                                ]
+                            }
+                        ]
+                    }
+                ]
+            },
+            LogFilePrefix: `${cloudFrontLogsLoggingPrefix}/`
+        });
+        // disabling versioning, since it was disabled in a previous release, enabling
+        // versioning now will create a new bucket with an update from the previous version
+        cfnCloudFrontLoggingBucket.addPropertyDeletionOverride('VersioningConfiguration');
+
+        cloudfrontToS3.node.tryFindChild('CloudfrontLoggingBucketAccessLog')?.node.tryRemoveChild('Resource');
+        cloudfrontToS3.node
+            .tryFindChild('CloudfrontLoggingBucketAccessLog')
+            ?.node.tryFindChild('Policy')
+            ?.node.tryRemoveChild('Resource');
 
         const cloudfrontFunction = cloudfrontToS3.node
             .tryFindChild('SetHttpSecurityHeaders')
@@ -120,73 +179,6 @@ export class StaticWebsite extends Construct {
         );
 
         this.cloudFrontDistribution = cloudfrontToS3.cloudFrontWebDistribution;
-        this.cloudFrontDistribution.node
-            .tryFindChild('Origin1')
-            ?.node.tryFindChild('S3Origin')
-            ?.node.tryRemoveChild('Resource');
-
-        const originAccessControl = new cloudfront.CfnOriginAccessControl(this, 'OAC', {
-            originAccessControlConfig: {
-                name: `BucketOriginAccessControl-${cdk.Aws.REGION}`,
-                originAccessControlOriginType: 's3',
-                signingBehavior: 'always',
-                signingProtocol: 'sigv4'
-            }
-        });
-
-        // prettier-ignore
-        let l1CloudFrontDistribution = this.cloudFrontDistribution.node.defaultChild as cdk.aws_cloudfront.CfnDistribution;
-        // prettier-ignore
-        l1CloudFrontDistribution.addPropertyOverride('DistributionConfig.Origins.0.OriginAccessControlId', originAccessControl.getAtt('Id'));
-        // prettier-ignore
-        l1CloudFrontDistribution.addPropertyOverride('DistributionConfig.Origins.0.S3OriginConfig.OriginAccessIdentity', '');
-
-        this.node.tryFindChild('CloudfrontLoggingBucket')?.node.tryRemoveChild('Resource');
-        this.node.tryFindChild('CloudfrontLoggingBucket')?.node.tryFindChild('Policy')?.node.tryRemoveChild('Resource');
-
-        let l1BucketPolicy = this.webS3Bucket.node.tryFindChild('Policy')?.node.defaultChild as s3.CfnBucketPolicy;
-        l1BucketPolicy.addPropertyOverride('PolicyDocument', {
-            Statement: [
-                {
-                    Action: 's3:*',
-                    Condition: {
-                        Bool: {
-                            'aws:SecureTransport': 'false'
-                        }
-                    },
-                    Effect: 'Deny',
-                    Principal: {
-                        AWS: '*'
-                    },
-                    Resource: [`${this.webS3Bucket.bucketArn}`, `${this.webS3Bucket.bucketArn}/*`]
-                },
-                {
-                    Action: 's3:GetObject',
-                    Condition: {
-                        StringEquals: {
-                            'AWS:SourceArn': {
-                                'Fn::Join': [
-                                    '',
-                                    [
-                                        'arn:',
-                                        `${cdk.Aws.PARTITION}`,
-                                        ':cloudfront::',
-                                        `${cdk.Aws.ACCOUNT_ID}`,
-                                        ':distribution/',
-                                        `${this.cloudFrontDistribution.distributionId}`
-                                    ]
-                                ]
-                            }
-                        }
-                    },
-                    Effect: 'Allow',
-                    Principal: {
-                        Service: 'cloudfront.amazonaws.com'
-                    },
-                    Resource: `${this.webS3Bucket.bucketArn}/*`
-                }
-            ]
-        });
 
         // prettier-ignore
         new cdk.CfnOutput(cdk.Stack.of(this), 'WebUrl', { // NOSONAR - Typescript construct instantiation
