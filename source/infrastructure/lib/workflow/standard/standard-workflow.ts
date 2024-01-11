@@ -237,7 +237,7 @@ export class StandardWorkflow extends AbstractWorkflow {
                 throw new Error('Invalid workflowType');
         }
 
-        this.map.iterator(mapIteratorState);
+        this.map.iterator(mapIteratorState); // NOSONAR -typescript:S1874 - in backlog to upgrade with a future release
         this.map.next(this.setStatusValue(WorkflowStatus.SUCCESS)).next(this.publishInferenceTask);
 
         return sfn.Chain.start(

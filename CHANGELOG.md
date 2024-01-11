@@ -5,6 +5,13 @@ All notable changes to this project will be documented in this file.
 The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/),
 and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
 
+## [1.0.4] - 2024-01-11
+
+### Updated
+
+- AWS CDK and SDK upgrades
+- Fix an intermittent issue in AWS CloudFormation by setting explicit dependencies between resources
+
 ## [1.0.3] - 2023-12-07
 
 ### Updated

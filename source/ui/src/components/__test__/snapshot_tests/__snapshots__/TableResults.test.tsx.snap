@@ -6,13 +6,13 @@ exports[`Renders error message when currentStatus is error 1`] = `
 >
    
   <span
-    className="awsui_root_1cbgc_babsw_147 awsui_status-error_1cbgc_babsw_156"
+    className="awsui_root_1cbgc_1jv5o_147 awsui_status-error_1cbgc_1jv5o_156"
   >
     <span
-      className="awsui_container_1cbgc_babsw_125 awsui_display-inline-block_1cbgc_babsw_204"
+      className="awsui_container_1cbgc_1jv5o_125 awsui_display-inline-block_1cbgc_1jv5o_204"
     >
       <span
-        className="awsui_icon_1cbgc_babsw_97"
+        className="awsui_icon_1cbgc_1jv5o_97"
       >
         <span
           className="awsui_icon_h11ix_s5sg5_98 awsui_size-normal-mapped-height_h11ix_s5sg5_151 awsui_size-normal_h11ix_s5sg5_147 awsui_variant-normal_h11ix_s5sg5_219"
@@ -37,13 +37,13 @@ exports[`Renders loading message when currentStatus is loading 1`] = `
 >
    
   <span
-    className="awsui_root_1cbgc_babsw_147 awsui_status-loading_1cbgc_babsw_177"
+    className="awsui_root_1cbgc_1jv5o_147 awsui_status-loading_1cbgc_1jv5o_177"
   >
     <span
-      className="awsui_container_1cbgc_babsw_125 awsui_display-inline-block_1cbgc_babsw_204"
+      className="awsui_container_1cbgc_1jv5o_125 awsui_display-inline-block_1cbgc_1jv5o_204"
     >
       <span
-        className="awsui_icon_1cbgc_babsw_97"
+        className="awsui_icon_1cbgc_1jv5o_97"
       >
         <span
           className="awsui_root_1612d_1v79u_127 awsui_size-normal_1612d_1v79u_135 awsui_variant-normal_1612d_1v79u_159"
