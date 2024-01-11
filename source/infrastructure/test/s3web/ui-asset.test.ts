@@ -160,6 +160,11 @@ describe('when running as cdk synth locally outside the pipeline', () => {
                 }
             ]
         });
+
+        template.hasResource('AWS::IAM::Policy', {
+            Properties: Match.anyValue(),
+            DependsOn: [Match.stringLikeRegexp('WebsiteBucketPolicy*'), Match.stringLikeRegexp('WebsiteBucket*')]
+        });
     });
 
     it('should have a dependency on the custom resource to create the policy before executing the custom resource', () => {
