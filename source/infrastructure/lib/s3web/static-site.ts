@@ -81,18 +81,6 @@ export class StaticWebsite extends Construct {
             iam.Role.fromRoleArn(this, 'BucketPolicyLambdaRole', props.customResourceRoleArn)
         );
 
-        const bucketPolicyUpdateCustomResource = new cdk.CustomResource(this, 'UpdateBucketPolicy', {
-            resourceType: 'Custom::UpdateBucketPolicy',
-            serviceToken: props.customResourceLambdaArn,
-            properties: {
-                Resource: 'UPDATE_BUCKET_POLICY',
-                SOURCE_BUCKET_NAME: this.webS3Bucket.bucketName,
-                LOGGING_BUCKET_NAME: props.accessLoggingBucket.bucketName,
-                SOURCE_PREFIX: 'webappbucket'
-            }
-        });
-        bucketPolicyUpdateCustomResource.node.addDependency(bucketPolicyForLambda);
-
         const cloudfrontToS3 = new CloudFrontToS3(this, 'UI', {
             existingBucketObj: this.webS3Bucket,
             cloudFrontDistributionProps: {
@@ -109,7 +97,21 @@ export class StaticWebsite extends Construct {
 
         const cloudFrontLogsLoggingPrefix = 'cloudfrontlogs-logging';
 
-        const cloudFrontLoggingUpdateBucketPolicy = new cdk.CustomResource(
+        const bucketPolicyUpdateCustomResource = new cdk.CustomResource(this, 'UpdateBucketPolicy', {
+            resourceType: 'Custom::UpdateBucketPolicy',
+            serviceToken: props.customResourceLambdaArn,
+            properties: {
+                Resource: 'UPDATE_BUCKET_POLICY',
+                SOURCE_BUCKET_NAME: this.webS3Bucket.bucketName,
+                LOGGING_BUCKET_NAME: props.accessLoggingBucket.bucketName,
+                SOURCE_PREFIX: 'webappbucket'
+            }
+        });
+        bucketPolicyUpdateCustomResource.node.addDependency(bucketPolicyForLambda);
+        bucketPolicyUpdateCustomResource.node.addDependency(this.webS3Bucket.policy!);
+        bucketPolicyUpdateCustomResource.node.addDependency(cloudfrontToS3.cloudFrontWebDistribution);
+
+        const cloudFrontLoggingUpdateBucketPolicyCustomResource = new cdk.CustomResource(
             this,
             'CloudFrontLoggingUpdateBucketPolicy',
             {
@@ -123,8 +125,11 @@ export class StaticWebsite extends Construct {
                 }
             }
         );
-
-        cloudFrontLoggingUpdateBucketPolicy.node.addDependency(bucketPolicyForLambda);
+        cloudFrontLoggingUpdateBucketPolicyCustomResource.node.addDependency(bucketPolicyUpdateCustomResource);
+        cloudFrontLoggingUpdateBucketPolicyCustomResource.node.addDependency(
+            cloudfrontToS3.cloudFrontLoggingBucket!.policy!
+        );
+        cloudFrontLoggingUpdateBucketPolicyCustomResource.node.addDependency(cloudfrontToS3.cloudFrontWebDistribution);
 
         const cfnCloudFrontLoggingBucket = cloudfrontToS3.cloudFrontLoggingBucket?.node.defaultChild as s3.CfnBucket;
         cfnCloudFrontLoggingBucket.addPropertyOverride('LoggingConfiguration', {
