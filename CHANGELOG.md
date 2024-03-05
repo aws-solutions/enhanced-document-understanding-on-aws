@@ -9,7 +9,7 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ### Updated
 
-- Library upgrades to address security vulnerability related to `node-ip` (CVE-2023-42282)[https://github.com/advisories/GHSA-78xj-cgh5-2h22]
+- Library upgrades to address security vulnerability related to `node-ip` [CVE-2023-42282](https://github.com/advisories/GHSA-78xj-cgh5-2h22)
 - Add dependency between Amazon S3 bucket creation and S3 bucket policy to reduce failures with `Fn::GetAtt` when retrieving bucket arn to create bucket policy
 
 ## [1.0.4] - 2024-01-11
