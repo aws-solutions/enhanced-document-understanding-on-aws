@@ -97,6 +97,12 @@ export class StaticWebsite extends Construct {
 
         const cloudFrontLogsLoggingPrefix = 'cloudfrontlogs-logging';
 
+        this.webS3Bucket.policy?.node.addDependency(cloudfrontToS3.cloudFrontWebDistribution);
+        cloudfrontToS3.cloudFrontLoggingBucket?.node
+            .tryFindChild('Policy')
+            ?.node.tryFindChild('Resource')
+            ?.node?.addDependency(cloudfrontToS3.cloudFrontLoggingBucket);
+
         const bucketPolicyUpdateCustomResource = new cdk.CustomResource(this, 'UpdateBucketPolicy', {
             resourceType: 'Custom::UpdateBucketPolicy',
             serviceToken: props.customResourceLambdaArn,
