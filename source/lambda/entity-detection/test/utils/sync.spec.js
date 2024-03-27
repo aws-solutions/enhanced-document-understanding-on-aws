@@ -93,7 +93,7 @@ describe('runSyncEntityDetection (Comprehend): When provided with correct inputs
         expect(getComprehendResult).toHaveBeenCalledWith({
             endpointArn: 'custom-arn',
             languageCode: 'es',
-            pageText: 'This is a 2023 test about John Doe, New York. john doe.',
+            pageText: 'This is a 2023 test about John Doe, New York. john doe. it is it is repeating.',
             taskToken: 'fake-token'
         });
 
@@ -143,7 +143,7 @@ describe('runSyncEntityDetection (Comprehend): When provided with correct inputs
         expect(getComprehendResult).toHaveBeenCalledWith({
             endpointArn: 'custom-arn',
             languageCode: 'es',
-            pageText: 'This is a 2023 test about John Doe, New York. john doe.',
+            pageText: 'This is a 2023 test about John Doe, New York. john doe. it is it is repeating.',
             taskToken: 'fake-token'
         });
         // for 2 pages in fake textract response

@@ -7,7 +7,7 @@
     <groupId>com.builder.config</groupId>
     <artifactId>custom-java-sdk-config</artifactId>
     <packaging>jar</packaging>
-    <version>1.0.4</version>
+    <version>1.0.6</version>
     <name>custom-java-sdk-config</name>
     <properties>
         <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
@@ -98,11 +98,11 @@
                             <goal>enforce</goal>
                         </goals>
                         <configuration>
-                        <rules>
-                            <requireMavenVersion>
-                                <version>3.8</version>
-                            </requireMavenVersion>
-                        </rules>    
+                            <rules>
+                                <requireMavenVersion>
+                                    <version>3.8</version>
+                                </requireMavenVersion>
+                            </rules>
                         </configuration>
                     </execution>
                 </executions>
@@ -219,7 +219,7 @@
                 <groupId>org.apache.maven.plugins</groupId>
                 <artifactId>maven-project-info-reports-plugin</artifactId>
                 <version>3.4.3</version>
-            </plugin>            
+            </plugin>
         </plugins>
     </build>
     <reporting>
@@ -229,13 +229,13 @@
                 <artifactId>maven-project-info-reports-plugin</artifactId>
                 <version>3.4.3</version>
                 <reportSets>
-                <reportSet>
-                    <reports>
-                    <report>dependencies</report>
-                    </reports>
-                </reportSet>
+                    <reportSet>
+                        <reports>
+                            <report>dependencies</report>
+                        </reports>
+                    </reportSet>
                 </reportSets>
             </plugin>
         </plugins>
-  </reporting>    
+    </reporting>
 </project>

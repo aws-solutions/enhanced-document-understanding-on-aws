@@ -66,13 +66,19 @@ class PiiEntityDetectionStrategy {
         params.comprehendResponse.Entities.forEach((entity) => {
             // create a new entity 'Text' for custom inference, as 'Text' is not present in the ComprehendPii response
             entity.Text = params.pageText.substring(entity.BeginOffset, entity.EndOffset);
-            utils.addEntityLocation(
-                params.entityLocations,
-                entity,
-                params.offsetToLineIdMap,
-                params.blockDict,
-                params.pageIdx + 1
-            );
+            try {
+                utils.addEntityLocation(
+                    params.entityLocations,
+                    entity,
+                    params.offsetToLineIdMap,
+                    params.blockDict,
+                    params.pageIdx + 1
+                );
+            } catch (error) {
+                console.error(
+                    `Determining location of PII entity '${JSON.stringify(entity)}' failed with error: ${error}`
+                );
+            }
         });
     }
 }

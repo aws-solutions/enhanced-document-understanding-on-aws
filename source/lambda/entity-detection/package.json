@@ -1,6 +1,6 @@
 {
   "name": "entity-detection",
-  "version": "1.0.4",
+  "version": "1.0.6",
   "description": "This lambda function detects entities within Text",
   "main": "index.js",
   "scripts": {

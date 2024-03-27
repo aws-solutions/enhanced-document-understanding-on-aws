@@ -19,6 +19,7 @@ const AWSMock = require('aws-sdk-mock');
 const {
     expectedSyncComprehendPiiResponse,
     blockDictPii,
+    errorCaseOffsetToLineIdMapPii,
     offsetToLineIdMapPii,
     textractFullPageText,
     bondingBoxResultPii
@@ -68,6 +69,20 @@ describe('Get Comprehend API Result:: When provided with correct inputs', () => 
             pageText: textractFullPageText
         });
         expect(entityLocations).toEqual(bondingBoxResultPii);
+    });
+
+    it('addEntityLocations should pass with errors logged', async () => {
+        let entityLocations = {};
+        const errorSpy = jest.spyOn(console, 'error');
+        piiEntityDetectionStrategy.addEntityLocations({
+            entityLocations: entityLocations,
+            comprehendResponse: expectedSyncComprehendPiiResponse,
+            offsetToLineIdMap: errorCaseOffsetToLineIdMapPii,
+            blockDict: blockDictPii,
+            pageIdx: 0,
+            pageText: textractFullPageText
+        });
+        expect(errorSpy).toHaveBeenCalledWith("Determining location of PII entity '{\"Score\":0.8900869488716125,\"Type\":\"PERSON\",\"BeginOffset\":46,\"EndOffset\":54,\"Text\":\"john doe\"}' failed with error: Error: Bounding box computation failed for entity 'john doe' at offset 46. Got error: Cannot read properties of undefined (reading 'Text')");
     });
 
     afterEach(() => {
