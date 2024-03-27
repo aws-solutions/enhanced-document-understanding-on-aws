@@ -224,6 +224,12 @@ describe('computeBoundingBoxes', () => {
         expect(res).toEqual([{ 'Width': 4, 'Height': 1, 'Left': 0, 'Top': 0 }]);
     });
 
+    it('an entity which starts and needs to backtrack', () => {
+        let entity = expectedSyncComprehendResponse.Entities[5];
+        let res = utils.computeBoundingBoxes(entity, dummyOffsetToLineMap, dummyBlockDict);
+        expect(res).toEqual([{ 'Width': 3, 'Height': 1, 'Left': 2, 'Top': 2 }]);
+    });
+
     it('should throw if we pass an entity that does not exist', () => {
         let entity = {
             'Score': 0.8919363021850586,

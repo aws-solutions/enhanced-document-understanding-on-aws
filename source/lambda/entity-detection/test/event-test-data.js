@@ -138,6 +138,26 @@ exports.textractDetectTextInference = [
                 ]
             },
             {
+                'BlockType': 'LINE',
+                'Confidence': 98.38265228271484,
+                'Text': 'it is it is repeating.',
+                'Geometry': {
+                    'BoundingBox': {
+                        'Width': 5,
+                        'Height': 1,
+                        'Left': 0,
+                        'Top': 2
+                    }
+                },
+                'Id': 'line3',
+                'Relationships': [
+                    {
+                        'Type': 'CHILD',
+                        'Ids': ['word13', 'word14', 'word15', 'word16', 'word17']
+                    }
+                ]
+            },
+            {
                 'BlockType': 'WORD',
                 'Confidence': 98.13988494873047,
                 'Text': 'This',
@@ -316,6 +336,81 @@ exports.textractDetectTextInference = [
                     }
                 },
                 'Id': 'word12'
+            },
+            {
+                'BlockType': 'WORD',
+                'Confidence': 99.45236206054688,
+                'Text': 'it',
+                'TextType': 'PRINTED',
+                'Geometry': {
+                    'BoundingBox': {
+                        'Width': 1,
+                        'Height': 1,
+                        'Left': 0,
+                        'Top': 2
+                    }
+                },
+                'Id': 'word13'
+            },
+            {
+                'BlockType': 'WORD',
+                'Confidence': 99.45236206054688,
+                'Text': 'is',
+                'TextType': 'PRINTED',
+                'Geometry': {
+                    'BoundingBox': {
+                        'Width': 1,
+                        'Height': 1,
+                        'Left': 1,
+                        'Top': 2
+                    }
+                },
+                'Id': 'word14'
+            },
+            {
+                'BlockType': 'WORD',
+                'Confidence': 99.45236206054688,
+                'Text': 'it',
+                'TextType': 'PRINTED',
+                'Geometry': {
+                    'BoundingBox': {
+                        'Width': 1,
+                        'Height': 1,
+                        'Left': 2,
+                        'Top': 2
+                    }
+                },
+                'Id': 'word15'
+            },
+            {
+                'BlockType': 'WORD',
+                'Confidence': 99.45236206054688,
+                'Text': 'is',
+                'TextType': 'PRINTED',
+                'Geometry': {
+                    'BoundingBox': {
+                        'Width': 1,
+                        'Height': 1,
+                        'Left': 3,
+                        'Top': 2
+                    }
+                },
+                'Id': 'word16'
+            },
+            {
+                'BlockType': 'WORD',
+                'Confidence': 99.45236206054688,
+                'Text': 'repeating',
+                'TextType': 'PRINTED',
+                'Geometry': {
+                    'BoundingBox': {
+                        'Width': 1,
+                        'Height': 1,
+                        'Left': 4,
+                        'Top': 2
+                    }
+                },
+                'Id': 'word17'
             }
         ]
     },
@@ -401,6 +496,26 @@ exports.textractDetectTextInference = [
                 ]
             },
             {
+                'BlockType': 'LINE',
+                'Confidence': 98.38265228271484,
+                'Text': 'it is it is repeating.',
+                'Geometry': {
+                    'BoundingBox': {
+                        'Width': 5,
+                        'Height': 1,
+                        'Left': 0,
+                        'Top': 2
+                    }
+                },
+                'Id': 'line3',
+                'Relationships': [
+                    {
+                        'Type': 'CHILD',
+                        'Ids': ['word13', 'word14', 'word15', 'word16', 'word17']
+                    }
+                ]
+            },
+            {
                 'BlockType': 'WORD',
                 'Confidence': 98.13988494873047,
                 'Text': 'This',
@@ -579,12 +694,87 @@ exports.textractDetectTextInference = [
                     }
                 },
                 'Id': 'word12'
+            },
+            {
+                'BlockType': 'WORD',
+                'Confidence': 99.45236206054688,
+                'Text': 'it',
+                'TextType': 'PRINTED',
+                'Geometry': {
+                    'BoundingBox': {
+                        'Width': 1,
+                        'Height': 1,
+                        'Left': 0,
+                        'Top': 2
+                    }
+                },
+                'Id': 'word13'
+            },
+            {
+                'BlockType': 'WORD',
+                'Confidence': 99.45236206054688,
+                'Text': 'is',
+                'TextType': 'PRINTED',
+                'Geometry': {
+                    'BoundingBox': {
+                        'Width': 1,
+                        'Height': 1,
+                        'Left': 1,
+                        'Top': 2
+                    }
+                },
+                'Id': 'word14'
+            },
+            {
+                'BlockType': 'WORD',
+                'Confidence': 99.45236206054688,
+                'Text': 'it',
+                'TextType': 'PRINTED',
+                'Geometry': {
+                    'BoundingBox': {
+                        'Width': 1,
+                        'Height': 1,
+                        'Left': 2,
+                        'Top': 2
+                    }
+                },
+                'Id': 'word15'
+            },
+            {
+                'BlockType': 'WORD',
+                'Confidence': 99.45236206054688,
+                'Text': 'is',
+                'TextType': 'PRINTED',
+                'Geometry': {
+                    'BoundingBox': {
+                        'Width': 1,
+                        'Height': 1,
+                        'Left': 3,
+                        'Top': 2
+                    }
+                },
+                'Id': 'word16'
+            },
+            {
+                'BlockType': 'WORD',
+                'Confidence': 99.45236206054688,
+                'Text': 'repeating',
+                'TextType': 'PRINTED',
+                'Geometry': {
+                    'BoundingBox': {
+                        'Width': 1,
+                        'Height': 1,
+                        'Left': 4,
+                        'Top': 2
+                    }
+                },
+                'Id': 'word17'
             }
         ]
     }
 ];
 
-exports.textractFullPageText = 'This is a 2023 test about John Doe, New York. john doe.';
+exports.textractFullPageText = 'This is a 2023 test about John Doe, New York. john doe. it is it is repeating';
 
 exports.expectedSyncComprehendResponse = {
     'Entities': [
@@ -622,6 +812,13 @@ exports.expectedSyncComprehendResponse = {
             'Text': 'john doe',
             'BeginOffset': 46,
             'EndOffset': 54
+        },
+        {
+            'Score': 0.8900869488716125,
+            'Type': 'OTHER',
+            'Text': 'it is repeating',
+            'BeginOffset': 56,
+            'EndOffset': 77
         }
     ]
 };
@@ -701,6 +898,191 @@ exports.expectedSyncComprehendMedicalResponse = {
 };
 
 exports.expectedEntityLocations = {
+    'DATE': {
+        '2023': {
+            '1': [
+                {
+                    'BoundingBoxes': [
+                        {
+                            'Height': 1,
+                            'Left': 3,
+                            'Top': 0,
+                            'Width': 1
+                        }
+                    ],
+                    'Score': 0.8919363021850586
+                }
+            ],
+            '2': [
+                {
+                    'BoundingBoxes': [
+                        {
+                            'Height': 1,
+                            'Left': 3,
+                            'Top': 0,
+                            'Width': 1
+                        }
+                    ],
+                    'Score': 0.8919363021850586
+                }
+            ]
+        }
+    },
+    'LOCATION': {
+        'NEW YORK': {
+            '1': [
+                {
+                    'BoundingBoxes': [
+                        {
+                            'Height': 1,
+                            'Left': 1,
+                            'Top': 1,
+                            'Width': 2
+                        }
+                    ],
+                    'Score': 0.8900869488716125
+                }
+            ],
+            '2': [
+                {
+                    'BoundingBoxes': [
+                        {
+                            'Height': 1,
+                            'Left': 1,
+                            'Top': 1,
+                            'Width': 2
+                        }
+                    ],
+                    'Score': 0.8900869488716125
+                }
+            ]
+        }
+    },
+    'OTHER': {
+        'IT IS REPEATING': {
+            '1': [
+                {
+                    'BoundingBoxes': [
+                        {
+                            'Height': 1,
+                            'Left': 2,
+                            'Top': 2,
+                            'Width': 3
+                        }
+                    ],
+                    'Score': 0.8900869488716125
+                }
+            ],
+            '2': [
+                {
+                    'BoundingBoxes': [
+                        {
+                            'Height': 1,
+                            'Left': 2,
+                            'Top': 2,
+                            'Width': 3
+                        }
+                    ],
+                    'Score': 0.8900869488716125
+                }
+            ]
+        },
+        'THIS IS A 2023': {
+            '1': [
+                {
+                    'BoundingBoxes': [
+                        {
+                            'Height': 1,
+                            'Left': 0,
+                            'Top': 0,
+                            'Width': 4
+                        }
+                    ],
+                    'Score': 0.8900869488716125
+                }
+            ],
+            '2': [
+                {
+                    'BoundingBoxes': [
+                        {
+                            'Height': 1,
+                            'Left': 0,
+                            'Top': 0,
+                            'Width': 4
+                        }
+                    ],
+                    'Score': 0.8900869488716125
+                }
+            ]
+        }
+    },
+    'PERSON': {
+        'JOHN DOE': {
+            '1': [
+                {
+                    'BoundingBoxes': [
+                        {
+                            'Height': 1,
+                            'Left': 6,
+                            'Top': 0,
+                            'Width': 1
+                        },
+                        {
+                            'Height': 1,
+                            'Left': 0,
+                            'Top': 1,
+                            'Width': 1
+                        }
+                    ],
+                    'Score': 0.8900869488716125
+                },
+                {
+                    'BoundingBoxes': [
+                        {
+                            'Height': 1,
+                            'Left': 3,
+                            'Top': 1,
+                            'Width': 2
+                        }
+                    ],
+                    'Score': 0.8900869488716125
+                }
+            ],
+            '2': [
+                {
+                    'BoundingBoxes': [
+                        {
+                            'Height': 1,
+                            'Left': 6,
+                            'Top': 0,
+                            'Width': 1
+                        },
+                        {
+                            'Height': 1,
+                            'Left': 0,
+                            'Top': 1,
+                            'Width': 1
+                        }
+                    ],
+                    'Score': 0.8900869488716125
+                },
+                {
+                    'BoundingBoxes': [
+                        {
+                            'Height': 1,
+                            'Left': 3,
+                            'Top': 1,
+                            'Width': 2
+                        }
+                    ],
+                    'Score': 0.8900869488716125
+                }
+            ]
+        }
+    }
+};
+
+exports.expectedPiiEntityLocations = {
     'DATE': {
         '2023': {
             '1': [
@@ -921,7 +1303,7 @@ exports.expectedPiiEntityS3Upload = {
     },
     'inferences': {
         'entity-pii': [exports.expectedSyncComprehendPiiResponse, exports.expectedSyncComprehendPiiResponse],
-        'entity-pii-locations': exports.expectedEntityLocations,
+        'entity-pii-locations': exports.expectedPiiEntityLocations,
         'textract-analyzeId': 'fake-s3-key2',
         'textract-detectText': 'fake-s3-key1'
     },
@@ -1222,6 +1604,12 @@ exports.expectedS3getObjectResponse = {
 exports.offsetToLineIdMapPii = [
     { 'offset': 0, 'id': 'line1' },
     { 'offset': 31, 'id': 'line2' }
+];
+
+exports.errorCaseOffsetToLineIdMapPii = [
+    { 'offset': 0, 'id': 'line1' },
+    { 'offset': 31, 'id': 'line2' },
+    { 'offset': 40, 'dummy': 'line3' }
 ];
 
 exports.blockDictPii = {
@@ -1573,7 +1961,14 @@ exports.bondingBoxResultPii = {
 
 exports.offsetToLineIdMapStandard = [
     { offset: 0, id: 'line1' },
-    { offset: 31, id: 'line2' }
+    { offset: 31, id: 'line2' },
+    { offset: 56, id: 'line3' }
+];
+
+exports.errorCaseOffsetToLineIdMapStandard = [
+    { offset: 0, id: 'line1' },
+    { offset: 31, id: 'line2' },
+    { offset: 56, dummy: 'line3' }
 ];
 
 exports.blockDictStandard = {
@@ -1609,7 +2004,7 @@ exports.blockDictStandard = {
         'Relationships': [
             {
                 'Type': 'CHILD',
-                'Ids': ['line1', 'line2']
+                'Ids': ['line1', 'line2', 'line3']
             }
         ]
     },
@@ -1650,6 +2045,26 @@ exports.blockDictStandard = {
             {
                 'Type': 'CHILD',
                 'Ids': ['word8', 'word9', 'word10', 'word11', 'word12']
+            }
+        ]
+    },
+    'line3': {
+        'BlockType': 'LINE',
+        'Confidence': 98.38265228271484,
+        'Text': 'it is it is repeating.',
+        'Geometry': {
+            'BoundingBox': {
+                'Width': 5,
+                'Height': 1,
+                'Left': 0,
+                'Top': 2
+            }
+        },
+        'Id': 'line3',
+        'Relationships': [
+            {
+                'Type': 'CHILD',
+                'Ids': ['word13', 'word14', 'word15', 'word16', 'word17']
             }
         ]
     },
@@ -1816,7 +2231,7 @@ exports.blockDictStandard = {
                 'Top': 1
             }
         },
-        'Id': 'word10'
+        'Id': 'word11'
     },
     'word12': {
         'BlockType': 'WORD',
@@ -1831,7 +2246,82 @@ exports.blockDictStandard = {
                 'Top': 1
             }
         },
-        'Id': 'word10'
+        'Id': 'word12'
+    },
+    'word13': {
+        'BlockType': 'WORD',
+        'Confidence': 99.45236206054688,
+        'Text': 'it',
+        'TextType': 'PRINTED',
+        'Geometry': {
+            'BoundingBox': {
+                'Width': 1,
+                'Height': 1,
+                'Left': 0,
+                'Top': 2
+            }
+        },
+        'Id': 'word13'
+    },
+    'word14': {
+        'BlockType': 'WORD',
+        'Confidence': 99.45236206054688,
+        'Text': 'is',
+        'TextType': 'PRINTED',
+        'Geometry': {
+            'BoundingBox': {
+                'Width': 1,
+                'Height': 1,
+                'Left': 1,
+                'Top': 2
+            }
+        },
+        'Id': 'word14'
+    },
+    'word15': {
+        'BlockType': 'WORD',
+        'Confidence': 99.45236206054688,
+        'Text': 'it',
+        'TextType': 'PRINTED',
+        'Geometry': {
+            'BoundingBox': {
+                'Width': 1,
+                'Height': 1,
+                'Left': 2,
+                'Top': 2
+            }
+        },
+        'Id': 'word15'
+    },
+    'word16': {
+        'BlockType': 'WORD',
+        'Confidence': 99.45236206054688,
+        'Text': 'is',
+        'TextType': 'PRINTED',
+        'Geometry': {
+            'BoundingBox': {
+                'Width': 1,
+                'Height': 1,
+                'Left': 3,
+                'Top': 2
+            }
+        },
+        'Id': 'word16'
+    },
+    'word17': {
+        'BlockType': 'WORD',
+        'Confidence': 99.45236206054688,
+        'Text': 'repeating',
+        'TextType': 'PRINTED',
+        'Geometry': {
+            'BoundingBox': {
+                'Width': 1,
+                'Height': 1,
+                'Left': 4,
+                'Top': 2
+            }
+        },
+        'Id': 'word17'
     }
 };
 
@@ -1905,6 +2395,21 @@ exports.bondingBoxResultStandard = {
         }
     },
     'OTHER': {
+        'IT IS REPEATING': {
+            '1': [
+                {
+                    'BoundingBoxes': [
+                        {
+                            'Height': 1,
+                            'Left': 2,
+                            'Top': 2,
+                            'Width': 3
+                        }
+                    ],
+                    'Score': 0.8900869488716125
+                }
+            ]
+        },
         'THIS IS A 2023': {
             '1': [
                 {
@@ -1926,6 +2431,10 @@ exports.bondingBoxResultStandard = {
 exports.offsetToLineIdMapMedical = [
     { 'offset': 0, 'id': 'line1' },
     { 'offset': 31, 'id': 'line2' }
+];
+
+exports.errorCaseOffsetToLineIdMapMedical = [
+    { 'offset': 0, 'dummy': 'line1' }
 ];
 
 exports.blockDictMedical = {

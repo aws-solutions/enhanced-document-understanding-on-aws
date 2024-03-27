@@ -67,13 +67,19 @@ class MedicalEntityDetectionStrategy {
             // use Comprehend Medical response's 'Category' as 'Type' to calculate bounding-boxes
             entity.Type = entity.Category;
 
-            utils.addEntityLocation(
-                params.entityLocations,
-                entity,
-                params.offsetToLineIdMap,
-                params.blockDict,
-                params.pageIdx + 1
-            );
+            try {
+                utils.addEntityLocation(
+                    params.entityLocations,
+                    entity,
+                    params.offsetToLineIdMap,
+                    params.blockDict,
+                    params.pageIdx + 1
+                );
+            } catch (error) {
+                console.error(
+                    `Determining location of medical entity '${JSON.stringify(entity)}' failed with error: ${error}`
+                );
+            }
 
             // reassign the value of 'Type' from 'MedicalType'
             entity.Type = entity.MedicalType;

@@ -20,6 +20,7 @@ const {
     expectedSyncComprehendResponse,
     blockDictStandard,
     offsetToLineIdMapStandard,
+    errorCaseOffsetToLineIdMapStandard,
     bondingBoxResultStandard
 } = require('../../event-test-data');
 
@@ -79,6 +80,19 @@ describe('Get Comprehend API Result:: When provided with correct inputs', () => 
             pageIdx: 0
         });
         expect(entityLocations).toEqual(bondingBoxResultStandard);
+    });
+
+    it('addEntityLocations should pass with errors logged', async () => {
+        let entityLocations = {};
+        const errorSpy = jest.spyOn(console, 'error');
+        genericEntityDetectionStrategy.addEntityLocations({
+            entityLocations: entityLocations,
+            comprehendResponse: expectedSyncComprehendResponse,
+            offsetToLineIdMap: errorCaseOffsetToLineIdMapStandard,
+            blockDict: blockDictStandard,
+            pageIdx: 0
+        });
+        expect(errorSpy).toHaveBeenCalledWith("Determining location of entity '{\"Score\":0.8900869488716125,\"Type\":\"OTHER\",\"Text\":\"it is repeating\",\"BeginOffset\":56,\"EndOffset\":77}' failed with error: Error: Bounding box computation failed for entity 'it is repeating' at offset 56. Got error: Cannot read properties of undefined (reading 'Text')");
     });
 
     afterEach(() => {

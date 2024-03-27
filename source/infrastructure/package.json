@@ -1,6 +1,6 @@
 {
   "name": "enhanced-document-understanding-on-aws-infrastructure",
-  "version": "1.0.4",
+  "version": "1.0.6",
   "bin": {
     "infrastructure": "bin/dus.js"
   },

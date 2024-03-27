@@ -68,13 +68,17 @@ class GenericEntityDetectionStrategy {
      */
     addEntityLocations(params) {
         params.comprehendResponse.Entities.forEach((entity) => {
-            utils.addEntityLocation(
-                params.entityLocations,
-                entity,
-                params.offsetToLineIdMap,
-                params.blockDict,
-                params.pageIdx + 1
-            );
+            try {
+                utils.addEntityLocation(
+                    params.entityLocations,
+                    entity,
+                    params.offsetToLineIdMap,
+                    params.blockDict,
+                    params.pageIdx + 1
+                );
+            } catch (error) {
+                console.error(`Determining location of entity '${JSON.stringify(entity)}' failed with error: ${error}`);
+            }
         });
     }
 }

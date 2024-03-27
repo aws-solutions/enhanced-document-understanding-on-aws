@@ -50,7 +50,7 @@ exports.addEntityLocation = (entityLocations, entity, offsetToLineIdMap, blockDi
     }
 
     // entites are kept case-insensitive
-    let entityText = entity.Text.toUpperCase(); 
+    let entityText = entity.Text.toUpperCase();
 
     // creating new empty sub-objects in the output object for first occurrences of entity type/content per page
     if (!(entity.Type in entityLocations)) {
@@ -107,8 +107,11 @@ exports.computeBoundingBoxes = (entity, offsetToLineIdMap, blockDict) => { // NO
                     const wordBlock = blockDict[currentLineBlock.Relationships[0].Ids[j]];
 
                     // box on same line gets merged with previous box
-                    if (wordBlock !== undefined){
-                        bboxes[lineCounter] = this.mergeBoundingBoxes(bboxes[lineCounter], wordBlock.Geometry.BoundingBox);
+                    if (wordBlock !== undefined) {
+                        bboxes[lineCounter] = this.mergeBoundingBoxes(
+                            bboxes[lineCounter],
+                            wordBlock.Geometry.BoundingBox
+                        );
                     }
                     entityWordIdx++;
 
@@ -118,7 +121,8 @@ exports.computeBoundingBoxes = (entity, offsetToLineIdMap, blockDict) => { // NO
                     }
                 } else {
                     // we partially matched the entity in the line, and then did not match, so we must restart matching
-                    // the entity from the beginning at our current place in the line
+                    // the entity from the beginning at our current place in the line, throwing away the partial matches
+                    j -= entityWordIdx; // NOSONAR javascript:S2310 this is a requirement of the algorithm and not a problem
                     entityWordIdx = 0;
                     bboxes[lineCounter] = undefined;
                 }
@@ -128,7 +132,6 @@ exports.computeBoundingBoxes = (entity, offsetToLineIdMap, blockDict) => { // NO
         }
     } catch (error) {
         const errMsg = `Bounding box computation failed for entity '${entity.Text}' at offset ${entity.BeginOffset}. Got error: ${error.message}`;
-        console.error(errMsg);
         throw new Error(errMsg);
     }
     return bboxes;
