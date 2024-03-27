@@ -5,6 +5,22 @@ All notable changes to this project will be documented in this file.
 The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/),
 and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
 
+=======
+
+## [1.0.6] - 2024-03-27
+
+### Security
+
+- Updated node modules to patch vulnerabilities
+
+### Fixed
+
+- Fixed a bug in the entity detection code which caused failures on an edge case with repeating words ([issue 34](https://github.com/aws-solutions/enhanced-document-understanding-on-aws/issues/34))
+
+### Updated
+
+- Failure on a single entity now does not cause the whole workflow to fail, instead logging an error message and continuing
+
 ## [1.0.5] - 2024-03-05
 
 ### Updated

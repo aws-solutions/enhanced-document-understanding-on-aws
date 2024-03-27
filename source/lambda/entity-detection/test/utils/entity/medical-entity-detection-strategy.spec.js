@@ -20,7 +20,8 @@ const {
     expectedSyncComprehendMedicalResponse,
     blockDictMedical,
     offsetToLineIdMapMedical,
-    bondingBoxResultMedical
+    bondingBoxResultMedical,
+    errorCaseOffsetToLineIdMapMedical
 } = require('../../event-test-data');
 
 const SharedLib = require('common-node-lib');
@@ -65,6 +66,19 @@ describe('Get Comprehend API Result:: When provided with correct inputs', () => 
             pageIdx: 0
         });
         expect(entityLocations).toEqual(bondingBoxResultMedical);
+    });
+
+    it('addEntityLocations should pass with errors logged', async () => {
+        let entityLocations = {};
+        const errorSpy = jest.spyOn(console, 'error');
+        medicalEntityDetectionStrategy.addEntityLocations({
+            entityLocations: entityLocations,
+            comprehendResponse: expectedSyncComprehendMedicalResponse,
+            offsetToLineIdMap: errorCaseOffsetToLineIdMapMedical,
+            blockDict: blockDictMedical,
+            pageIdx: 0
+        });
+        expect(errorSpy).toHaveBeenCalledWith("Determining location of medical entity '{\"Attributes\":[{\"BeginOffset\":546456,\"Category\":\"fake-category\",\"EndOffset\":45846,\"Id\":12345,\"RelationshipScore\":43535,\"RelationshipType\":\"fake-type\",\"Score\":0.996697902,\"Text\":\"fake-text\",\"Traits\":[{\"Name\":\"fake-name\",\"Score\":0.99}],\"Type\":\"fake-type\"}],\"BeginOffset\":10,\"Category\":\"MEDICATION\",\"EndOffset\":14,\"Id\":12345,\"Score\":0.8919363021850586,\"Text\":\"2023\",\"Traits\":[{\"Name\":\"fake-name\",\"Score\":0.98}],\"Type\":\"MEDICATION\",\"MedicalType\":\"DX_NAME\"}' failed with error: Error: Bounding box computation failed for entity '2023' at offset 10. Got error: Cannot read properties of undefined (reading 'Text')");
     });
 
     afterEach(() => {
