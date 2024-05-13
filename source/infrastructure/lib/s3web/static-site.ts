@@ -81,6 +81,19 @@ export class StaticWebsite extends Construct {
             iam.Role.fromRoleArn(this, 'BucketPolicyLambdaRole', props.customResourceRoleArn)
         );
 
+        const cspResponseHeadersPolicy = new cloudfront.ResponseHeadersPolicy(this, 'CSPResponseHeadersPolicy', {
+            responseHeadersPolicyName: `eDU-CSPResponseHeadersPolicy-${cdk.Aws.STACK_NAME}-${cdk.Aws.REGION}`,
+            comment: 'CSP Response Headers Policy',
+            securityHeadersBehavior: {
+                contentSecurityPolicy: {
+                    contentSecurityPolicy:
+                        "default-src 'self' data: https://*.amazonaws.com; img-src 'self' data: https://*.cloudfront.net https://*.amazonaws.com; script-src 'self' http://*.cloudfront.net https://*.amazonaws.com; style-src 'self' 'unsafe-inline' https://*.amazonaws.com; object-src 'self' https://*.amazonaws.com; worker-src 'self' blob:",
+                    override: true
+                },
+                frameOptions: { frameOption: cloudfront.HeadersFrameOption.DENY, override: true }
+            }
+        });
+
         const cloudfrontToS3 = new CloudFrontToS3(this, 'UI', {
             existingBucketObj: this.webS3Bucket,
             cloudFrontDistributionProps: {
@@ -91,7 +104,10 @@ export class StaticWebsite extends Construct {
                 ],
                 logFilePrefix: 'cloudfront/',
                 minimumProtocolVersion: cloudfront.SecurityPolicyProtocol.TLS_V1_2_2019,
-                defaultRootObject: 'login.html'
+                defaultRootObject: 'login.html',
+                defaultBehavior: {
+                    responseHeadersPolicy: cspResponseHeadersPolicy
+                }
             }
         });
 
