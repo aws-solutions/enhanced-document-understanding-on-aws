@@ -128,7 +128,10 @@ export class IndexedStorage extends Construct {
             .addResource('{query}');
         kendraSearchResource.addCorsPreflight({
             allowOrigins: ['*'],
-            allowHeaders: ['*'],
+            allowHeaders: [
+                'Content-Type, Access-Control-Allow-Headers, X-Requested-With, Authorization',
+                'Access-Control-Allow-Origin'
+            ],
             allowMethods: ['GET']
         });
 

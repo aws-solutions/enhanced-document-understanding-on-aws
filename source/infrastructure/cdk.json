@@ -1,9 +1,7 @@
 {
   "app": "../pre-build-jars.sh && npx ts-node --prefer-ts-exts bin/dus.ts",
   "watch": {
-    "include": [
-      "**"
-    ],
+    "include": ["**"],
     "exclude": [
       "README.md",
       "cdk*.json",
@@ -19,10 +17,7 @@
   "context": {
     "@aws-cdk/aws-lambda:recognizeLayerVersion": true,
     "@aws-cdk/core:checkSecretUsage": true,
-    "@aws-cdk/core:target-partitions": [
-      "aws",
-      "aws-cn"
-    ],
+    "@aws-cdk/core:target-partitions": ["aws", "aws-cn"],
     "@aws-cdk-containers/ecs-service-extensions:enableDefaultLogDriver": true,
     "@aws-cdk/aws-ec2:uniqueImdsv2TemplateName": true,
     "@aws-cdk/aws-ecs:arnFormatIncludesClusterName": true,
@@ -62,7 +57,7 @@
     "@aws-cdk/aws-codepipeline-actions:useNewDefaultBranchForCodeCommitSource": true,
     "solution_id": "SO0281",
     "solution_name": "enhanced-document-understanding-on-aws",
-    "solution_version": "v1.0.6",
+    "solution_version": "v1.0.7",
     "app_namespace": "app.idp",
     "app_registry_name": "enhanced-document-understanding",
     "application_type": "AWS-Solutions",

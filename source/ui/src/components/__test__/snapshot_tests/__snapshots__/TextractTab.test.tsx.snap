@@ -29,6 +29,11 @@ exports[`Textract tab snapshot test 1`] = `
         >
           <div
             className="react-pdf__Document document"
+            style={
+              Object {
+                "--scale-factor": "1",
+              }
+            }
           >
             <div
               className="react-pdf__message react-pdf__message--loading"

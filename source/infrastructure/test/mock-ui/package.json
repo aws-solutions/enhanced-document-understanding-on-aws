@@ -1,6 +1,6 @@
 {
   "name": "mock-react-app",
-  "version": "1.0.6",
+  "version": "1.0.7",
   "description": "Mock Reactjs app used for unit testing constructs",
   "main": "index.js",
   "scripts": {
@@ -8,7 +8,7 @@
     "test": "echo \"Error: no test specified\" && exit 1"
   },
   "dependencies": {
-    "react": "^18.2.0"
+    "react": "^18.3.1"
   },
   "devDependencies": {
     "react-scripts": "^5.0.1"
