@@ -33,7 +33,8 @@ function formatError(error) {
         'statusCode': error.statusCode,
         'headers': {
             'Content-Type': 'text/plain',
-            'x-amzn-ErrorType': error.code
+            'x-amzn-ErrorType': error.code,
+            'Access-Control-Allow-Origin': '*' // NOSONAR - javascript:S5122 - Domain not known at this point.
         },
         'isBase64Encoded': false,
         'body': error.code + ': ' + error.message

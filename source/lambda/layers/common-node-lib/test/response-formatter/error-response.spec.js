@@ -26,7 +26,8 @@ describe('When formatting error responses as HTTP responses', () => {
             'statusCode': '400',
             'headers': {
                 'Content-Type': 'text/plain',
-                'x-amzn-ErrorType': 'CustomExecutionError'
+                'x-amzn-ErrorType': 'CustomExecutionError',
+                'Access-Control-Allow-Origin': '*' // NOSONAR - javascript:S5122 - Domain not known at this point.
             },
             'isBase64Encoded': false,
             'body': 'CustomExecutionError: Test error'
@@ -42,7 +43,8 @@ describe('When formatting error responses as HTTP responses', () => {
             'statusCode': '501',
             'headers': {
                 'Content-Type': 'text/plain',
-                'x-amzn-ErrorType': 'TestCustomError'
+                'x-amzn-ErrorType': 'TestCustomError',
+                'Access-Control-Allow-Origin': '*' // NOSONAR - javascript:S5122 - Domain not known at this point.
             },
             'isBase64Encoded': false,
             'body': 'TestCustomError: Test error'
@@ -55,7 +57,8 @@ describe('When formatting error responses as HTTP responses', () => {
             'statusCode': '400',
             'headers': {
                 'Content-Type': 'text/plain',
-                'x-amzn-ErrorType': 'CustomExecutionError'
+                'x-amzn-ErrorType': 'CustomExecutionError',
+                'Access-Control-Allow-Origin': '*' // NOSONAR - javascript:S5122 - Domain not known at this point.
             },
             'isBase64Encoded': false,
             'body': 'CustomExecutionError: Test error'

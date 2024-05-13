@@ -253,7 +253,7 @@ export class RestEndpoint extends Construct {
         // case creation
         caseResource.addCorsPreflight({
             allowOrigins: ['*'],
-            allowHeaders: ['*'],
+            allowHeaders: ['Content-Type, Access-Control-Allow-Headers, X-Requested-With, Authorization'],
             allowMethods: ['POST']
         });
         caseResource.addMethod('POST', postRequestLambdaIntegration, {
@@ -293,7 +293,7 @@ export class RestEndpoint extends Construct {
         const caseCaseIdResource = caseResource.addResource('{caseId}');
         caseCaseIdResource.addCorsPreflight({
             allowOrigins: ['*'],
-            allowHeaders: ['*'],
+            allowHeaders: ['Content-Type, Access-Control-Allow-Headers, X-Requested-With, Authorization'],
             allowMethods: ['GET']
         });
 
@@ -326,7 +326,7 @@ export class RestEndpoint extends Construct {
         const casesResource = apiRoot.addResource('cases');
         casesResource.addCorsPreflight({
             allowOrigins: ['*'],
-            allowHeaders: ['*'],
+            allowHeaders: ['Content-Type, Access-Control-Allow-Headers, X-Requested-With, Authorization'],
             allowMethods: ['GET']
         });
         casesResource.addMethod('GET', getRequestLambdaIntegration, {
@@ -352,7 +352,7 @@ export class RestEndpoint extends Construct {
         // Upload a document to a case
         documentResource.addCorsPreflight({
             allowOrigins: ['*'],
-            allowHeaders: ['*'],
+            allowHeaders: ['Content-Type, Access-Control-Allow-Headers, X-Requested-With, Authorization'],
             allowMethods: ['POST']
         });
         documentResource.addMethod('POST', postRequestLambdaIntegration, {
@@ -383,7 +383,7 @@ export class RestEndpoint extends Construct {
         const documentCaseIdDocIdResource = documentResource.addResource('{caseId}').addResource('{documentId}');
         documentCaseIdDocIdResource.addCorsPreflight({
             allowOrigins: ['*'],
-            allowHeaders: ['*'],
+            allowHeaders: ['Content-Type, Access-Control-Allow-Headers, X-Requested-With, Authorization'],
             allowMethods: ['GET']
         });
         documentCaseIdDocIdResource.addMethod('GET', getRequestLambdaIntegration, {
@@ -415,7 +415,10 @@ export class RestEndpoint extends Construct {
         const documentDownloadResource = documentResource.addResource('download');
         documentDownloadResource.addCorsPreflight({
             allowOrigins: ['*'],
-            allowHeaders: ['*'],
+            allowHeaders: [
+                'Content-Type, Access-Control-Allow-Headers, X-Requested-With, Authorization',
+                'Access-Control-Allow-Origin'
+            ],
             allowMethods: ['GET']
         });
         documentDownloadResource.addMethod('GET', getDocumentLambdaIntegration, {
@@ -450,7 +453,10 @@ export class RestEndpoint extends Construct {
             .addResource('{documentId}');
         inferencesResource.addCorsPreflight({
             allowOrigins: ['*'],
-            allowHeaders: ['*'],
+            allowHeaders: [
+                'Content-Type, Access-Control-Allow-Headers, X-Requested-With, Authorization',
+                'Access-Control-Allow-Origin'
+            ],
             allowMethods: ['GET']
         });
         inferencesResource.addMethod('GET', getInferenceLambdaIntegration, {
@@ -466,7 +472,10 @@ export class RestEndpoint extends Construct {
         const inferenceResource = inferencesResource.addResource('{inferenceType}');
         inferenceResource.addCorsPreflight({
             allowOrigins: ['*'],
-            allowHeaders: ['*'],
+            allowHeaders: [
+                'Content-Type, Access-Control-Allow-Headers, X-Requested-With, Authorization',
+                'Access-Control-Allow-Origin'
+            ],
             allowMethods: ['GET']
         });
         inferenceResource.addMethod('GET', getInferenceLambdaIntegration, {
@@ -487,7 +496,10 @@ export class RestEndpoint extends Construct {
         const redactResource = apiRoot.addResource('redact').addResource('{caseId}').addResource('{documentId}');
         redactResource.addCorsPreflight({
             allowOrigins: ['*'],
-            allowHeaders: ['*'],
+            allowHeaders: [
+                'Content-Type, Access-Control-Allow-Headers, X-Requested-With, Authorization',
+                'Access-Control-Allow-Origin'
+            ],
             allowMethods: ['POST']
         });
         redactResource.addMethod('POST', postRedactLambdaIntegration, {
