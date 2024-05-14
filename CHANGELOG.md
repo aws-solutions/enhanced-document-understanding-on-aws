@@ -7,6 +7,12 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 =======
 
+## [1.0.8] - 2024-05-14
+
+### Fixed
+
+- CSP response header name length longer than supported, causing stack failure in ap-southeast-1 and ap-south-east-2
+
 ## [1.0.7] - 2024-05-13
 
 ### Security
