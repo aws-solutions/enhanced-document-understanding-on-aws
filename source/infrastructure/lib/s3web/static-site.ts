@@ -82,12 +82,12 @@ export class StaticWebsite extends Construct {
         );
 
         const cspResponseHeadersPolicy = new cloudfront.ResponseHeadersPolicy(this, 'CSPResponseHeadersPolicy', {
-            responseHeadersPolicyName: `eDU-CSPResponseHeadersPolicy-${cdk.Aws.STACK_NAME}-${cdk.Aws.REGION}`,
+            responseHeadersPolicyName: `eDU-CSP-${cdk.Aws.STACK_NAME}-${cdk.Aws.REGION}`,
             comment: 'CSP Response Headers Policy',
             securityHeadersBehavior: {
                 contentSecurityPolicy: {
                     contentSecurityPolicy:
-                        "default-src 'self' data: https://*.amazonaws.com; img-src 'self' data: https://*.cloudfront.net https://*.amazonaws.com; script-src 'self' http://*.cloudfront.net https://*.amazonaws.com; style-src 'self' 'unsafe-inline' https://*.amazonaws.com; object-src 'self' https://*.amazonaws.com; worker-src 'self' blob:",
+                        "default-src 'self' data: https://*.amazonaws.com; img-src 'self' data: https://*.cloudfront.net https://*.amazonaws.com; script-src 'self' https://*.cloudfront.net https://*.amazonaws.com; style-src 'self' https://*.amazonaws.com; object-src 'self' https://*.amazonaws.com; worker-src 'self' blob:",
                     override: true
                 },
                 frameOptions: { frameOption: cloudfront.HeadersFrameOption.DENY, override: true }
