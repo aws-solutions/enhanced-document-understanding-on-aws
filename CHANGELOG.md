@@ -7,6 +7,12 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 =======
 
+## [1.0.9] - 2024-05-16
+
+### Update
+
+- Updated java runtime libraries to patch vulnerabilities
+
 ## [1.0.8] - 2024-05-14
 
 ### Fixed

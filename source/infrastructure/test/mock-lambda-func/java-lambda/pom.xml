@@ -37,15 +37,27 @@
             <artifactId>dynamodb</artifactId>
         </dependency>
         <dependency>
+            <groupId>com.amazonaws</groupId>
+            <artifactId>aws-java-sdk-xray</artifactId>
+            <version>1.12.722</version>
+        </dependency>
+        <dependency>
             <groupId>software.amazon.lambda</groupId>
             <artifactId>powertools-tracing</artifactId>
             <version>1.18.0</version>
+            <exclusions>
+                <!--  upgrading to new version of x-ray sdk to address ion-java CVE -->
+                <exclusion>
+                    <groupId>com.amazonaws</groupId>
+                    <artifactId>aws-java-sdk-xray</artifactId>
+                </exclusion>
+            </exclusions>      
         </dependency>
         <dependency>
             <groupId>software.amazon.lambda</groupId>
             <artifactId>powertools-metrics</artifactId>
             <version>1.18.0</version>
-        </dependency>
+        </dependency>     
         <dependency>
             <groupId>com.amazonaws</groupId>
             <artifactId>aws-lambda-java-core</artifactId>
