@@ -6,20 +6,7 @@ exports[`DocumentRenderer component DocumentRenderer snapshot test 1`] = `
     className="pdf-viewer"
     data-testid="pdf-box"
   >
-    <div
-      className="react-pdf__Document document"
-      style={
-        Object {
-          "--scale-factor": "1",
-        }
-      }
-    >
-      <div
-        className="react-pdf__message react-pdf__message--loading"
-      >
-        Loading PDF…
-      </div>
-    </div>
+    <div />
     <Pagination
       ariaLabels={
         Object {
@@ -31,7 +18,7 @@ exports[`DocumentRenderer component DocumentRenderer snapshot test 1`] = `
       currentPageIndex={1}
       data-testid="pdf-pagination"
       onChange={[Function]}
-      pagesCount={0}
+      pagesCount={4}
     />
   </div>
 </div>

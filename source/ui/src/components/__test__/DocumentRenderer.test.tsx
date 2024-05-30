@@ -16,6 +16,15 @@ import { render, screen } from '@testing-library/react';
 import { marks1, tables } from '../../__test__/test_data';
 import DocumentRenderer from '../DocumentRenderer/DocumentRenderer';
 
+jest.mock('react-pdf', () => ({
+    pdfjs: { GlobalWorkerOptions: { workerSrc: 'abc' } },
+    Document: ({ onLoadSuccess = (pdf = { numPages: 4 }) => pdf.numPages }) => {
+        return <div>PDF load failed. Retrying...{onLoadSuccess({ numPages: 4 })}</div>;
+    },
+    Outline: null,
+    Page: () => <div>def</div>
+}));
+
 describe('DocumentRenderer component', () => {
     it('renders the correct component when selectedDocumentFileType is pdf', async () => {
         const selectedDocumentFileType = 'pdf';

@@ -16,6 +16,8 @@ import { API_NAME } from '../utils/constants';
 
 const unmockedFetch = global.fetch;
 
+jest.mock('../App', () => require('./mocks/App').default);
+
 describe('When Web UI is created', () => {
     const fakeApiEndpoint = 'fake.endpoint';
     const fakeAwsRegion = 'fake-us-east-1';

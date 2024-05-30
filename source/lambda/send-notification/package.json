@@ -1,6 +1,6 @@
 {
   "name": "send-notification",
-  "version": "1.0.8",
+  "version": "1.0.10",
   "description": "This lambda function sends notifications about document processing updates",
   "main": "index.js",
   "scripts": {
