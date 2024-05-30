@@ -1,13 +1,12 @@
 <?xml version="1.0" encoding="UTF-8"?>
 
 <project xmlns="http://maven.apache.org/POM/4.0.0"
-    xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
-    xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
+    xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
     <modelVersion>4.0.0</modelVersion>
     <groupId>com.builder.config</groupId>
     <artifactId>custom-java-sdk-config</artifactId>
     <packaging>jar</packaging>
-    <version>1.0.8</version>
+    <version>1.0.10</version>
     <name>custom-java-sdk-config</name>
     <properties>
         <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
@@ -53,7 +52,7 @@
                     <groupId>com.amazonaws</groupId>
                     <artifactId>aws-java-sdk-xray</artifactId>
                 </exclusion>
-            </exclusions>            
+            </exclusions>
         </dependency>
         <dependency>
             <groupId>software.amazon.lambda</groupId>
@@ -152,8 +151,7 @@
                     <outputFile>${project.basedir}/dist/${project.artifactId}.jar</outputFile>
                     <outputDirectory>${project.basedir}/dist</outputDirectory>
                     <transformers>
-                        <transformer
-                            implementation="io.github.edwgiz.log4j.maven.plugins.shade.transformer.Log4j2PluginCacheFileTransformer">
+                        <transformer implementation="io.github.edwgiz.log4j.maven.plugins.shade.transformer.Log4j2PluginCacheFileTransformer">
                         </transformer>
                     </transformers>
                 </configuration>
