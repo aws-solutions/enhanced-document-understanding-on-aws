@@ -41,6 +41,15 @@ jest.mock('../DocumentTable/DocumentTable', () => ({
     generateToken: () => 'fake-jwt-token'
 }));
 
+jest.mock('react-pdf', () => ({
+    pdfjs: { GlobalWorkerOptions: { workerSrc: 'abc' } },
+    Document: ({ onLoadSuccess = (pdf = { numPages: 4 }) => pdf.numPages }) => {
+        return <div>{onLoadSuccess({ numPages: 4 })}</div>;
+    },
+    Outline: null,
+    Page: () => <div>def</div>
+}));
+
 beforeEach(() => {
     mockAPI.get.mockReset();
 });
@@ -246,7 +255,7 @@ test('switches between tabs successfully', async () => {
     }
 });
 
-test('On clicking info tools panel should apprear', async () => {
+test('On clicking info tools panel should appear', async () => {
     mockAPI.get.mockResolvedValueOnce(getSignedUrlResponse).mockResolvedValueOnce(getSignedUrlResponse);
     mockAPI.get.mockResolvedValueOnce(getSignedUrlResponse).mockResolvedValueOnce(getSignedUrlResponse);
     render(<DocumentView {...documentViewProps} />);

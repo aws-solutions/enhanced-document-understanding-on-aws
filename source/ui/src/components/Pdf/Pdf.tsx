@@ -29,7 +29,7 @@ type PdfProps = {
 };
 
 export default function PDF(props: PdfProps) {
-    pdfjs.GlobalWorkerOptions.workerSrc = '/pdf.worker.min.js';
+    pdfjs.GlobalWorkerOptions.workerSrc = '/pdf.worker.min.mjs';
     const [numPages, setNumPages] = useState(0);
     const [numRetries, setNumRetries] = useState(0);
     const [pdfErrorMessage, setPdfErrorMessage] = useState('Failed to load PDF file.');

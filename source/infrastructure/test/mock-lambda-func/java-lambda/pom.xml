@@ -1,12 +1,11 @@
 <?xml version="1.0" encoding="UTF-8"?>
 
 <project xmlns="http://maven.apache.org/POM/4.0.0"
-    xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
-    xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
+    xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
     <modelVersion>4.0.0</modelVersion>
     <groupId>example</groupId>
     <artifactId>java-lambda</artifactId>
-    <version>1.0.8</version>
+    <version>1.0.10</version>
 
     <name>mock-java-lambda</name>
 
@@ -51,13 +50,13 @@
                     <groupId>com.amazonaws</groupId>
                     <artifactId>aws-java-sdk-xray</artifactId>
                 </exclusion>
-            </exclusions>      
+            </exclusions>
         </dependency>
         <dependency>
             <groupId>software.amazon.lambda</groupId>
             <artifactId>powertools-metrics</artifactId>
             <version>1.18.0</version>
-        </dependency>     
+        </dependency>
         <dependency>
             <groupId>com.amazonaws</groupId>
             <artifactId>aws-lambda-java-core</artifactId>

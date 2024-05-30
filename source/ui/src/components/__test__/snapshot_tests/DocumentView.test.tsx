@@ -48,6 +48,15 @@ const getSignedUrlResponse = {
     downloadUrl: 'fake-url'
 };
 
+jest.mock('react-pdf', () => ({
+    pdfjs: { GlobalWorkerOptions: { workerSrc: 'abc' } },
+    Document: ({ onLoadSuccess = (pdf = { numPages: 4 }) => pdf.numPages }) => {
+        return <div>{onLoadSuccess({ numPages: 4 })}</div>;
+    },
+    Outline: null,
+    Page: () => <div>def</div>
+}));
+
 jest.mock('@cloudscape-design/components', () => {
     const Components = jest.genMockFromModule('@cloudscape-design/components') as any;
     for (const componentName of Object.keys(Components)) {
