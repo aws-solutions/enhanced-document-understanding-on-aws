@@ -39,6 +39,18 @@ export const CaseTableInfoPanelContent = () => (
     </HelpPanel>
 );
 
+export const BackendUploadInfoPanelContent = () => (
+    <HelpPanel data-testid="document-results-info-panel" header={<h2>Backend Upload Info</h2>}>
+        <div>
+            <p>
+                Enabling this feature will allow you to upload multiple documents through the aws console via the S3
+                service.
+            </p>
+            <br />
+        </div>
+    </HelpPanel>
+);
+
 export const DocumentResultsInfoPanelContent = () => (
     <HelpPanel
         data-testid="document-results-info-panel"

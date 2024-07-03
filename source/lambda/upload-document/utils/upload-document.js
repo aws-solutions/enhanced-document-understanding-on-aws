@@ -39,7 +39,17 @@ const createDocumentId = () => {
  * @returns
  */
 const createTag = (tagKey, tagValue) => {
-    return `<Tagging><TagSet><Tag><Key>${tagKey}</Key><Value>${tagValue}</Value></Tag></TagSet></Tagging>`;
+    return `<Tag><Key>${tagKey}</Key><Value>${tagValue}</Value></Tag>`;
+};
+
+/**
+ * Generate the xml tag set that will be used to add tags to objects uploaded to s3
+ * @params {string[]} tags
+ * @return string
+ */
+
+const createTagSet = (tags) => {
+    return `<Tagging><TagSet>${tags.join('')}</TagSet></Tagging>`;
 };
 
 /**
@@ -64,6 +74,15 @@ const generatePresignedS3PostUrl = async (params) => {
         throw new Error(errMsg);
     }
 
+    const userIdTag = createTag(SharedLib.userIdKey, params.userId);
+
+    const documentTypeTag = createTag(SharedLib.documentTypeKey, params.documentType);
+    const fileNameBase64EncodedTag = createTag(SharedLib.fileNameBase64EncodedKey, btoa(params.fileName));
+
+    const tags = [userIdTag, documentTypeTag, fileNameBase64EncodedTag];
+
+    const tagging = createTagSet(tags);
+
     const s3Params = {
         Bucket: process.env.UPLOAD_DOCS_BUCKET_NAME,
         Conditions: [
@@ -71,7 +90,7 @@ const generatePresignedS3PostUrl = async (params) => {
             ['content-length-range', 1, MAX_UPLOAD_FILE_SIZE], // 1 means empty files cannot be uploaded
             ['eq', '$x-amz-meta-userid', params.userId],
             ['eq', '$x-amz-meta-fileExtension', contentType],
-            ['eq', '$tagging', createTag('userId', params.userId)]
+            ['eq', '$tagging', tagging]
         ],
         Fields: {
             key: params.filekey,
@@ -79,7 +98,7 @@ const generatePresignedS3PostUrl = async (params) => {
             'x-amz-meta-fileExtension': contentType,
             'Content-Type': contentType,
             'Content-Disposition': `inline; filename="${params.fileName}"`,
-            'tagging': createTag('userId', params.userId)
+            'tagging': tagging
         },
         Expires: 600
     };
@@ -91,60 +110,6 @@ const generatePresignedS3PostUrl = async (params) => {
             `Error generating presigned POST url. params: ${JSON.stringify(params)}, error: ${error.message}`
         );
         throw new Error('Error generating PresignedPost URL');
-    }
-};
-
-/**
- * Create a documentId and use it along with the file extension to create
- * a s3 file key. Generate a presigned post policy that can be used to upload the document.
- * If successful, then add the document entry into the database.
- * This gets triggered when the lambda receives a request that includes the filename
- * and filetype.
- *
- * @param {Object} params
- * @param {Object} params.caseId
- * @param {string} params.caseName
- * @param {string} params.fileName
- * @param {string} params.fileExtension
- * @param {string} params.documentType
- * @param {string} params.docId
- * @param {string} params.filekey
- * @param {string} params.userId
- *
- * @returns DynamoDB.putItem response
- */
-const addDocumentToDb = async (params, dynamoDB = undefined) => {
-    const _dynamoDB = dynamoDB ?? new AWS.DynamoDB(UserAgentConfig.customAwsConfig());
-    const caseId = params.caseId;
-    const caseName = params.caseName;
-    const fileName = params.fileName;
-    const fileExtension = params.fileExtension;
-    const documentType = params.documentType;
-    const docId = params.docId;
-    const filekey = params.filekey;
-    const userId = params.userId;
-
-    const ddbParams = {
-        TableName: process.env.CASE_DDB_TABLE_NAME,
-        Item: AWS.DynamoDB.Converter.marshall({
-            CASE_ID: caseId,
-            CASE_NAME: caseName,
-            DOCUMENT_ID: docId,
-            BUCKET_NAME: process.env.UPLOAD_DOCS_BUCKET_NAME,
-            S3_KEY: filekey,
-            UPLOADED_FILE_NAME: fileName,
-            UPLOADED_FILE_EXTENSION: fileExtension,
-            DOCUMENT_TYPE: documentType,
-            USER_ID: userId,
-            CREATION_TIMESTAMP: new Date().toISOString()
-        }),
-        ReturnValues: 'ALL_OLD'
-    };
-    try {
-        return await _dynamoDB.putItem(ddbParams).promise();
-    } catch (error) {
-        console.error('Error writing record to dynamoDb');
-        throw error;
     }
 };
 
@@ -221,7 +186,10 @@ const checkIfDocumentsCanBeUploadedForCase = async (params, dynamoDB = undefined
         uploadedDocTypeMap.set(docType, docCount + 1);
     });
 
-    if (!SharedLib.isUploadMissingDocument(uploadedDocTypeMap, requiredDocTypeMap, params.docType) || uploadedDocTypeMap.size > requiredDocTypeMap.size) {
+    if (
+        !SharedLib.isUploadMissingDocument(uploadedDocTypeMap, requiredDocTypeMap, params.docType) ||
+        uploadedDocTypeMap.size > requiredDocTypeMap.size
+    ) {
         console.error('Uploaded document types do not match required document types');
         return false;
     }
@@ -250,7 +218,6 @@ const createUploadPostRequest = async (params) => {
     if (canDocumentBeUploaded) {
         const docId = createDocumentId();
         const filekey = createFileKey(params.caseId, docId, params.fileExtension);
-        await addDocumentToDb({ ...params, docId: docId, filekey: filekey }, dynamoDB);
         return await generatePresignedS3PostUrl({ ...params, filekey: filekey }); // NOSONAR - false positive. Await required in lambda
     } else {
         const errMsg = 'No more documents can be uploaded';
@@ -260,10 +227,11 @@ const createUploadPostRequest = async (params) => {
 };
 
 module.exports = {
+    createTag,
+    createTagSet,
     createUploadPostRequest,
     createDocumentId,
     generatePresignedS3PostUrl,
     createFileKey,
-    addDocumentToDb,
     checkIfDocumentsCanBeUploadedForCase
 };

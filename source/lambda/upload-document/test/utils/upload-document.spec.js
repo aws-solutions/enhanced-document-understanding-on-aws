@@ -32,6 +32,14 @@ describe('When generating a document ID', () => {
     });
 });
 
+describe('When generating a tag set', () => {
+    it('should be a valid tag with', () => {
+        const tag = DocUploader.createTag('key', 'value');
+        const tagSet = DocUploader.createTagSet([tag]);
+        expect(tagSet).toBe('<Tagging><TagSet><Tag><Key>key</Key><Value>value</Value></Tag></TagSet></Tagging>');
+    });
+});
+
 describe('When generating the upload FileKey', () => {
     beforeAll(() => {
         process.env.S3_UPLOAD_PREFIX = 'initial';
@@ -70,68 +78,6 @@ describe('When generating the upload FileKey', () => {
     });
 });
 
-describe('When creating an entry for adding a new document to the database', () => {
-    const postPolicyResponse = {
-        url: 'fake-bucket-url',
-        fields: {
-            key: 'fake-key',
-            bucket: 'fake-bucket'
-        }
-    };
-    beforeEach(() => {
-        process.env.CASE_DDB_TABLE_NAME = 'testTable';
-        process.env.UPLOAD_DOCS_BUCKET_NAME = 'testBucket';
-        process.env.AWS_REGION = 'us-east-1';
-        process.env.AWS_SDK_USER_AGENT = '{ "customUserAgent": "AwsSolution/SO0999/v9.9.9" }';
-        process.env.WORKFLOW_CONFIG_NAME = 'fakeWorkflowName';
-        process.env.WORKFLOW_CONFIG_TABLE_NAME = 'fakeWorkflowConfigTableName';
-    });
-
-    it('should put an entry into the database', async () => {
-        const params = {
-            userId: 'fake-user-id',
-            caseId: 'user-id:fake-case-id',
-            caseName: 'case001',
-            fileName: 'fake-file-name',
-            fileExtension: '.pdf',
-            documentType: 'fake-doc-type',
-            docId: 'fake-doc-id',
-            filekey: 'fake-file-key'
-        };
-
-        AWSMock.mock('DynamoDB', 'putItem', async (ddbParams) => {
-            expect(ddbParams.TableName).toEqual('testTable');
-            expect(Object.keys(ddbParams.Item)).toEqual([
-                'CASE_ID',
-                'CASE_NAME',
-                'DOCUMENT_ID',
-                'BUCKET_NAME',
-                'S3_KEY',
-                'UPLOADED_FILE_NAME',
-                'UPLOADED_FILE_EXTENSION',
-                'DOCUMENT_TYPE',
-                'USER_ID',
-                'CREATION_TIMESTAMP'
-            ]);
-
-            return 'success';
-        });
-
-        expect(await DocUploader.addDocumentToDb(params)).toEqual('success');
-    });
-
-    afterEach(() => {
-        delete process.env.CASE_DDB_TABLE_NAME;
-        delete process.env.UPLOAD_DOCS_BUCKET_NAME;
-        delete process.env.AWS_REGION;
-        delete process.env.AWS_SDK_USER_AGENT;
-        delete process.env.WORKFLOW_CONFIG_NAME;
-        delete process.env.WORKFLOW_CONFIG_TABLE_NAME;
-
-        AWSMock.restore('DynamoDB');
-    });
-});
-
 describe('When creating a presigned POST request', () => {
     const postPolicyResponse = {
         url: 'fake-bucket-url',
@@ -155,7 +101,7 @@ describe('When creating a presigned POST request', () => {
             expect(s3Params.Fields['x-amz-meta-userId']).toEqual('fake-user-id');
             expect(s3Params.Fields['x-amz-meta-fileExtension']).toEqual('application/pdf');
             expect(s3Params.Fields['tagging']).toEqual(
-                '<Tagging><TagSet><Tag><Key>userId</Key><Value>fake-user-id</Value></Tag></TagSet></Tagging>'
+                '<Tagging><TagSet><Tag><Key>userId</Key><Value>fake-user-id</Value></Tag><Tag><Key>documentType</Key><Value>fake-doc-type</Value></Tag><Tag><Key>fileNameBase64Encoded</Key><Value>ZmFrZS1maWxlLW5hbWU=</Value></Tag></TagSet></Tagging>'
             );
             return postPolicyResponse;
         });

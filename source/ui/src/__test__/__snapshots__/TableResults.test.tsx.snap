@@ -1,0 +1,11 @@
+// Jest Snapshot v1, https://goo.gl/fbAQLP
+
+exports[`Renders without tables 1`] = `
+<div>
+  <p
+    data-testid="tables-nodata"
+  >
+    No Tables detected
+  </p>
+</div>
+`;

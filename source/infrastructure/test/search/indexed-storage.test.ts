@@ -20,6 +20,7 @@ import { Capture, Match, Template } from 'aws-cdk-lib/assertions';
 import { RestEndpoint } from '../../lib/api/rest-endpoint';
 import { IndexedStorage } from '../../lib/search/indexed-storage';
 import { COMMERCIAL_REGION_LAMBDA_NODE_RUNTIME } from '../../lib/utils/constants';
+import { IndexedStorageParams } from '../../lib/search/indexed-storage-params';
 
 describe('When storage construct is created', () => {
     let template: Template;
@@ -46,6 +47,8 @@ describe('When storage construct is created', () => {
 
         const searchLambda = new lambda.Function(stack, 'MockSearchLambda', mockLambdaFuncProps);
 
+        const testIndexStorageParameters = new IndexedStorageParams(stack, 'TestIndexStorageParameters');
+
         indexedStorage = new IndexedStorage(stack, 'TestIndexedStorage', {
             genUUID: 'FAKEABCD',
             roleArn: 'arn:aws:iam:12345679012::role/fakerole',
@@ -53,11 +56,15 @@ describe('When storage construct is created', () => {
             apiRootResource: testRestEndpoint.apiRootResource,
             extUsrAuthorizer: testRestEndpoint.extUsrAuthorizer,
             documentBucketName: 'test-bucket-name',
-            extUserPoolId: 'mock-user-pool-id'
+            extUserPoolId: 'mock-user-pool-id',
+            securityGroupId: 'security-group-id',
+            vpcId: 'vpc-id',
+            privateSubnetIds: ['private-subnet-id'],
+            indexStorageParameters: testIndexStorageParameters
         });
 
         template = Template.fromStack(stack);
-        template.resourceCountIs('AWS::CloudFormation::Stack', 1);
+        template.resourceCountIs('AWS::CloudFormation::Stack', 2);
     });
 
     it('should create Kendra nested template', () => {
@@ -83,19 +90,14 @@ describe('When storage construct is created', () => {
                         ]
                     ]
                 },
-                Parameters: {
-                    QueryCapacityUnits: '0',
-                    StorageCapacityUnits: '0',
-                    RoleArn: 'arn:aws:iam:12345679012::role/fakerole',
-                    DocumentBucketName: 'test-bucket-name'
-                }
+                Parameters: {}
             },
-            Condition: Match.stringLikeRegexp('^TestIndexedStorageDeployKendraIndex[\\S+]*$')
+            Condition: Match.stringLikeRegexp('^TestIndexStorageParametersDeployOpenSearchCondition[\\S+]*$')
         });
     });
 
     it('has 2 parameters for deployment', () => {
-        template.hasParameter('DeployKendraIndex', {
+        template.hasParameter('TestIndexStorageParametersDeployKendraIndex38CCB989', {
             Type: 'String',
             Default: 'No',
             AllowedPattern: '^(Yes|No)$',
@@ -104,13 +106,23 @@ describe('When storage construct is created', () => {
             Description:
                 'Please select if you would like to deploy Amazon Kendra Index. For more details, refer to the implementation guide for this solution'
         });
+
+        template.hasParameter('TestIndexStorageParametersDeployOpenSearchA39B538F', {
+            Type: 'String',
+            Default: 'No',
+            AllowedPattern: '^(Yes|No)$',
+            AllowedValues: ['Yes', 'No'],
+            ConstraintDescription: 'Please select either Yes or No',
+            Description:
+                'Please select if you would like to deploy Amazon OpenSearch service. For more details, refer to the implementation guide for this solution'
+        });
     });
 
     it('has conditions for the CFN parameters', () => {
         template.hasCondition('*', {
             'Fn::Equals': [
                 {
-                    'Ref': 'DeployKendraIndex'
+                    'Ref': 'TestIndexStorageParametersDeployKendraIndex38CCB989'
                 },
                 'Yes'
             ]

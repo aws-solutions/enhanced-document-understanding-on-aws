@@ -25,6 +25,9 @@ describe('When formatting error responses as HTTP responses', () => {
         expect(response).toEqual({
             'statusCode': '400',
             'headers': {
+                'Access-Control-Allow-Headers': 'Origin, X-Requested-With, Content-Type, Accept',
+                'Access-Control-Allow-Methods': 'OPTIONS,POST,GET',
+                'Access-Control-Allow-Origin': '*',
                 'Content-Type': 'text/plain',
                 'x-amzn-ErrorType': 'CustomExecutionError',
                 'Access-Control-Allow-Origin': '*' // NOSONAR - javascript:S5122 - Domain not known at this point.
@@ -42,6 +45,9 @@ describe('When formatting error responses as HTTP responses', () => {
         expect(errorFormatter.formatError(customErr)).toEqual({
             'statusCode': '501',
             'headers': {
+                'Access-Control-Allow-Headers': 'Origin, X-Requested-With, Content-Type, Accept',
+                'Access-Control-Allow-Methods': 'OPTIONS,POST,GET',
+                'Access-Control-Allow-Origin': '*',
                 'Content-Type': 'text/plain',
                 'x-amzn-ErrorType': 'TestCustomError',
                 'Access-Control-Allow-Origin': '*' // NOSONAR - javascript:S5122 - Domain not known at this point.
@@ -56,6 +62,9 @@ describe('When formatting error responses as HTTP responses', () => {
         expect(errorFormatter.formatError('Test error')).toEqual({
             'statusCode': '400',
             'headers': {
+                'Access-Control-Allow-Headers': 'Origin, X-Requested-With, Content-Type, Accept',
+                'Access-Control-Allow-Methods': 'OPTIONS,POST,GET',
+                'Access-Control-Allow-Origin': '*',
                 'Content-Type': 'text/plain',
                 'x-amzn-ErrorType': 'CustomExecutionError',
                 'Access-Control-Allow-Origin': '*' // NOSONAR - javascript:S5122 - Domain not known at this point.

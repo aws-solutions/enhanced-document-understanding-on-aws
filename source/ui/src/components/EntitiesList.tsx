@@ -23,13 +23,18 @@ import {
     Tabs,
     Toggle
 } from '@cloudscape-design/components';
-import { API } from 'aws-amplify';
 import React, { useCallback } from 'react';
 import { isStatusSuccess, renderStatus } from '../utils/common-renderers';
-import { API_NAME, COMPREHEND_MEDICAL_SERVICE, ENTITIES, EntityTypes, PREVIEW_REDACTION_ON } from '../utils/constants';
-import { generateToken } from './DocumentTable/DocumentTable';
+import { COMPREHEND_MEDICAL_SERVICE, ENTITIES, EntityTypes, PREVIEW_REDACTION_ON } from '../utils/constants';
 import './EntitiesList.css';
 import { getEntitiesToProcess } from './entityUtils';
+import { useRedactMutation } from '../store/reducers/redactApiSlice';
+import {
+    useLazyGetDocumentByCaseAndDocumentIdQuery,
+    useLazyDocumentToDownloadQuery
+} from '../store/reducers/documentApiSlice';
+import { useAppDispatch, useAppSelector } from '../store/hooks/hooks';
+import { selectEntityStatus, setStatus } from '../store/reducers/entitySlice';
 
 type EntitiesListProps = {
     entities: any;
@@ -59,8 +64,6 @@ type EntityItemProps = {
     entityType: string;
     entityObject: any;
 };
-
-let token;
 
 const EntityItem: React.FC<EntityItemProps> = ({
     entityKey,
@@ -129,7 +132,14 @@ const EntityItem: React.FC<EntityItemProps> = ({
 };
 
 const EntitiesList: React.FC<EntitiesListProps> = (props) => {
-    const [currentStatus, setCurrentStatus] = React.useState<StatusIndicatorProps.Type | undefined>();
+    const dispatch = useAppDispatch();
+    const [redact] = useRedactMutation();
+
+    const [getDocumentByCaseAndDocumentIdTrigger] = useLazyGetDocumentByCaseAndDocumentIdQuery();
+
+    const [getDocumentToDownloadTrigger] = useLazyDocumentToDownloadQuery();
+
+    const currentStatus = useAppSelector(selectEntityStatus);
 
     const getFilteredArray = useCallback(
         (entityType: string) => {
@@ -210,39 +220,9 @@ const EntitiesList: React.FC<EntitiesListProps> = (props) => {
         []
     );
 
-    const postResource = async (endpoint: string, body = {}) => {
-        try {
-            token = await generateToken();
-            const response = await API.post(API_NAME, endpoint, {
-                headers: {
-                    Authorization: token
-                },
-                body: body
-            });
-            return response;
-        } catch (err) {
-            console.error(err);
-        }
-    };
-
-    const getResource = async (endpoint: string, queryStringParameters = {}) => {
-        try {
-            token = await generateToken();
-            const response = await API.get(API_NAME, endpoint, {
-                headers: {
-                    Authorization: token
-                },
-                queryStringParameters: queryStringParameters
-            });
-            return response;
-        } catch (err) {
-            console.error(err);
-        }
-    };
-
     const redactAllEntities = async () => {
         try {
-            setCurrentStatus('loading');
+            dispatch(setStatus('loading'));
             let entitiesToRedact: any = {
                 'entities': {
                     [EntityTypes.ENTITY_STANDARD]: {},
@@ -267,15 +247,25 @@ const EntitiesList: React.FC<EntitiesListProps> = (props) => {
                 }
             }
 
-            await postResource(`redact/${props.selectedCaseId}/${props.selectedDocumentId}`, entitiesToRedact);
-            const documentResponse = await getResource(`document/${props.selectedCaseId}/${props.selectedDocumentId}`, {
+            await redact({
+                caseId: props.selectedCaseId,
+                documentId: props.selectedDocumentId,
+                body: entitiesToRedact
+            }).unwrap();
+
+            const documentResponse = await getDocumentByCaseAndDocumentIdTrigger({
+                caseId: props.selectedCaseId as string,
+                documentId: props.selectedDocumentId as string,
                 redacted: true
-            });
-            const signedUrlObject = await getResource(`document/download`, { key: documentResponse.key });
+            }).unwrap();
+
+            const signedUrlObject = await getDocumentToDownloadTrigger({ key: documentResponse.key }).unwrap();
+
             window.open(signedUrlObject.downloadUrl, '_blank', 'noopener');
-            setCurrentStatus('success');
+            dispatch(setStatus('success'));
         } catch (err) {
-            setCurrentStatus('error');
+            dispatch(setStatus('error'));
+            console.log(err);
             console.error(err);
         }
 
@@ -377,59 +367,62 @@ const EntitiesList: React.FC<EntitiesListProps> = (props) => {
         props.setSelectedEntities({ ...props.selectedEntities, [props.entityType]: [] });
     };
 
-    const mainTabs = Object.keys(props.entities).map((type) => ({
-        label: (
-            <div>
-                {type}{' '}
-                <Badge color="blue" data-testid="badge-entity-count">
-                    {props.selectedEntities[props.entityType]
-                        ? props.selectedEntities[props.entityType].filter(
-                              (subarray: string[]) => subarray[0] === type && subarray.length === 3
-                          ).length
-                        : 0}
-                </Badge>
-            </div>
-        ),
-        id: type.replace(/\s/g, ''),
-        content: (
-            <Box data-testid="box-parent-view-entity-title">
-                {renderStatus(props.currentStatus, true, false, 'An error occurred loading detected entities.', '')}
-                {isStatusSuccess(props.currentStatus) && (
-                    <SpaceBetween direction="horizontal" size="xs">
-                        <Checkbox
-                            checked={
-                                props.selectedEntities[props.entityType]
-                                    ? props.selectedEntities[props.entityType].some((subArray: string[]) => {
-                                          return (
-                                              subArray.length === 1 && subArray.every((value, index) => value === type)
-                                          );
-                                      })
-                                    : false
-                            }
-                            onChange={() => handleEntitySelect([type])}
-                        ></Checkbox>
-                        <Box variant="h4" display="inline">
-                            All Detected {type} Entities
-                        </Box>
-                    </SpaceBetween>
-                )}
+    const mainTabs =
+        props.entities &&
+        Object.keys(props.entities).map((type) => ({
+            label: (
+                <div>
+                    {type}{' '}
+                    <Badge color="blue" data-testid="badge-entity-count">
+                        {props.selectedEntities[props.entityType]
+                            ? props.selectedEntities[props.entityType].filter(
+                                  (subarray: string[]) => subarray[0] === type && subarray.length === 3
+                              ).length
+                            : 0}
+                    </Badge>
+                </div>
+            ),
+            id: type.replace(/\s/g, ''),
+            content: (
+                <Box data-testid="box-parent-view-entity-title">
+                    {renderStatus(props.currentStatus, true, false, 'An error occurred loading detected entities.', '')}
+                    {isStatusSuccess(props.currentStatus) && (
+                        <SpaceBetween direction="horizontal" size="xs">
+                            <Checkbox
+                                checked={
+                                    props.selectedEntities[props.entityType]
+                                        ? props.selectedEntities[props.entityType].some((subArray: string[]) => {
+                                              return (
+                                                  subArray.length === 1 &&
+                                                  subArray.every((value, index) => value === type)
+                                              );
+                                          })
+                                        : false
+                                }
+                                onChange={() => handleEntitySelect([type])}
+                            ></Checkbox>
+                            <Box variant="h4" display="inline">
+                                All Detected {type} Entities
+                            </Box>
+                        </SpaceBetween>
+                    )}
 
-                {isStatusSuccess(props.currentStatus) &&
-                    Object.keys(props.entities[type]).map((entity) => (
-                        <EntityItem
-                            key={type + ' ' + entity + '-key'}
-                            entityType={props.entityType}
-                            entityObject={props.entities[type][entity]}
-                            entityKey={entity}
-                            selectedEntities={props.selectedEntities}
-                            handleEntitySelect={handleEntitySelect}
-                            switchPage={props.switchPage}
-                            entityPath={[type, entity]}
-                        />
-                    ))}
-            </Box>
-        )
-    }));
+                    {isStatusSuccess(props.currentStatus) &&
+                        Object.keys(props.entities[type]).map((entity) => (
+                            <EntityItem
+                                key={type + ' ' + entity + '-key'}
+                                entityType={props.entityType}
+                                entityObject={props.entities[type][entity]}
+                                entityKey={entity}
+                                selectedEntities={props.selectedEntities}
+                                handleEntitySelect={handleEntitySelect}
+                                switchPage={props.switchPage}
+                                entityPath={[type, entity]}
+                            />
+                        ))}
+                </Box>
+            )
+        }));
 
     const status = renderStatus(
         props.currentStatus,
@@ -449,7 +442,8 @@ const EntitiesList: React.FC<EntitiesListProps> = (props) => {
                         Deselect All
                     </Button>
                     <Button onClick={() => redactAllEntities()} data-testid="redact-all-entities">
-                        Download Redacted Document &nbsp;{currentStatus && <StatusIndicator type={currentStatus} />}
+                        Download Redacted Document &nbsp;
+                        {currentStatus && <StatusIndicator data-testid="status" type={currentStatus} />}
                     </Button>
                     <Toggle
                         onChange={({ detail }) => props.setPreviewRedaction(detail.checked ? PREVIEW_REDACTION_ON : '')}

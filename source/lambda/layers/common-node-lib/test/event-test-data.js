@@ -62,7 +62,7 @@ exports.sqsMessage = {
             body: {
                 taskToken: 'fakeToken',
                 input: {
-                    message: `Passport, Name fakePerson Address fakeAddress Nationality fakeNationality passportNo fakePNumber`
+                    message: 'Passport, Name fakePerson Address fakeAddress Nationality fakeNationality passportNo fakePNumber'
                 }
             },
             attribute: {
@@ -103,7 +103,7 @@ exports.sqsMessages = {
             body: {
                 taskToken: 'fakeToken1',
                 input: {
-                    message: `s3://dir1/subdir/filename1.jpg`
+                    message: 's3://dir1/subdir/filename1.jpg'
                 }
             },
             attribute: {
@@ -124,7 +124,7 @@ exports.sqsMessages = {
             body: {
                 taskToken: 'fakeToken2',
                 input: {
-                    message: `s3://dir1/subdir/filename2.jpg`
+                    message: 's3://dir1/subdir/filename2.jpg'
                 }
             },
             attribute: {
@@ -229,14 +229,14 @@ exports.dynamoDbInputFormatted = [
 exports.dynamoDbInputWithJobId = [
     {
         'taskToken': 'fakeToken1',
-        's3Prefix': `fake-prefix/input/filename1.jpg`,
+        's3Prefix': 'fake-prefix/input/filename1.jpg',
         'receiptHandle': 'fakeReceiptHandler1',
         's3FileName': 'filename1.jpg',
         'jobId': 'job1'
     },
     {
         'taskToken': 'fakeToken2',
-        's3Prefix': `fake-prefix/input/filename2.jpg`,
+        's3Prefix': 'fake-prefix/input/filename2.jpg',
         'receiptHandle': 'fakeReceiptHandler2',
         's3FileName': 'filename2.jpg',
         'jobId': 'job2'
@@ -747,3 +747,164 @@ exports.textractWorkflowMetricsResponse = {
     ],
     'Namespace': 'Workflows'
 };
+
+exports.openSearchQueryRequest = {
+    'body': {
+        '_source': true,
+        'highlight': {
+            'fields': {
+                'content': {
+                    'post_tags': [
+                        ''
+                    ],
+                    'pre_tags': [
+                        ''
+                    ]
+                }
+            },
+            'require_field_match': false
+        },
+        'query': {
+            'bool': {
+                'must': [
+                    {
+                        'query_string': {
+                            'query': 'some-keyword'
+                        }
+                    },
+                    {
+                        'bool': {
+                            'should': [
+                                {
+                                    'term': {
+                                        'case_id.keyword': 'id-1'
+                                    }
+                                },
+                                {
+                                    'term': {
+                                        'case_id.keyword': 'id-2'
+                                    }
+                                }
+                            ]
+                        }
+                    },
+                    {
+                        'bool': {
+                            'should': [
+                                {
+                                    'term': {
+                                        'file_type.keyword': '.jpg'
+                                    }
+                                }
+                            ]
+                        }
+                    },
+                    {
+                        'bool': {
+                            'should': [
+                                {
+                                    'term': {
+                                        'doc_type.keyword': 'generic'
+                                    }
+                                }
+                            ]
+                        }
+                    }
+                ]
+            }
+        }
+    },
+    'method': 'POST',
+    'path': '/sample-index/_search',
+    'querystring': {
+        'filter_path': 'hits.hits._id,hits.hits._source,hits.hits.highlight'
+    }
+};
+
+exports.openSearchQueryResponse = {
+    'body': {
+        'took': 94,
+        'timed_out': false,
+        '_shards': {
+            'total': 0,
+            'successful': 0,
+            'skipped': 0,
+            'failed': 0
+        },
+        'hits': {
+            'total': {
+                'value': 1,
+                'relation': 'eq'
+            },
+            'max_score': 1.1507283,
+            'hits': [
+                {
+                    '_index': 'edu',
+                    '_id': 'id-1',
+                    '_score': 1.1507283,
+                    '_source': {
+                        'case_id': 'id-1',
+                        'user_id': 'user',
+                        'document_id': 'id-1',
+                        'doc_type': 'generic',
+                        'file_name': 'example.jpg',
+                        'file_type': '.jpg',
+                        'content': 'some-content'
+                    },
+                    'highlight': {
+                        'content': [
+                            'some-content'
+                        ]
+                    }
+                }
+            ]
+        }
+    },
+    'statusCode': 200,
+    'headers': {
+        'date': 'Thu, 16 Nov 2023 20:33:32 GMT',
+        'content-type': 'application/json; charset=UTF-8',
+        'content-length': '1207',
+        'x-envoy-upstream-service-time': '78',
+        'server': 'aoss-amazon-s',
+        'x-request-id': '801470ec-fd03-906b-90fc-960d5e208639'
+    },
+    'meta': {
+    }
+};
+
+exports.openSearchLambdaResponse = {
+    'analytics': [
+        {
+            'filter': [
+                {
+                    'count': 1,
+                    'type': '.jpg'
+                }
+            ],
+            'type': 'file_type'
+        },
+        {
+            'filter': [
+                {
+                    'count': 1,
+                    'type': 'generic'
+                }
+            ],
+            'type': 'doc_type'
+        }
+    ],
+    'results': [
+        {
+            'case_id': 'id-1',
+            'user_id': 'user',
+            'doc_type': 'generic',
+            'document_id': 'id-1',
+            'file_name': 'example.jpg',
+            'file_type': '.jpg',
+            'lines': [
+                'some-content'
+            ]
+        }
+    ]
+}

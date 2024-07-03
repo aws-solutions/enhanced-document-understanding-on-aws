@@ -86,12 +86,18 @@ export enum MetricNames {
     REST_ENDPOINT_LATENCY = 'Count',
     COGNITO_SIGN_IN_SUCCESSES = 'SignInSuccesses',
     KENDRA_QUERIES = 'IndexQueryCount',
-    KENDRA_DOCUMENTS = 'IndexDocumentCount'
+    KENDRA_DOCUMENTS = 'IndexDocumentCount',
+    INGESTION_DOC_ERRORS = 'IngestionDocumentErrors',
+    SEARCH_REQ_RATE = 'SearchRequestRate',
+    INGESTION_REQ_RATE = 'IngestionRequestRate',
+    INGESTION_DATA_RATE = 'IngestionDataRate',
+    ACTIVE_COLLECTION = 'ActiveCollection'
 }
 
 export enum CloudwatchNamespace {
     API_GATEWAY = 'AWS/ApiGateway',
     COGNITO = 'AWS/Cognito',
+    AOSS = 'AWS/AOSS',
     DOCUMENTS = 'Documents',
     WORKFLOW_TYPES = 'Workflows',
     CASE = 'Case',

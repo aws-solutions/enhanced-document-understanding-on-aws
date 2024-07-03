@@ -18,6 +18,7 @@ const ConfigLoader = require('../../config/ddb-loader');
 const { configJSON } = require('../../test/config/config-data');
 const SharedLib = require('common-node-lib');
 const { CloudWatchContext } = require('../../../layers/common-node-lib/metrics/cloudwatch');
+const AWSMock = require('aws-sdk-mock');
 
 describe('When an event corresponds to document upload from user', () => {
     beforeEach(() => {
@@ -30,7 +31,7 @@ describe('When an event corresponds to document upload from user', () => {
         expect(S3Trigger.parseFileKey(filekey)).toEqual({
             caseId: 'fake-caseId',
             uploadPrefix: 'initial',
-            fileName: 'docId.txt'
+            documentName: 'docId.txt'
         });
     });
     it('succeeds when filekey contains initial', () => {
@@ -85,6 +86,119 @@ describe('When parsing the workflow config', () => {
     });
     afterEach(() => {
         delete process.env.S3_UPLOAD_PREFIX;
+    });
+});
+
+describe('When creating an entry for adding a new document to the database', () => {
+    const postPolicyResponse = {
+        url: 'fake-bucket-url',
+        fields: {
+            key: 'fake-key',
+            bucket: 'fake-bucket'
+        }
+    };
+    beforeEach(() => {
+        process.env.CASE_DDB_TABLE_NAME = 'testTable';
+        process.env.UPLOAD_DOCS_BUCKET_NAME = 'testBucket';
+        process.env.AWS_REGION = 'us-east-1';
+        process.env.AWS_SDK_USER_AGENT = '{ "customUserAgent": "AwsSolution/SO0999/v9.9.9" }';
+        process.env.WORKFLOW_CONFIG_NAME = 'fakeWorkflowName';
+        process.env.WORKFLOW_CONFIG_TABLE_NAME = 'fakeWorkflowConfigTableName';
+    });
+
+    it('should put an entry into the database', async () => {
+        const baseCase = {
+            CASE_NAME: {
+                S: 'case-name'
+            },
+            CREATION_TIMESTAMP: {
+                S: '2023-12-07T01:21:42.670Z'
+            },
+            ENABLE_BACKEND_UPLOAD: {
+                BOOL: false
+            },
+            S3_FOLDER_PATH: {
+                S: 'fake/path'
+            },
+            STATUS: {
+                S: 'initiate'
+            },
+            USER_DOC_ID: {
+                S: 'fake-user-doc-id'
+            },
+            USER_ID: {
+                S: 'fake-user-id'
+            },
+            DOC_COUNT: {
+                N: '1'
+            }
+        }
+        const params = {
+            userId: 'fake-user-id',
+            userDocId: 'fake-user-id:fake-doc-id',
+            caseId: 'user-id:fake-case-id',
+            caseName: 'case001',
+            fileName: 'fake-file-name',
+            fileExtension: '.pdf',
+            documentType: 'fake-doc-type',
+            docId: 'fake-doc-id',
+            filekey: 'fake-file-key'
+        };
+
+        AWSMock.mock('DynamoDB', 'putItem', async (ddbParams) => {
+            expect(ddbParams.TableName).toEqual('testTable');
+            expect(Object.keys(ddbParams.Item)).toEqual([
+                'CASE_ID',
+                'CASE_NAME',
+                'DOCUMENT_ID',
+                'USER_DOC_ID',
+                'S3_KEY',
+                'UPLOADED_FILE_NAME',
+                'UPLOADED_FILE_EXTENSION',
+                'DOCUMENT_TYPE',
+                'USER_ID',
+                'CREATION_TIMESTAMP'
+            ]);
+
+            return 'success';
+        });
+
+        AWSMock.mock('DynamoDB', 'transactWriteItems', async (ddbParams) => {
+            const updateItem = ddbParams.TransactItems[0].Update;
+            expect(updateItem).toEqual({
+                TableName: 'testTable',
+                Key: {
+                    'CASE_ID':{
+                        'S': 'user-id:fake-case-id'
+                    },
+                    'DOCUMENT_ID':{
+                        'S': '0000'
+                    }
+                },
+                UpdateExpression:'ADD DOC_COUNT :change',
+                ExpressionAttributeValues: {
+                    ':change':{
+                        'N':'1'
+                    }
+                },
+                ReturnValuesOnConditionCheckFailure: 'ALL_OLD'
+            });
+
+            return 'success';
+        });
+
+        expect(await S3Trigger.addDocumentToDb(baseCase, params)).toEqual('success');
+    });
+
+    afterEach(() => {
+        delete process.env.CASE_DDB_TABLE_NAME;
+        delete process.env.UPLOAD_DOCS_BUCKET_NAME;
+        delete process.env.AWS_REGION;
+        delete process.env.AWS_SDK_USER_AGENT;
+        delete process.env.WORKFLOW_CONFIG_NAME;
+        delete process.env.WORKFLOW_CONFIG_TABLE_NAME;
+
+        AWSMock.restore('DynamoDB');
     });
 });
 
@@ -212,60 +326,6 @@ describe('When a stepfunction workflow trigger event is successfully created', (
 
         const docPayload = S3Trigger.createDocumentPayload(dataRecord.Items[0], configJsonStubbed);
         expect(docPayload).toEqual(expectedPayload);
-    });
-
-    it('successfully create an event to trigger stepFunction workflow', async () => {
-        jest.spyOn(S3Trigger, 'loadConfig').mockImplementation(async (configName) => {
-            const configJsonStubbed = JSON.parse(JSON.stringify(configJSON));
-            configJsonStubbed.MinRequiredDocuments[0] = {
-                ...configJsonStubbed.MinRequiredDocuments[0],
-                ...stubbedAnalyzeDocParams
-            };
-            return configJsonStubbed;
-        });
-
-        const expectedPayload = {
-            case: {
-                id: 'fake-case-id',
-                status: 'initiate',
-                stage: 'textract',
-                workflows: [
-                    SharedLib.WorkflowStageNames.TEXTRACT,
-                    SharedLib.WorkflowStageNames.PII,
-                    SharedLib.WorkflowStageNames.ENTITY,
-                    SharedLib.WorkflowStageNames.REDACTION
-                ],
-                documentList: [
-                    {
-                        document: {
-                            id: 'fake-doc-id',
-                            caseId: 'fake-case-id',
-                            piiFlag: true,
-                            runTextractAnalyzeAction: true,
-                            analyzeDocFeatureType: ['TABLES', 'FORMS', 'SIGNATURES'],
-                            selfCertifiedDocType: 'passport',
-                            processingType: 'sync',
-                            s3Bucket: 'fake-bucket',
-                            s3Prefix: 'initial/fake-case-id/fake-doc-id.txt',
-                            documentWorkflow: [
-                                SharedLib.WorkflowStageNames.TEXTRACT,
-                                SharedLib.WorkflowStageNames.REDACTION
-                            ],
-                            uploadedFileExtension: '.pdf',
-                            uploadedFileName: 'single-page-Insulin.pdf'
-                        },
-                        inferences: {}
-                    }
-                ]
-            }
-        };
-        const params = {
-            caseId: 'fake-case-id',
-            configName: 'config0'
-        };
-        const eventPayload = await S3Trigger.createEventForStepFunction(params);
-
-        expect(eventPayload).toEqual(expectedPayload);
     });
 
     afterEach(() => {

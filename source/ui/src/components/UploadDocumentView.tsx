@@ -10,6 +10,7 @@
  *  OR CONDITIONS OF ANY KIND, express or implied. See the License for the specific language governing permissions    *
  *  and limitations under the License.                                                                                *
  *********************************************************************************************************************/
+
 import {
     Alert,
     AppLayout,
@@ -24,16 +25,16 @@ import {
     SelectProps,
     SpaceBetween
 } from '@cloudscape-design/components';
-import { generateToken, getUsername } from './DocumentTable/DocumentTable';
 import { FileSize, FileType } from './FileUpload/interfaces';
 
-import { API } from 'aws-amplify';
 import React from 'react';
 import { useNavigate } from 'react-router-dom';
-import { API_NAME, MAX_UPLOAD_FILE_SIZE } from '../utils/constants';
+import { MAX_UPLOAD_FILE_SIZE } from '../utils/constants';
 import FileUpload from './FileUpload/FileUpload';
-import { mapResultsToCases } from './makeData';
 import { formatFileSize } from './FileUpload/internal';
+import StartJobButton from './buttons/StartJobButton';
+import { useUploadDocumentMutation } from '../store/reducers/documentApiSlice';
+import { Auth } from 'aws-amplify';
 
 export interface WorkflowConfig {
     NumRequiredDocuments: number;
@@ -45,7 +46,6 @@ type UploadDocumentViewProps = {
     caseName?: string;
     caseId?: string;
     casesList: any[];
-    setCasesList: Function;
     workflowConfig: WorkflowConfig;
     selectedCaseRemainingRequiredDocs: any;
 };
@@ -61,18 +61,26 @@ type CaseMap = {
     [key: string]: Case;
 };
 
-let token: string;
-let results: any;
-
 enum Status {
     IN_PROGRESS = 'in-progress',
     SUCCESS = 'success',
     ERROR = 'error'
 }
+export async function getUsername(): Promise<string | undefined> {
+    try {
+        const user = await Auth.currentAuthenticatedUser();
+        const username = user.username;
+        return username;
+    } catch (error) {
+        console.error('error REST API:', error);
+    }
+}
 
 export default function UploadDocumentView(props: UploadDocumentViewProps) {
     let caseMap: CaseMap = {};
     let casesOptions: SelectProps.Option[] = [];
+
+    const [uploadDocument] = useUploadDocumentMutation();
 
     const updateCaseMap = () => {
         if (props.casesList) {
@@ -120,7 +128,6 @@ export default function UploadDocumentView(props: UploadDocumentViewProps) {
     const [chooseFilesError, setChooseFilesError] = React.useState('');
     const [allFilesAttempted, setAllFilesAttempted] = React.useState(false);
     const [documentTypeList, setDocumentTypeList] = React.useState<string[]>([]);
-    const [refreshCaseData, setRefreshCaseData] = React.useState(false);
     const [selectedCaseRemainingAllowedDocs, setSelectedCaseRemainingAllowedDocs] = React.useState();
     const navigate = useNavigate();
 
@@ -137,24 +144,6 @@ export default function UploadDocumentView(props: UploadDocumentViewProps) {
         }
         setSelectedCaseRemainingAllowedDocs(newRemainingDocs);
     }, [documentTypeList, props.selectedCaseRemainingRequiredDocs]);
-
-    React.useEffect(() => {
-        const fetchData = async () => {
-            token = await generateToken();
-            results = await API.get(API_NAME, 'cases', {
-                headers: {
-                    Authorization: token
-                }
-            });
-            const newData = mapResultsToCases(results.Items);
-            props.setCasesList(newData);
-        };
-        if (!props.casesList || refreshCaseData) {
-            fetchData();
-            updateCaseMap();
-            setRefreshCaseData(false);
-        }
-    }, [refreshCaseData]);
 
     const handleFileSelection = async (newFiles: FileType) => {
         setChooseFilesError('');
@@ -206,21 +195,6 @@ export default function UploadDocumentView(props: UploadDocumentViewProps) {
         }
     };
 
-    const postResource = async (endpoint: string, params = {}) => {
-        try {
-            token = await generateToken();
-            const response = await API.post(API_NAME, endpoint, {
-                headers: {
-                    Authorization: token
-                },
-                body: params
-            });
-            return response;
-        } catch (err) {
-            console.error(err);
-        }
-    };
-
     const handleUploadClick = async () => {
         setProgressStatus(Status.IN_PROGRESS);
         setFilesFailedToUpload((filesFailedToUpload) => []);
@@ -232,15 +206,14 @@ export default function UploadDocumentView(props: UploadDocumentViewProps) {
         const userName = await getUsername();
         let promiseArray = [];
         for (let i = 0; i < chosenFiles.length; i++) {
-            let apiRequest = postResource(`document`, {
+            const apiRequest = await uploadDocument({
                 userId: userName,
                 caseId: selectedCaseOption.value,
                 caseName: selectedCaseOption.label,
                 fileName: chosenFiles[i].name,
                 fileExtension: '.' + chosenFiles[i].name.split('.').pop(),
-                documentType: documentTypeList[i],
-                tagging: `<Tagging><TagSet><Tag><Key>userId</Key><Value>${userName}</Value></Tag></TagSet></Tagging>`
-            });
+                documentType: documentTypeList[i]
+            }).unwrap();
             promiseArray.push(apiRequest);
         }
 
@@ -257,7 +230,6 @@ export default function UploadDocumentView(props: UploadDocumentViewProps) {
                 }
             });
         });
-        setRefreshCaseData(true);
         setChosenFiles([]);
     };
 
@@ -307,7 +279,7 @@ export default function UploadDocumentView(props: UploadDocumentViewProps) {
     }, [uploadProgress, progressStatus, allFilesAttempted]);
 
     return (
-        <div>
+        <>
             <AppLayout
                 contentType="form"
                 content={
@@ -342,6 +314,10 @@ export default function UploadDocumentView(props: UploadDocumentViewProps) {
                                         >
                                             Upload Documents
                                         </Button>
+                                        <StartJobButton
+                                            caseId={selectedCaseOption.value ?? ''}
+                                            disabled={allowUploadFiles()}
+                                        />
                                         <Button variant="link" onClick={() => navigate(`/`)}>
                                             Done
                                         </Button>
@@ -405,6 +381,6 @@ export default function UploadDocumentView(props: UploadDocumentViewProps) {
                 toolsHide
                 date-testid="doc-upload-view-applayout"
             />
-        </div>
+        </>
     );
 }

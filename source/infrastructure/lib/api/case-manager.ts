@@ -55,6 +55,12 @@ export interface CaseManagerProps {
      * The table which contains the configuration for workflows
      */
     workflowConfigTable: dynamodb.Table;
+
+
+    /**
+     * The ARN for the Event Bus
+     */
+    eventBusArn: string;
 }
 
 /**
@@ -96,6 +102,31 @@ export class CaseManager extends Construct {
     constructor(scope: Construct, id: string, props: CaseManagerProps) {
         super(scope, id);
 
+        const appNamespace = cdk.Fn.findInMap('Solution', 'Data', 'AppNamespace');
+        const userIdIndexProps: dynamodb.GlobalSecondaryIndexProps = {
+            indexName: 'UserIdIndex',
+            partitionKey: {
+                name: 'USER_ID',
+                type: dynamodb.AttributeType.STRING
+            },
+            projectionType: dynamodb.ProjectionType.ALL,
+            sortKey: {
+                name: 'CASE_ID',
+                type: dynamodb.AttributeType.STRING
+            }
+        };
+        const userDocIdIndexProps: dynamodb.GlobalSecondaryIndexProps = {
+            indexName: 'UserDocIdIndex',
+            partitionKey: {
+                name: 'USER_DOC_ID',
+                type: dynamodb.AttributeType.STRING
+            },
+            projectionType: dynamodb.ProjectionType.ALL,
+            sortKey: {
+                name: 'CASE_NAME',
+                type: dynamodb.AttributeType.STRING
+            }
+        };
         const createRecordsLambdaToDynamoDb = new LambdaToDynamoDB(this, 'CreateRecordsLambdaDDb', {
             lambdaFunctionProps: {
                 runtime: COMMERCIAL_REGION_LAMBDA_NODE_RUNTIME,
@@ -110,7 +141,11 @@ export class CaseManager extends Construct {
                     UPLOAD_DOCS_BUCKET_NAME: props.bucketToUpload.bucketName,
                     S3_UPLOAD_PREFIX: this.s3UploadPrefix,
                     UUID: props.genUUID,
-                    WORKFLOW_CONFIG_NAME: props.workflowConfigName
+                    WORKFLOW_CONFIG_NAME: props.workflowConfigName,
+                    APP_NAMESPACE: appNamespace,
+                    EVENT_BUS_ARN: props.eventBusArn,
+                    DDB_GSI_USER_ID: userIdIndexProps.indexName,
+                    DDB_GSI_USER_DOC_ID: userDocIdIndexProps.indexName
                 },
                 timeout: cdk.Duration.minutes(10)
             },
@@ -136,19 +171,8 @@ export class CaseManager extends Construct {
             tableEnvironmentVariableName: 'WORKFLOW_CONFIG_TABLE_NAME'
         });
 
-        const globalSecondaryIndexProps: dynamodb.GlobalSecondaryIndexProps = {
-            indexName: 'UserIdIndex',
-            partitionKey: {
-                name: 'USER_ID',
-                type: dynamodb.AttributeType.STRING
-            },
-            projectionType: dynamodb.ProjectionType.ALL,
-            sortKey: {
-                name: 'CASE_ID',
-                type: dynamodb.AttributeType.STRING
-            }
-        };
-        createRecordsLambdaToDynamoDb.dynamoTable.addGlobalSecondaryIndex(globalSecondaryIndexProps);
+        createRecordsLambdaToDynamoDb.dynamoTable.addGlobalSecondaryIndex(userIdIndexProps);
+        createRecordsLambdaToDynamoDb.dynamoTable.addGlobalSecondaryIndex(userDocIdIndexProps);
 
         this.docUploadLambda = createRecordsLambdaToDynamoDb.lambdaFunction;
         this.table = createRecordsLambdaToDynamoDb.dynamoTable;
@@ -169,7 +193,8 @@ export class CaseManager extends Construct {
                 memorySize: 192,
                 timeout: cdk.Duration.minutes(LAMBDA_TIMEOUT_MINS),
                 environment: {
-                    DDB_GSI_USER_ID: globalSecondaryIndexProps.indexName,
+                    DDB_GSI_USER_ID: userIdIndexProps.indexName,
+                    DDB_GSI_USER_DOC_ID: userDocIdIndexProps.indexName,
                     S3_REDACTED_PREFIX: S3_REDACTED_PREFIX
                 }
             },

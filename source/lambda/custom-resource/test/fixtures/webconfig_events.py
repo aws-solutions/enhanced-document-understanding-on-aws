@@ -26,6 +26,7 @@ from operations.webconfig import (
     USER_POOL_CLIENT_ID,
     USER_POOL_ID,
     KENDRA_STACK_DEPLOYED,
+    OPEN_SEARCH_STACK_DEPLOYED,
     PHYSICAL_RESOURCE_ID,
     WORKFLOW_CONFIG_NAME,
     WORKFLOW_CONFIG_DDB_TABLE_NAME,
@@ -40,6 +41,7 @@ def lambda_event(aws_credentials, custom_resource_event):
     custom_resource_event[RESOURCE_PROPERTIES][USER_POOL_CLIENT_ID] = "fakeclientid"
     custom_resource_event[RESOURCE_PROPERTIES][USER_POOL_ID] = "fakepoolid"
     custom_resource_event[RESOURCE_PROPERTIES][KENDRA_STACK_DEPLOYED] = "Yes"
+    custom_resource_event[RESOURCE_PROPERTIES][OPEN_SEARCH_STACK_DEPLOYED] = "Yes"
     custom_resource_event[RESOURCE_PROPERTIES][WORKFLOW_CONFIG_DDB_TABLE_NAME] = "fake-ddb-table"
     custom_resource_event[RESOURCE_PROPERTIES][WORKFLOW_CONFIG_NAME] = "fake-workflow"
     custom_resource_event[PHYSICAL_RESOURCE_ID] = "fake_physical_resource_id"
@@ -118,6 +120,7 @@ def setup_ssm(ssm, lambda_event, setup_workflow_config_ddb_table):
                 "UserPoolId": lambda_event[RESOURCE_PROPERTIES][USER_POOL_ID],
                 "UserPoolClientId": lambda_event[RESOURCE_PROPERTIES][USER_POOL_CLIENT_ID],
                 "KendraStackDeployed": lambda_event[RESOURCE_PROPERTIES][KENDRA_STACK_DEPLOYED],
+                "OpenSearchStackDeployed": lambda_event[RESOURCE_PROPERTIES][OPEN_SEARCH_STACK_DEPLOYED],
                 "AwsRegion": os.environ["AWS_REGION"],
                 "RequiredDocs": [
                     {
@@ -153,12 +156,13 @@ def setup_ssm(ssm, lambda_event, setup_workflow_config_ddb_table):
 
     # fmt: off
     assert ssm.get_parameter(
-        Name=lambda_event[RESOURCE_PROPERTIES][SSM_KEY], 
+        Name=lambda_event[RESOURCE_PROPERTIES][SSM_KEY],
         WithDecryption=True)["Parameter"]["Value"] == json.dumps({
             "ApiEndpoint": "https://non-existent/url/fakeapi",
             "UserPoolId": "fakepoolid",
             "UserPoolClientId": "fakeclientid",
             "KendraStackDeployed": "Yes",
+            "OpenSearchStackDeployed": "Yes",
             "AwsRegion": "us-east-1",
             "RequiredDocs": [
                 {
@@ -185,7 +189,7 @@ def setup_ssm(ssm, lambda_event, setup_workflow_config_ddb_table):
                     "RunTextractAnalyzeAction": True,
                     "NumDocuments": "2",
                 },
-            ],            
+            ],
             "WorkflowConfigName": lambda_event[RESOURCE_PROPERTIES][WORKFLOW_CONFIG_NAME],
         })
     # fmt: on

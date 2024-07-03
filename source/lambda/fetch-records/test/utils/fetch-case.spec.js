@@ -70,8 +70,7 @@ describe('When retrieving a single record from the database', () => {
             const params = { caseId: 'invalid-fake-case-id' };
             await CaseFetcher.getCase(params);
         } catch (error) {
-            const expectedErrMessage = `CaseId::invalid-fake-case-id NOT found in Table::${process.env.CASE_DDB_TABLE_NAME}`;
-            expect(error.message).toEqual(expectedErrMessage);
+            expect(error.message).toEqual('Incorrect CaseId');
         }
     });
 
@@ -91,10 +90,11 @@ describe('When listing all cases', () => {
         process.env.S3_UPLOAD_PREFIX = 'initial';
         process.env.AWS_REGION = 'us-east-1';
         process.env.AWS_SDK_USER_AGENT = '{ "customUserAgent": "AwsSolution/SO0999/v9.9.9" }';
-        process.env.DDB_GSI_USER_ID = 'fake-gsi-name';
+        process.env.DDB_GSI_USER_ID = 'fake-user-index';
+        process.env.DDB_GSI_USER_DOC_ID = 'fake-user-doc-index';
     });
 
-    it('should return caseId key of all the records', async () => {
+    it('should return caseId key of all the records if query size not specified', async () => {
         const mockedResponse = {
             Count: 2,
             Items: [
@@ -112,11 +112,40 @@ describe('When listing all cases', () => {
         };
         AWSMock.mock('DynamoDB', 'query', async (params) => {
             expect(params.TableName).toEqual('testTable');
-            expect(params.IndexName).toEqual('fake-gsi-name');
+            expect(params.IndexName).toEqual('fake-user-index');
             return mockedResponse;
         });
 
-        const caseRecords = await CaseFetcher.listCases();
+        const caseRecords = await CaseFetcher.listCases('some-user');
+        expect(caseRecords).toEqual(mockedResponse);
+    });
+
+    it('should return caseId key of paginated the records if query size specified', async () => {
+        const params = {
+            size: 20
+        };
+        const mockedResponse = {
+            Count: 2,
+            Items: [
+                {
+                    CASE_ID: {
+                        S: 'fake-case-id-1'
+                    }
+                },
+                {
+                    CASE_ID: {
+                        S: 'fake-case-id-2'
+                    }
+                }
+            ]
+        };
+        AWSMock.mock('DynamoDB', 'query', async (params) => {
+            expect(params.TableName).toEqual('testTable');
+            expect(params.IndexName).toEqual('fake-user-doc-index');
+            return mockedResponse;
+        });
+
+        const caseRecords = await CaseFetcher.listCases('some-user', params);
         expect(caseRecords).toEqual(mockedResponse);
     });
 
@@ -126,6 +155,7 @@ describe('When listing all cases', () => {
         delete process.env.AWS_REGION;
         delete process.env.AWS_SDK_USER_AGENT;
         delete process.env.DDB_GSI_USER_ID;
+        delete process.env.DDB_GSI_USER_DOC_ID;
 
         AWSMock.restore('DynamoDB');
     });

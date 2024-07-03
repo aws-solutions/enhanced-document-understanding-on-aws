@@ -340,7 +340,7 @@ describe('S3 Inference Getter: When provided with incorrect inputs', () => {
     it('should throw an due to s3 error', async () => {
         await expect(
             s3Inference.getInferenceFromS3('caseId', 'docId', 'inferenceType', 'fake-account-id')
-        ).rejects.toThrow('Error retrieving object: caseId/docId/inferenceType.json. Error is: Fake error');
+        ).rejects.toThrow('Error retrieving references for the specified caseId and documentId.');
     });
 
     afterAll(() => {

@@ -191,6 +191,9 @@ describe('When createWebConfigStorage is called', () => {
             userPoolClientId: extUserPoolClient.ref,
             deployKendraIndexCondition: new cdk.CfnCondition(stack, 'DeployKendraIndex', {
                 expression: cdk.Fn.conditionEquals('Yes', 'Yes')
+            }),
+            deployOpenSearchCondition: new cdk.CfnCondition(stack, 'DeployOpenSearchCondition', {
+                expression: cdk.Fn.conditionEquals('Yes', 'Yes')
             })
         });
         template = Template.fromStack(stack);

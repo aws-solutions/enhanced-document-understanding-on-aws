@@ -42,8 +42,6 @@ def send_response(
     """
     response_url = event["ResponseURL"]
 
-    logger.debug(f"ResponseUrl: {response_url}exit")
-
     response_body = {
         "Status": response_status,
         "Reason": reason or "See the details in CloudWatch Log Stream: {}".format(context.log_stream_name),

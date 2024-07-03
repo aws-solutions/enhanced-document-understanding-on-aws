@@ -38,7 +38,7 @@ exports.redactedDocAccessChecker = async (ddbDocRecord, authToken) => {
     }
 
     const congnitoEntity = SharedLib.getCognitoEntityFromAuthToken(authToken);
-
+    
     const userId = congnitoEntity['cognito:username'];
     if (userId !== ddbDocRecord.USER_ID) {
         return false;
@@ -84,7 +84,7 @@ exports.unredactedDocAccessChecker = async (ddbDocRecord, authToken) => {
     const userId = congnitoEntity['cognito:username'];
     let checker = true;
 
-    if (userId !== ddbDocRecord.USER_ID) {
+        if (userId !== ddbDocRecord.USER_ID) {
         checker = false;
     }
     return checker;

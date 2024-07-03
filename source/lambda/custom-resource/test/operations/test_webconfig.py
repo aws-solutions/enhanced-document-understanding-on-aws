@@ -29,6 +29,7 @@ from operations.webconfig import (
     USER_POOL_CLIENT_ID,
     USER_POOL_ID,
     KENDRA_STACK_DEPLOYED,
+    OPEN_SEARCH_STACK_DEPLOYED,
     WORKFLOW_CONFIG_DDB_TABLE_NAME,
     WORKFLOW_CONFIG_NAME,
     create,
@@ -83,6 +84,14 @@ def test_env_setup_with_no_kendra_stack_deployed(monkeypatch, lambda_event, requ
 
 
 @pytest.mark.parametrize("requestType", ["Create", "Update"])
+def test_env_setup_with_no_open_search_stack_deployed(monkeypatch, lambda_event, requestType):
+    lambda_event["RequestType"] = requestType
+    with pytest.raises(ValueError):
+        monkeypatch.delitem(lambda_event[RESOURCE_PROPERTIES], OPEN_SEARCH_STACK_DEPLOYED)
+        verify_env_setup(lambda_event)
+
+
+@pytest.mark.parametrize("requestType", ["Create", "Update"])
 def test_env_setup_with_no_config_ddb_table_name(monkeypatch, lambda_event, requestType):
     lambda_event["RequestType"] = requestType
     with pytest.raises(ValueError):
@@ -104,7 +113,7 @@ def test_create_success(lambda_event, mock_lambda_context, setup_workflow_config
     ssm = get_service_client("ssm")
     # fmt: off
     web_config_value = ssm.get_parameter(
-        Name=lambda_event[RESOURCE_PROPERTIES][SSM_KEY], 
+        Name=lambda_event[RESOURCE_PROPERTIES][SSM_KEY],
         WithDecryption=True)["Parameter"]["Value"]
     # fmt: on
 
@@ -114,6 +123,7 @@ def test_create_success(lambda_event, mock_lambda_context, setup_workflow_config
             "UserPoolId": "fakepoolid",
             "UserPoolClientId": "fakeclientid",
             "KendraStackDeployed": "Yes",
+            "OpenSearchStackDeployed": "Yes",
             "AwsRegion": "us-east-1",
             "RequiredDocs": [
                 {
@@ -210,6 +220,6 @@ def test_execute_failure(monkeypatch, lambda_event, mock_lambda_context, request
         mocked_PoolManager.request.assert_called_once_with(
             method="PUT",
             url="https://fakeurl/doesnotexist",
-            headers={"content-type": "", "content-length": "407"},
-            body='{"Status": "FAILED", "Reason": "Any of SSM_KEY, API_ENDPOINT, USER_POOL_ID, USER_POOL_CLIENT_ID, KENDRA_STACK_DEPLOYED, WORKFLOW_CONFIG_DDB_TABLE_NAME, WORKFLOW_CONFIG_NAME has not been passed. Operation cannot be performed", "PhysicalResourceId": "fake_physical_resource_id", "StackId": "fakeStackId", "RequestId": "fakeRequestId", "LogicalResourceId": "fakeLogicalResourceId", "NoEcho": false, "Data": {}}',
+            headers={"content-type": "", "content-length": "435"},
+            body='{"Status": "FAILED", "Reason": "Any of SSM_KEY, API_ENDPOINT, USER_POOL_ID, USER_POOL_CLIENT_ID, KENDRA_STACK_DEPLOYED, OPEN_SEARCH_STACK_DEPLOYED, WORKFLOW_CONFIG_DDB_TABLE_NAME, WORKFLOW_CONFIG_NAME has not been passed. Operation cannot be performed", "PhysicalResourceId": "fake_physical_resource_id", "StackId": "fakeStackId", "RequestId": "fakeRequestId", "LogicalResourceId": "fakeLogicalResourceId", "NoEcho": false, "Data": {}}',
         )

@@ -123,6 +123,7 @@ const FileUploadComponent = (
             );
         }
     }, [
+        remainingAllowedDocs,
         errorText,
         multiple,
         value,

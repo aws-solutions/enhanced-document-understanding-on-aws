@@ -53,6 +53,11 @@ exports.casePlaceholderDocumentId = '0000';
 
 exports.caseStatusDdbAttributeName = 'STATUS';
 
+exports.fileNameBase64EncodedKey = 'fileNameBase64Encoded'
+exports.documentTypeKey ='documentType' 
+exports.userIdKey = 'userId'
+
+
 exports.InferenceTypes = {
     TEXTRACT_ANALYZE_EXPENSE: 'textract-analyzeExpense',
     TEXTRACT_ANALYZE_DOCUMENT: 'textract-analyzeDoc',
@@ -140,6 +145,8 @@ exports.WorkflowOrchestratorDefaults = {
         FILE_TYPE: 'file_type'
     }
 };
+
+exports.DEFAULT_DOC_PROCESSING_TYPE = 'sync';
 
 exports.RedactionDefaults = {
     REDACTED_FILE_SUFFIX: '-redacted'

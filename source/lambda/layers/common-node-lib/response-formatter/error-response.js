@@ -28,10 +28,14 @@ function formatError(error) {
 
     error.statusCode = error.statusCode ?? '400';
     error.code = error.code ?? 'CustomExecutionError';
+    const allowOrigin = process.env.ALLOW_ORIGIN || "*";
 
     let response = {
         'statusCode': error.statusCode,
         'headers': {
+            "Access-Control-Allow-Headers": "Origin, X-Requested-With, Content-Type, Accept",
+            "Access-Control-Allow-Methods": "OPTIONS,POST,GET",
+            "Access-Control-Allow-Origin": `${allowOrigin}`,
             'Content-Type': 'text/plain',
             'x-amzn-ErrorType': error.code,
             'Access-Control-Allow-Origin': '*' // NOSONAR - javascript:S5122 - Domain not known at this point.

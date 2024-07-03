@@ -15,7 +15,7 @@
 
 const AWSMock = require('aws-sdk-mock');
 const AWS = require('aws-sdk');
-const { uploadToKendraIndex, prepareDocuments, getUserIdFromEvent } = require('../../utils/kendra-upload');
+const { uploadToKendraIndex, prepareDocuments } = require('../../utils/kendra-upload');
 const SharedLib = require('common-node-lib');
 const {
     casePayload,
@@ -24,6 +24,7 @@ const {
     expectedPrepareDocumentsOutput,
     textractDetectTextInference
 } = require('../event-test-data');
+const { getUserIdFromEvent } = require('../../utils/search-storage-utils');
 
 describe('Uploads documents to Kendra Index', () => {
     let getTextractMock;
@@ -85,7 +86,7 @@ describe('when preparing documents', () => {
 
     it('should prepare documents successfully', async () => {
         const mockedUserId = 'mock-user-id';
-        const documents = await prepareDocuments(expectedPrepareDocumentsInput(), mockedUserId, "fake-account");
+        const documents = await prepareDocuments(expectedPrepareDocumentsInput(), mockedUserId, 'fake-account');
 
         expect(getTextractMock).toHaveBeenCalledTimes(11);
         expect(documents).toEqual(expectedPrepareDocumentsOutput());
@@ -96,7 +97,7 @@ describe('when preparing documents', () => {
 
     it('should add ACL to document prep output', async () => {
         const mockedUserId = 'mock-user-id';
-        const documentBatches = await prepareDocuments(expectedPrepareDocumentsInput(), mockedUserId, "fake-account");
+        const documentBatches = await prepareDocuments(expectedPrepareDocumentsInput(), mockedUserId, 'fake-account');
 
         expect(getTextractMock).toHaveBeenCalledTimes(11);
         documentBatches.forEach((batch) => {
@@ -114,7 +115,7 @@ describe('when preparing documents', () => {
 
     it('should add Attributes to document prep output', async () => {
         const mockedUserId = 'mock-user-id';
-        const documentBatches = await prepareDocuments(expectedPrepareDocumentsInput(), mockedUserId, "fake-account");
+        const documentBatches = await prepareDocuments(expectedPrepareDocumentsInput(), mockedUserId, 'fake-account');
 
         documentBatches.forEach((batch) => {
             batch.forEach((document) => {

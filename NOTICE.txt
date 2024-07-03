@@ -33,6 +33,7 @@ This software includes third party software subject to the following copyrights:
 @cloudscape-design/design-tokens                         Apache-2.0
 @cloudscape-design/global-styles                         Apache-2.0
 @cloudscape-design/jest-preset                           Apache-2.0
+@reduxjs/toolkit                                         MIT
 @tanstack/react-table                                    MIT
 @testing-library/jest-dom                                MIT
 @testing-library/react                                   MIT
@@ -47,7 +48,7 @@ This software includes third party software subject to the following copyrights:
 @types/uuid                                              MIT
 @typescript-eslint/eslint-plugin                         MIT
 @typescript-eslint/parser                                BSD-2-Clause
-attrs                                                    MIT 
+attrs                                                    MIT
 aws-amplify                                              Apache-2.0
 aws-cdk-lib                                              Apache-2.0
 aws-lambda-powertools                                    MIT
@@ -55,28 +56,28 @@ aws-sdk                                                  Apache-2.0
 aws-sdk-client-mock                                      MIT
 aws-sdk-mock                                             Apache-2.0
 aws-xray-sdk                                             Apache-2.0
-awscli                                                   Apache-2.0 
+awscli                                                   Apache-2.0
 babel-jest                                               MIT
 boolean.py                                               BSD-2-Clause
 bootstrap                                                MIT
 boto3                                                    Apache-2.0
 botocore                                                 Apache-2.0
 cdk-nag                                                  Apache-2.0
-colorama                                                 BSD-3-Clause 
+colorama                                                 BSD-3-Clause
 com.amazonaws>>aws-lambda-java-events                    Apache-2.0
 com.drewnoakes>>metadata-extractor                       Apache-2.0
 com.google.code.gson>>gson                               Apache-2.0
 constructs                                               Apache-2.0
-coverage                                                 Apache-2.0 
+coverage                                                 Apache-2.0
 dayjs                                                    MIT
 docutils                                                 BSD License
 eslint                                                   MIT
-exceptiongroup                                           MIT 
+exceptiongroup                                           MIT
 freezegun                                                Apache-2.0
 identity-obj-proxy                                       MIT
-iniconfig                                                MIT 
+iniconfig                                                MIT
 jest                                                     MIT
-jmespath                                                 MIT 
+jmespath                                                 MIT
 jwt-decode                                               MIT
 lodash                                                   MIT
 license-expression                                       Apache-2.0
@@ -90,14 +91,14 @@ org.junit.jupiter>>junit-jupiter-engine                  EPL 2.0
 org.mockito>>mockito-inline                              MIT
 pdf-lib                                                  MIT
 pdfjs-dist                                               Apache-2.0
-pluggy                                                   MIT 
+pluggy                                                   MIT
 portfinder                                               MIT
 prettier                                                 MIT
-pyasn1                                                   BSD-2-Clause 
+pyasn1                                                   BSD-2-Clause
 pytest                                                   MIT
 pytest-cov                                               MIT
 pytest-env                                               MIT
-python-dateutil                                          Apache-2.0 
+python-dateutil                                          Apache-2.0
 PyYAML                                                   MIT
 ramda                                                    MIT
 react                                                    MIT
@@ -107,8 +108,10 @@ react-pdf                                                MIT
 react-router-dom                                         MIT
 react-scripts                                            MIT
 react-tabs                                               MIT
-rsa                                                      Apache-2.0 
-s3transfer                                               Apache-2.0 
+react-highlighter-ts                                     MIT
+react-redux                                              MIT                   
+rsa                                                      Apache-2.0
+s3transfer                                               Apache-2.0
 setuptools                                               MIT
 software.amazon.awssdk>>cloudwatch                       Apache-2.0
 software.amazon.awssdk>>s3                               Apache-2.0
@@ -117,11 +120,11 @@ software.amazon.lambda>>powertools-logging               Apache-2.0
 software.amazon.lambda>>powertools-tracing               Apache-2.0
 source-map-support                                       MIT
 testcontainers                                           MIT
-tomli                                                    MIT 
+tomli                                                    MIT
 ts-jest                                                  MIT
 ts-node                                                  MIT
 typescript                                               Apache-2.0
-typing-extensions                                        Python 2.0
+typing_extensions                                        Python 2.0
 uk.org.webcompere>>system-stubs-core                     MIT
 uk.org.webcompere>>system-stubs-jupiter                  MIT
 uuid                                                     MIT

@@ -64,6 +64,8 @@ mkdir -p $template_dist_dir
 rm -rf $build_dist_dir
 mkdir -p $build_dist_dir
 
+rm -rf $source_dir/infrastructure/cdk.out
+
 echo "------------------------------------------------------------------------------"
 echo "[Init] Install dependencies for the cdk-solution-helper"
 echo "------------------------------------------------------------------------------"
@@ -75,7 +77,9 @@ echo "[Synth] CDK Project"
 echo "------------------------------------------------------------------------------"
 cd $source_dir/infrastructure
 
+npm install
 # Important: CDK global version number
+npm i
 cdk_version=$(node ../../deployment/get-cdk-version.js) # Note: grabs from node_modules/aws-cdk-lib/package.json
 
 echo "------------------------------------------------------------------------------"

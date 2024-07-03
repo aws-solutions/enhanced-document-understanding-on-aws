@@ -36,9 +36,41 @@ describe('Check Kendra index id env variable setup', () => {
     });
 });
 
+describe('Check open search env variable setup', () => {
+    beforeEach(() => {
+        process.env.AWS_REGION = 'us-west-2';
+        process.env.OS_COLLECTION_ENDPOINT = 'https://foobar.us-east-1.aoss.amazonaws.com';
+    });
+
+    it('checkOpenSearchEnvSetup', () => {
+        expect(envSetupChecker.checkOpenSearchEnvSetup()).toBe();
+    });
+
+    it('fails when aws region env is not set correctly', () => {
+        delete process.env.AWS_REGION;
+        expect(() => {
+            envSetupChecker.checkOpenSearchEnvSetup();
+        }).toThrow();
+    });
+
+    it('fails when collection endpoint env is not set correctly', () => {
+        delete process.env.OS_COLLECTION_ENDPOINT;
+        expect(() => {
+            envSetupChecker.checkOpenSearchEnvSetup();
+        }).toThrow();
+    });
+
+    afterAll(() => {
+        delete process.env.AWS_REGION;
+        delete process.env.OS_COLLECTION_ENDPOINT;
+    });
+});
+
 describe('Checks all environments', () => {
     beforeEach(() => {
         process.env.KENDRA_INDEX_ID = 'fake-kendra-index-id';
+        process.env.AWS_REGION = 'us-west-2';
+        process.env.OS_COLLECTION_ENDPOINT = 'https://foobar.us-east-1.aoss.amazonaws.com';
     });
 
     it('succeeds when env is set correctly', () => {
@@ -47,5 +79,7 @@ describe('Checks all environments', () => {
 
     afterAll(() => {
         delete process.env.KENDRA_INDEX_ID;
+        delete process.env.AWS_REGION;
+        delete process.env.OS_COLLECTION_ENDPOINT;
     });
 });

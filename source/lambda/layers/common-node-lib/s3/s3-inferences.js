@@ -183,9 +183,8 @@ async function getInferenceFromS3(caseId, documentId, inferenceType, requestAcco
             .promise();
         return JSON.parse(response.Body.toString('utf-8'));
     } catch (error) {
-        let errMessage = `Error retrieving object: ${inferenceFileKey}. Error is: ${error.message}`;
-        console.error(errMessage);
-        throw new Error(errMessage);
+        console.error(`Error retrieving object: ${inferenceFileKey}. Error is: ${error.message}`);
+        throw new Error('Error retrieving references for the specified caseId and documentId.');
     }
 }
 

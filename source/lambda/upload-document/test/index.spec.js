@@ -15,7 +15,7 @@
 const lambda = require('../index');
 const SharedLib = require('common-node-lib');
 const AWSMock = require('aws-sdk-mock');
-const { dynamoDBConfigResponse } = require('./config/config-data');
+const { dynamoDBConfigResponse, dynamoDbQueryResponse } = require('./config/config-data');
 
 describe('When invoking lambda without required env variables', () => {
     const formatErrorSpy = jest.spyOn(SharedLib, 'formatError').mockImplementation(async (params) => {
@@ -37,6 +37,7 @@ describe('When sending unsupported http requests to lambda', () => {
         process.env.UPLOAD_DOCS_BUCKET_NAME = 'fake-prefix';
         process.env.AWS_REGION = 'us-east-1';
         process.env.AWS_SDK_USER_AGENT = '{ "customUserAgent": "AwsSolution/SO0999/v9.9.9" }';
+        process.env.DDB_GSI_USER_DOC_ID = 'user-doc-id-index';
     });
 
     it('Should throw an error', async () => {
@@ -91,6 +92,10 @@ describe('When invoking lambda endpoints', () => {
 
         AWSMock.mock('DynamoDB', 'getItem', (params, callback) => {
             callback(null, dynamoDBConfigResponse);
+        });
+
+        AWSMock.mock('DynamoDB', 'query', (params, callback) => {
+            callback(null, dynamoDbQueryResponse);
         });
 
         jest.spyOn(SharedLib, 'getCase').mockImplementation(async (params) => {
@@ -158,7 +163,8 @@ describe('When invoking lambda endpoints', () => {
         const event = {
             httpMethod: 'POST',
             resource: '/document',
-            body: '{"userId":"fake-user-id","caseId":"fake-case-id","fileName":"fake-file","fileExtension":".jpg","documentType":"paystub"}'
+            body: '{"userId":"fake-user-id","caseId":"fake-user-id:fake-case-id","fileName":"fake-file","fileExtension":".jpg","documentType":"paystub"}',
+            requestContext: { authorizer: { claims: { 'cognito:username': 'fake-user-id' } } }
         };
 
         const response = await lambda.handler(event);
@@ -169,6 +175,38 @@ describe('When invoking lambda endpoints', () => {
 
         // fileExtension and Document upload, both.
         expect(publishMetricsSpy).toHaveBeenCalledTimes(2);
+    });
+
+    it('should throw error when creating document record if userId is not associated with caseId', async () => {
+        jest.spyOn(SharedLib, 'formatError').mockImplementation(async (params) => {
+            return 'User is not associated with the case';
+        });
+
+        const event = {
+            httpMethod: 'POST',
+            resource: '/document',
+            body: '{"userId":"fake-user-id","caseId":"fake-user-id:fake-case-id","fileName":"fake-file","fileExtension":".jpg","documentType":"paystub"}',
+            requestContext: { authorizer: { claims: { 'cognito:username': 'invalid-fake-user-id' } } }
+        };
+
+        const response = await lambda.handler(event);
+        expect(response).toEqual('User is not associated with the case');
+    });
+
+    it('should throw error when starting job if userId is not associated with caseId', async () => {
+        jest.spyOn(SharedLib, 'formatError').mockImplementation(async (params) => {
+            return 'User is not associated with the case';
+        });
+
+        const event = {
+            httpMethod: 'POST',
+            resource: '/case/start-job',
+            body: '{"userId":"fake-user-id","caseId":"fake-user-id:fake-case-id","jobType":"fake-job-type"}',
+            requestContext: { authorizer: { claims: { 'cognito:username': 'invalid-fake-user-id' } } }
+        };
+
+        const response = await lambda.handler(event);
+        expect(response).toEqual('User is not associated with the case');
     });
 
     it('Should throw an error and format the response', async () => {

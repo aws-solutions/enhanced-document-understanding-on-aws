@@ -16,10 +16,10 @@ import { Construct } from 'constructs';
 import { caseResource, createCaseBody, createCaseMethod } from './case';
 import { casesResource } from './cases';
 import { downloadDocQueryParam, getDocQueryParam } from './document';
-import { getInferenceByTypeMethod, listInferencesMethod } from './inferences';
 import { redactMethod, redactSuccessResponse } from './redact';
+import { getInferenceByTypeMethod, listInferencesMethod } from './inferences';
 import { apiRootDocumentationPart, authTokenHeader, caseIdPathParam, docIdPathParam } from './root';
-import { searchMethod, searchQueryPathParam } from './search';
+import { kendraSearchMethod, kendraSearchQueryPathParam, openSearchMethod, openSearchQueryPathParam } from './search';
 
 export interface ApiDocumentationProps {
     /**
@@ -91,10 +91,16 @@ export class ApiDocumentation extends Construct {
 
         // search endpoint
         documentationVersion.addDependency(
-            new CfnDocumentationPart(this, 'KendraSearchMethod', this.createDocumentationPart(searchMethod))
+            new CfnDocumentationPart(this, 'KendraSearchMethod', this.createDocumentationPart(kendraSearchMethod))
         );
         documentationVersion.addDependency(
-            new CfnDocumentationPart(this, 'KendraSearchPathParam', this.createDocumentationPart(searchQueryPathParam))
+            new CfnDocumentationPart(this, 'KendraSearchPathParam', this.createDocumentationPart(kendraSearchQueryPathParam))
+        );
+        documentationVersion.addDependency(
+            new CfnDocumentationPart(this, 'OpenSearchMethod', this.createDocumentationPart(openSearchMethod))
+        );
+        documentationVersion.addDependency(
+            new CfnDocumentationPart(this, 'OpenSearchPathParam', this.createDocumentationPart(openSearchQueryPathParam))
         );
 
         // inference edpoints
