@@ -27,7 +27,20 @@ describe('When Web UI is created', () => {
         'ApiEndpoint': fakeApiEndpoint,
         'AwsRegion': fakeAwsRegion,
         'UserPoolId': fakeUserPoolId,
-        'UserPoolClientId': fakeUserPoolClientId
+        'UserPoolClientId': fakeUserPoolClientId,
+        'KendraStackDeployed': 'Yes',
+        'OpenSearchStackDeployed': 'Yes',
+        'RequiredDocs': [
+            {
+                'NumDocuments': '1',
+                'DocumentType': 'generic',
+                'FileTypes': ['.pdf', '.png', '.jpeg', '.jpg'],
+                'WorkflowsToProcess': ['textract', 'entity-standard', 'entity-pii', 'entity-medical', 'redaction'],
+                'MaxSize': '5',
+                'RunTextractAnalyzeAction': true
+            }
+        ],
+        'WorkflowConfigName': 'default'
     };
 
     beforeAll(async () => {

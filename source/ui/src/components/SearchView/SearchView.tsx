@@ -26,14 +26,15 @@ import {
     Spinner
 } from '@cloudscape-design/components';
 import { OptionDefinition } from '@cloudscape-design/components/internal/components/option/interfaces';
-import { API } from 'aws-amplify';
+import Tabs from '@cloudscape-design/components/tabs';
 import React from 'react';
 import { useNavigate } from 'react-router-dom';
-import { API_NAME, FacetDocumentAttributeKey, MIN_SEARCH_QUERY_LENGTH } from '../../utils/constants';
+import { FacetDocumentAttributeKey, MIN_SEARCH_QUERY_LENGTH } from '../../utils/constants';
 import { FacetResult } from '../../utils/interfaces';
-import { generateToken } from '../DocumentTable/DocumentTable';
-import { mapResultsToCases } from '../makeData';
-import KendraResults from './KendraResults';
+import KendraResults from './Kendra/KendraResults';
+import OpenSearchResults from './OpenSearch/OpenSearchResults';
+import { useLazyQueryKendraQuery, useLazyQueryOpenSearchQuery } from '../../store/reducers/searchApiSlice';
+import querystring from 'querystring';
 
 type SearchViewProps = {
     searchValue: string;
@@ -41,19 +42,20 @@ type SearchViewProps = {
     submittedSearchValue: string;
     setSubmittedSearchValue: Function;
     casesList: any[];
-    setCasesList: Function;
     caseName: string;
     setSelectedCaseId: Function;
     setSelectedDocumentId: Function;
     setSelectedDocumentFileType: Function;
+    enableKendra: boolean;
+    enableOpenSearch: boolean;
 };
-let token: string;
-let results: any;
 
 const QUERY_LONG_ENOUGH_ERROR = `Enter a search query longer than ${MIN_SEARCH_QUERY_LENGTH - 1} characters to
 initiate a search.`;
 
 export default function SearchView(props: SearchViewProps) {
+    const [searchOpensearch] = useLazyQueryOpenSearchQuery();
+    const [searchKendra] = useLazyQueryKendraQuery();
     let cases: any[];
     if (props.casesList) {
         cases = [
@@ -75,56 +77,38 @@ export default function SearchView(props: SearchViewProps) {
 
     const [selectedCaseOptions, setSelectedCaseOptions] = React.useState<MultiselectProps.Option[]>([]);
     const [selectedFacets, setSelectedFacets] = React.useState<{ [key: string]: string[] }>({});
+    const [selectedFilters, setSelectedFilters] = React.useState<{ [key: string]: string[] }>({});
 
     const [kendraResults, setKendraResults] = React.useState<any[]>([]);
-    const [facetResults, setFacetResults] = React.useState<any[]>([]);
+    const [openSearchResults, setOpenSearchResults] = React.useState<any[]>([]);
+    const [kendraFacetResults, setKendraFacetResults] = React.useState<any[]>([]);
+    const [openSearchFilters, setOpenSearchFilters] = React.useState<any[]>([]);
     const [searchValueError, setSearchValueError] = React.useState('');
     const [loading, setLoading] = React.useState(false);
-
-    React.useEffect(() => {
-        const fetchData = async () => {
-            token = await generateToken();
-            results = await API.get(API_NAME, 'cases', {
-                headers: {
-                    Authorization: token
-                }
-            });
-            const newData = mapResultsToCases(results.Items);
-            props.setCasesList(newData);
-        };
-        if (!props.casesList) {
-            fetchData();
-        }
-    }, []);
 
     const queryKendra = async (facetsToFilterBy = selectedFacets, maintainFacetSelection = false) => {
         if (props.submittedSearchValue) {
             try {
                 setLoading(true);
-                token = await generateToken();
-                const queryParams: any = {
-                    headers: {
-                        Authorization: token
-                    }
-                };
+                let queryParams: any = {};
                 if (selectedCaseOptions.length > 0) {
-                    queryParams.queryStringParameters = {
+                    queryParams = {
                         'case_id': selectedCaseOptions.map((caseOptions) => caseOptions.value)
                     };
                 }
                 if (Object.keys(facetsToFilterBy).length > 0 && maintainFacetSelection) {
-                    queryParams.queryStringParameters = {
-                        ...queryParams.queryStringParameters,
+                    queryParams = {
+                        ...queryParams,
                         ...facetsToFilterBy
                     };
                 }
-                const response = await API.get(
-                    API_NAME,
-                    `search/kendra/${encodeURIComponent(props.submittedSearchValue)}`,
-                    queryParams
-                );
+                queryParams = querystring.stringify(queryParams)
+                const response = await searchKendra({
+                    searchValue: encodeURIComponent(props.submittedSearchValue),
+                    params: queryParams
+                }).unwrap();
                 setKendraResults(response?.ResultItems);
-                setFacetResults(response?.FacetResults);
+                setKendraFacetResults(response?.FacetResults);
 
                 const uniqueFacets: Set<string> = new Set();
                 response?.FacetResults.forEach((result: FacetResult) => {
@@ -150,8 +134,64 @@ export default function SearchView(props: SearchViewProps) {
         }
     };
 
+    const queryOpenSearch = async (filtersToFilterBy = selectedFilters, maintainFilterSelection = false) => {
+        if (props.submittedSearchValue) {
+            try {
+                setLoading(true);
+                let queryParams: any = {};
+                if (selectedCaseOptions.length > 0) {
+                    queryParams = {
+                        'case_id': selectedCaseOptions.map((caseOptions) => caseOptions.value)
+                    };
+                }
+
+                if (Object.keys(filtersToFilterBy).length > 0 && maintainFilterSelection) {
+                    queryParams = {
+                        ...queryParams,
+                        ...filtersToFilterBy
+                    };
+                }
+                queryParams = querystring.stringify(queryParams)
+                const response = await searchOpensearch({
+                    searchValue: props.submittedSearchValue,
+                    params: queryParams
+                }).unwrap();
+
+                setOpenSearchResults(response.results);
+                setOpenSearchFilters(response.analytics);
+
+                const uniqueFilters: Set<string> = new Set();
+                response.analytics.forEach((filter: any) => {
+                    uniqueFilters.add(filter.type);
+                });
+                const emptySelectedFilters: Record<string, string[]> = {};
+                uniqueFilters.forEach((key: string) => {
+                    emptySelectedFilters[key] = [];
+                });
+                if (maintainFilterSelection) {
+                    for (const key of Object.keys(emptySelectedFilters)) {
+                        emptySelectedFilters[key] = filtersToFilterBy[key];
+                    }
+                }
+                setSelectedFilters(emptySelectedFilters);
+                setLoading(false);
+
+                return response;
+            } catch (err) {
+                console.error(err);
+            }
+        } else {
+            setLoading(false);
+        }
+    };
+
     React.useEffect(() => {
-        queryKendra();
+        if (props.enableKendra) {
+            queryKendra();
+        }
+        if (props.enableOpenSearch) {
+            queryOpenSearch();
+        }
         // eslint-disable-next-line react-hooks/exhaustive-deps
     }, [props.submittedSearchValue, selectedCaseOptions]);
 
@@ -184,7 +224,6 @@ export default function SearchView(props: SearchViewProps) {
     };
 
     const handleSearchClick = async () => {
-        console.count('search click');
         if (!checkForSearchValueErrors() && props.submittedSearchValue !== props.searchValue) {
             setLoading(true);
             setSearchValueError('');
@@ -192,7 +231,7 @@ export default function SearchView(props: SearchViewProps) {
         }
     };
 
-    const handleCheckboxClick = async (facetType: string, facetValue: string) => {
+    const handleKendraCheckboxClick = async (facetType: string, facetValue: string) => {
         setLoading(true);
         if (isFacetSelected(facetType, facetValue)) {
             setSelectedFacets({
@@ -221,11 +260,209 @@ export default function SearchView(props: SearchViewProps) {
         }
     };
 
+    const handleOpenSearchCheckboxClick = async (filterType: string, filterValue: string) => {
+        setLoading(true);
+        if (isFilterSelected(filterType, filterValue)) {
+            setSelectedFilters({
+                ...selectedFilters,
+                [filterType]: selectedFilters[filterType]?.filter((value: string) => value !== filterValue) ?? []
+            });
+            queryOpenSearch(
+                {
+                    ...selectedFilters,
+                    [filterType]: selectedFilters[filterType]?.filter((value: string) => value !== filterValue) ?? []
+                },
+                true
+            );
+        } else {
+            setSelectedFilters({
+                ...selectedFilters,
+                [filterType]: [...selectedFilters[filterType], filterValue]
+            });
+            queryOpenSearch(
+                {
+                    ...selectedFilters,
+                    [filterType]: [...selectedFilters[filterType], filterValue]
+                },
+                true
+            );
+        }
+    };
+
     const isFacetSelected = (facetType: string, facetValue: string) => {
         if (Object.keys(selectedFacets).includes(facetType)) {
             return selectedFacets[facetType].includes(facetValue);
         }
         return false;
+    };
+
+    const isFilterSelected = (filterType: string, filterValue: string) => {
+        if (Object.keys(selectedFilters).includes(filterType)) {
+            return selectedFilters[filterType].includes(filterValue);
+        }
+        return false;
+    };
+
+    const renderKendraResults = () => {
+        return (
+            <div
+                style={{
+                    position: 'relative',
+                    minHeight: '320rem',
+                    paddingBottom: '32rem'
+                }}
+            >
+                {loading && <Spinner size="large" />}
+                {props.submittedSearchValue && (
+                    <div style={{ display: 'flex', height: '100%' }}>
+                        {kendraFacetResults.length > 0 && (
+                            <div
+                                style={{
+                                    width: '25%',
+                                    float: 'left'
+                                }}
+                            >
+                                <h2>Filters</h2>
+                                {kendraFacetResults.map((facetResult: any) => (
+                                    <div key={JSON.stringify(facetResult)}>
+                                        {Object.keys(FacetDocumentAttributeKey).includes(
+                                            facetResult.DocumentAttributeKey
+                                        ) && (
+                                            <div>
+                                                <h4>
+                                                    {
+                                                        FacetDocumentAttributeKey[
+                                                            facetResult.DocumentAttributeKey as keyof typeof FacetDocumentAttributeKey
+                                                        ]
+                                                    }
+                                                </h4>
+                                                {facetResult.DocumentAttributeValueCountPairs.map(
+                                                    (valueCountPair: any) => (
+                                                        <Checkbox
+                                                            onChange={({ detail }) =>
+                                                                handleKendraCheckboxClick(
+                                                                    facetResult.DocumentAttributeKey,
+                                                                    valueCountPair.DocumentAttributeValue.StringValue
+                                                                )
+                                                            }
+                                                            checked={isFacetSelected(
+                                                                facetResult.DocumentAttributeKey,
+                                                                valueCountPair.DocumentAttributeValue.StringValue
+                                                            )}
+                                                            key={JSON.stringify(valueCountPair)}
+                                                        >
+                                                            <p>
+                                                                {(facetResult.DocumentAttributeKey === 'file_type'
+                                                                    ? valueCountPair.DocumentAttributeValue.StringValue.slice(
+                                                                          1
+                                                                      )
+                                                                    : valueCountPair.DocumentAttributeValue
+                                                                          .StringValue) +
+                                                                    ' (' +
+                                                                    valueCountPair.Count.toString() +
+                                                                    ')'}
+                                                            </p>
+                                                        </Checkbox>
+                                                    )
+                                                )}
+                                            </div>
+                                        )}
+                                    </div>
+                                ))}
+                            </div>
+                        )}
+                        <div
+                            style={{
+                                float: 'left'
+                            }}
+                        >
+                            <KendraResults
+                                results={kendraResults}
+                                searchQuery={props.submittedSearchValue}
+                                casesList={props.casesList}
+                                setSelectedCaseId={props.setSelectedCaseId}
+                                setSelectedDocumentId={props.setSelectedDocumentId}
+                                setSelectedDocumentFileType={props.setSelectedDocumentFileType}
+                            />
+                        </div>
+                    </div>
+                )}
+            </div>
+        );
+    };
+
+    const renderOpenSearchResults = () => {
+        return (
+            <div
+                style={{
+                    position: 'relative',
+                    minHeight: '320rem',
+                    paddingBottom: '32rem'
+                }}
+            >
+                {loading && <Spinner size="large" />}
+                {props.submittedSearchValue && (
+                    <div style={{ display: 'flex', height: '100%' }}>
+                        {openSearchFilters.length > 0 && (
+                            <div
+                                style={{
+                                    width: '25%',
+                                    float: 'left'
+                                }}
+                            >
+                                <h2>Filters</h2>
+                                {openSearchFilters.map((openSearchFilter: any) => (
+                                    <div key={JSON.stringify(openSearchFilter)}>
+                                        {Object.keys(FacetDocumentAttributeKey).includes(openSearchFilter.type) && (
+                                            <div>
+                                                <h4>
+                                                    {
+                                                        FacetDocumentAttributeKey[
+                                                            openSearchFilter.type as keyof typeof FacetDocumentAttributeKey
+                                                        ]
+                                                    }
+                                                </h4>
+                                                {openSearchFilter.filter.map((valueCountPair: any) => (
+                                                    <Checkbox
+                                                        onChange={({ detail }) =>
+                                                            handleOpenSearchCheckboxClick(
+                                                                openSearchFilter.type,
+                                                                valueCountPair.type
+                                                            )
+                                                        }
+                                                        checked={isFilterSelected(
+                                                            openSearchFilter.type,
+                                                            valueCountPair.type
+                                                        )}
+                                                        key={JSON.stringify(valueCountPair.type + valueCountPair.count)}
+                                                    >
+                                                        <p>{valueCountPair.type + ' (' + valueCountPair.count + ')'}</p>
+                                                    </Checkbox>
+                                                ))}
+                                            </div>
+                                        )}
+                                    </div>
+                                ))}
+                            </div>
+                        )}
+                        <div
+                            style={{
+                                float: 'left'
+                            }}
+                        >
+                            <OpenSearchResults
+                                results={openSearchResults}
+                                searchQuery={props.submittedSearchValue}
+                                casesList={props.casesList}
+                                setSelectedCaseId={props.setSelectedCaseId}
+                                setSelectedDocumentId={props.setSelectedDocumentId}
+                                setSelectedDocumentFileType={props.setSelectedDocumentFileType}
+                            />
+                        </div>
+                    </div>
+                )}
+            </div>
+        );
     };
 
     if (documentsTotal === 0) {
@@ -263,17 +500,17 @@ export default function SearchView(props: SearchViewProps) {
                 <ContentLayout
                     header={
                         <SpaceBetween size="m">
-                            <Header variant="h1">Kendra search</Header>
+                            <Header variant="h1">Search</Header>
                         </SpaceBetween>
                     }
-                    data-testid="kendra-search-contentlayout"
+                    data-testid="search-contentlayout"
                 >
                     <form onSubmit={(event) => event.preventDefault()}>
                         <Form
                             actions={
                                 <SpaceBetween direction="horizontal" size="xs">
                                     <Button
-                                        data-testid="kendra-search-button"
+                                        data-testid="search-button"
                                         variant="primary"
                                         onClick={() => handleSearchClick()}
                                     >
@@ -322,92 +559,22 @@ export default function SearchView(props: SearchViewProps) {
                             </Container>
                         </Form>
                     </form>
-                    <div
-                        style={{
-                            position: 'relative',
-                            minHeight: '320rem',
-                            paddingBottom: '32rem'
-                        }}
-                    >
-                        {loading && <Spinner size="large" />}
-                        {props.submittedSearchValue && (
-                            <div style={{ display: 'flex', height: '100%' }}>
-                                {facetResults.length > 0 && (
-                                    <div
-                                        style={{
-                                            width: '25%',
-                                            float: 'left'
-                                        }}
-                                    >
-                                        <h2>Filters</h2>
-                                        {facetResults.map((facetResult: any) => (
-                                            <div key={JSON.stringify(facetResult)}>
-                                                {Object.keys(FacetDocumentAttributeKey).includes(
-                                                    facetResult.DocumentAttributeKey
-                                                ) && (
-                                                    <div>
-                                                        <h4>
-                                                            {
-                                                                FacetDocumentAttributeKey[
-                                                                    facetResult.DocumentAttributeKey as keyof typeof FacetDocumentAttributeKey
-                                                                ]
-                                                            }
-                                                        </h4>
-                                                        {facetResult.DocumentAttributeValueCountPairs.map(
-                                                            (valueCountPair: any) => (
-                                                                <Checkbox
-                                                                    onChange={({ detail }) =>
-                                                                        handleCheckboxClick(
-                                                                            facetResult.DocumentAttributeKey,
-                                                                            valueCountPair.DocumentAttributeValue
-                                                                                .StringValue
-                                                                        )
-                                                                    }
-                                                                    checked={isFacetSelected(
-                                                                        facetResult.DocumentAttributeKey,
-                                                                        valueCountPair.DocumentAttributeValue
-                                                                            .StringValue
-                                                                    )}
-                                                                    key={JSON.stringify(valueCountPair)}
-                                                                >
-                                                                    <p>
-                                                                        {(facetResult.DocumentAttributeKey ===
-                                                                        'file_type'
-                                                                            ? valueCountPair.DocumentAttributeValue.StringValue.slice(
-                                                                                  1
-                                                                              )
-                                                                            : valueCountPair.DocumentAttributeValue
-                                                                                  .StringValue) +
-                                                                            ' (' +
-                                                                            valueCountPair.Count.toString() +
-                                                                            ')'}
-                                                                    </p>
-                                                                </Checkbox>
-                                                            )
-                                                        )}
-                                                    </div>
-                                                )}
-                                            </div>
-                                        ))}
-                                    </div>
-                                )}
-                                <div
-                                    style={{
-                                    float: 'right'
-                                    }}
-                                >
-                                    <KendraResults
-                                        results={kendraResults}
-                                        searchQuery={props.submittedSearchValue}
-                                        casesList={props.casesList}
-                                        setSelectedCaseId={props.setSelectedCaseId}
-                                        setSelectedDocumentId={props.setSelectedDocumentId}
-                                        setSelectedDocumentFileType={props.setSelectedDocumentFileType}
-                                    />
-                                </div>
-                            </div>
-                        )}
-                    </div>
+                    <Tabs
+                        tabs={[
+                            {
+                                label: 'KendraResults',
+                                id: 'first',
+                                content: renderKendraResults(),
+                                disabled: !props.enableKendra
+                            },
+                            {
+                                label: 'OpenSearch Results',
+                                id: 'second',
+                                content: renderOpenSearchResults(),
+                                disabled: !props.enableOpenSearch
+                            }
+                        ]}
+                    />
                 </ContentLayout>
             }
             headerSelector="#header"

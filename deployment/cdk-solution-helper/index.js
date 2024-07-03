@@ -12,7 +12,7 @@
  */
 
 // Imports
-const fs = require("fs");
+const fs = require("node:fs");
 
 // Paths
 const global_s3_assets = "../../deployment/global-s3-assets";

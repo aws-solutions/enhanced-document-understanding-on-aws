@@ -78,7 +78,7 @@ def get_function_for_resource(resource: str):
 
 @metrics.log_metrics(capture_cold_start_metric=True)  # type: ignore
 @tracer.capture_lambda_handler
-@logger.inject_lambda_context(log_event=True)
+@logger.inject_lambda_context
 def handler(event, context):
     """The main entry point for the custom resource lambda function. It looks for the implementation for the operation type passed in the
     resource properties and invokes that specific operation

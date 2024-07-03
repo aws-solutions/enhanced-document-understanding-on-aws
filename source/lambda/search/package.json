@@ -1,11 +1,12 @@
 {
   "name": "search",
-  "version": "1.0.12",
+  "version": "1.1.0",
   "description": "This lambda function is used to search for queries in the kendra index backing the rest-endpoints",
   "main": "index.js",
   "scripts": {
     "test": "jest --coverage --silent --verbose",
     "test-debug": "jest --coverage",
+    "zip": "rm -rf package-lock.json && zip -rq --exclude=*test* search.zip .",
     "clean": "rm -rf node_modules",
     "code-formatter": "./node_modules/prettier/bin-prettier.js --config ../../.prettierrc.yml '**/*.{js,json,css,md}' !package*.json --write",
     "code-linter": "./node_modules/eslint/bin/eslint.js . -c ../.eslintrc.js --ext .js"

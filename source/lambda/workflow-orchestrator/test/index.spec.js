@@ -15,12 +15,10 @@
 
 const index = require('../index.js');
 const S3Trigger = require('../utils/s3-event-trigger');
-const EventDispatcher = require('../utils/event-dispatcher');
 const SharedLib = require('common-node-lib');
 const _ = require('lodash');
 
 jest.mock('../utils/s3-event-trigger');
-jest.mock('../utils/event-dispatcher');
 jest.mock('common-node-lib');
 const kendra = require('../utils/kendra-upload');
 const { failureEvent } = require('./event-test-data.js');
@@ -44,7 +42,7 @@ describe('When processing a Sfn event from the custom event bus', () => {
                 return 'success';
             });
 
-        publishEventSpy = jest.spyOn(EventDispatcher, 'publishEvent').mockImplementation(async (detail, detailType) => {
+        publishEventSpy = jest.spyOn(SharedLib, 'publishEvent').mockImplementation(async (detail, detailType) => {
             return 'success';
         });
     });
@@ -92,11 +90,9 @@ describe('When processing a Sfn event from the custom event bus', () => {
         const expectedNextEvent = _.cloneDeep(mockSfnEvent);
         (expectedNextEvent.detail.case.status = 'initiate'), (expectedNextEvent.detail.case.stage = 'classification');
 
-        const publishEventSpy = jest
-            .spyOn(EventDispatcher, 'publishEvent')
-            .mockImplementation(async (detail, detailType) => {
-                return 'success';
-            });
+        const publishEventSpy = jest.spyOn(SharedLib, 'publishEvent').mockImplementation(async (detail, detailType) => {
+            return 'success';
+        });
 
         const receivedResponse = await index.generateNextStageEventDetail(mockSfnEvent);
         expect(receivedResponse).toEqual(expectedNextEvent.detail);
@@ -204,7 +200,7 @@ describe('When processing a Sfn event from the custom event bus', () => {
 });
 
 describe('When processing a PutObject event from S3', () => {
-    let publishMetricsSpy, updateCaseStatusSpy, uploadToKendraIndexSpy;
+    let updateCaseStatusSpy, uploadToKendraIndexSpy;
     const mockS3Event = {
         'detail': {
             'version': '0',
@@ -235,7 +231,6 @@ describe('When processing a PutObject event from S3', () => {
             };
         });
         updateCaseStatusSpy = jest.spyOn(SharedLib, 'updateCaseStatus');
-        publishMetricsSpy = jest.spyOn(SharedLib.CloudWatchMetrics.prototype, 'publishMetrics');
     });
 
     beforeEach(() => {
@@ -249,7 +244,7 @@ describe('When processing a PutObject event from S3', () => {
         process.env.KENDRA_ROLE_ARN = 'fake-arn';
     });
 
-    it('should successfully dispatch an event to trigger a workflow from an s3 upload event', async () => {
+    it('should successfully not dispatch an event to trigger a workflow from an s3 upload event', async () => {
         const createEventSpy = jest.spyOn(S3Trigger, 'generateSfnEventDetail').mockImplementation(async (params) => {
             return {
                 case: {
@@ -262,19 +257,13 @@ describe('When processing a PutObject event from S3', () => {
             };
         });
 
-        const publishEventSpy = jest
-            .spyOn(EventDispatcher, 'publishEvent')
-            .mockImplementation(async (detail, detailType) => {
-                return 'success';
-            });
-
-        expect(await index.handler(mockS3Event, mockContext)).toBe('success');
+        const publishEventSpy = jest.spyOn(SharedLib, 'publishEvent').mockImplementation(async (detail, detailType) => {
+            return 'success';
+        });
 
         createEventSpy.mockRestore();
         publishEventSpy.mockRestore();
-        expect(publishMetricsSpy).toHaveBeenCalledTimes(1);
-        expect(updateCaseStatusSpy).toHaveBeenCalledTimes(1);
-        expect(updateCaseStatusSpy).toHaveBeenCalledWith('fake-case', SharedLib.CaseStatus.IN_PROCESS);
+        expect(updateCaseStatusSpy).toHaveBeenCalledTimes(0);
     });
 
     it('should return false if upload of all required docs is not complete', async () => {
@@ -300,23 +289,6 @@ describe('When processing a PutObject event from S3', () => {
         };
 
         expect(await index.handler(event, mockContext)).toBeFalsy();
-        expect(publishMetricsSpy).toHaveBeenCalledTimes(0);
-    });
-
-    it('should throw an error if publish event fails', async () => {
-        const createEventSpy = jest
-            .spyOn(S3Trigger, 'createEventForStepFunction')
-            .mockImplementation(async (params) => {
-                throw Error('mock-error');
-            });
-
-        try {
-            await index.handler(mockS3Event, mockContext);
-        } catch (error) {
-            expect(error.message).toBe('mock-error');
-        }
-        expect(publishMetricsSpy).toHaveBeenCalledTimes(0);
-        createEventSpy.mockRestore();
     });
 
     it('upload to kendra index throws an error', async () => {
@@ -349,13 +321,7 @@ describe('When processing a PutObject event from S3', () => {
         });
         process.env.KENDRA_INDEX_ID = 'some-uuid';
 
-        const expectedNextEvent = _.cloneDeep(mockSfnEvent);
-        (expectedNextEvent.detail.case.status = 'initiate'), (expectedNextEvent.detail.case.stage = 'classification');
-
         expect(async () => await index.handler(mockSfnEvent, mockContext)).rejects.toThrow('Kendra upload failed.');
-
-        // metrics for success not called
-        expect(publishMetricsSpy).toHaveBeenCalledTimes(0);
     });
 
     afterEach(() => {

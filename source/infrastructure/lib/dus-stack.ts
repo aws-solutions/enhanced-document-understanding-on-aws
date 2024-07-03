@@ -39,6 +39,8 @@ import { EntityDetectionWorkflow } from './workflow/entity-detection/entity-dete
 import { RedactionWorkflow } from './workflow/redaction/redaction-workflow';
 import { TextractWorkflow } from './workflow/textract/textract-workflow';
 import { UIAssets } from '../lib/s3web/ui-asset';
+import { VpcStack } from './vpc/vpc-stack';
+import { IndexedStorageParams } from './search/indexed-storage-params';
 
 export interface DusStackProps extends cdk.StackProps {
     /**
@@ -74,6 +76,7 @@ export class DusStack extends cdk.Stack {
     public readonly indexedStorage: IndexedStorage;
     public readonly sampleDocuments: SampleDocuments;
     public readonly uiInfrastructure: UIInfrastructure;
+    public readonly vpcStack: VpcStack;
 
     constructor(scope: Construct, id: string, props: DusStackProps) {
         super(scope, id, props);
@@ -105,7 +108,8 @@ export class DusStack extends cdk.Stack {
 
         const defaultUserEmail = new CfnParameter(this, 'DefaultUserEmail', {
             type: 'String',
-            description: 'Optional email to create a Cognito user with access to the application, and to receive document processing notifications from the application.',
+            description:
+                'Optional email to create a Cognito user with access to the application, and to receive document processing notifications from the application.',
             allowedPattern: "^$|[A-Za-z0-9_!#$%&'*+/=?`{|}~^.-]+@[A-Za-z0-9.-]+$",
             constraintDescription: 'Please provide a valid email, or leave blank',
             default: PLACEHOLDER_EMAIL
@@ -154,6 +158,12 @@ export class DusStack extends cdk.Stack {
             notificationManager.emailTemplatesCustomResource.node.defaultChild as cdk.CfnResource
         );
 
+        const indexedStorageParameters = new IndexedStorageParams(this, 'IndexedStorageParameters');
+
+        this.vpcStack = new VpcStack(this, 'VPCStack');
+        this.vpcStack.nestedStackResource!.cfnOptions.condition =
+            indexedStorageParameters.deployOpenSearchIndexCondition;
+
         this.requestProcessor = new RequestProcessor(this, 'RequestProcessor', {
             orchestratorBus: applicationSetup.orchestratorBus,
             appNamespace: appNamespace,
@@ -162,7 +172,10 @@ export class DusStack extends cdk.Stack {
             genUUID: applicationSetup.generateUUID.getAttString('UUID'),
             workflowConfigName: workflowConfigName.valueAsString,
             defaultUserEmail: defaultUserEmail.valueAsString,
-            applicationTrademarkName: props.applicationTrademarkName
+            applicationTrademarkName: props.applicationTrademarkName,
+            vpc: this.vpcStack.vpc,
+            securityGroup: this.vpcStack.securityGroup,
+            deployOpenSearchIndexCondition: indexedStorageParameters.deployOpenSearchIndexCondition
         });
 
         this.indexedStorage = new IndexedStorage(this, 'IndexedStorage', {
@@ -172,8 +185,17 @@ export class DusStack extends cdk.Stack {
             apiRootResource: this.requestProcessor.apiRootResource,
             extUsrAuthorizer: this.requestProcessor.extUsrAuthorizer,
             documentBucketName: this.requestProcessor.docUploadBucket[0].bucketName,
-            extUserPoolId: this.requestProcessor.extUsrPool.userPoolId
+            extUserPoolId: this.requestProcessor.extUsrPool.userPoolId,
+            vpcId: this.vpcStack.vpc.vpcId,
+            securityGroupId: this.vpcStack.securityGroup.securityGroupId,
+            privateSubnetIds: this.vpcStack.privateSubnetIds,
+            indexStorageParameters: indexedStorageParameters
         });
+        cdk.Fn.conditionIf(
+            indexedStorageParameters.deployOpenSearchIndexCondition.logicalId,
+            this.indexedStorage.openSearchCaseStorage.node.addDependency(this.vpcStack),
+            cdk.Aws.NO_VALUE
+        );
 
         applicationSetup.anonymousMetricsLambda.addEnvironment(
             REST_API_NAME_ENV_VAR,
@@ -186,7 +208,7 @@ export class DusStack extends cdk.Stack {
         applicationSetup.anonymousMetricsLambda.addEnvironment(
             KENDRA_INDEX_ID_ENV_VAR,
             cdk.Fn.conditionIf(
-                this.indexedStorage.deployKendraIndexCondition.logicalId,
+                indexedStorageParameters.deployKendraIndexCondition.logicalId,
                 this.indexedStorage.kendraCaseSearch.kendraCaseSearchIndex.attrId,
                 cdk.Aws.NO_VALUE
             ).toString()
@@ -197,12 +219,16 @@ export class DusStack extends cdk.Stack {
         );
 
         // this call is required to update lambda environment variables if Kendra is deployed
-        this.indexedStorage.updateLambdaEnvironmentVariables(this.requestProcessor.workflowOrchestratorFunc);
+        this.indexedStorage.updateLambdaEnvironmentVariables(
+            this.requestProcessor.workflowOrchestratorFunc,
+            indexedStorageParameters.deployKendraIndexCondition,
+            indexedStorageParameters.deployOpenSearchIndexCondition
+        );
 
         applicationSetup.addAnonymousMetricsCustomLambda(
             props.solutionID,
             props.solutionVersion,
-            this.indexedStorage.isKendraDeployed,
+            indexedStorageParameters.isKendraDeployed,
             workflowConfigName.valueAsString
         );
 
@@ -301,7 +327,8 @@ export class DusStack extends cdk.Stack {
             apiEndpoint: this.requestProcessor.apiGateway.url,
             userPoolId: this.requestProcessor.extUsrPool.userPoolId,
             userPoolClientId: this.requestProcessor.extUserPoolClient.ref,
-            deployKendraIndexCondition: this.indexedStorage.deployKendraIndexCondition,
+            deployKendraIndexCondition: indexedStorageParameters.deployKendraIndexCondition,
+            deployOpenSearchCondition: indexedStorageParameters.deployOpenSearchIndexCondition,
             workflowConfigName: workflowConfigName
         });
 

@@ -139,3 +139,9 @@ exports.dynamoDBConfigResponse = {
         TableName: process.env.WORKFLOW_CONFIG_TABLE_NAME
     }
 };
+
+exports.dynamoDbQueryResponse = {
+    'Items': [],
+    'Count': 0,
+    'ScannedCount': 0
+}

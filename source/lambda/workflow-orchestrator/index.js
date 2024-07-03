@@ -16,9 +16,9 @@
 const EnvSetup = require('./utils/env-setup');
 const S3Trigger = require('./utils/s3-event-trigger');
 const SfnTrigger = require('./utils/sfn-event-trigger');
-const EventDispatcher = require('./utils/event-dispatcher');
 const KendraUpload = require('./utils/kendra-upload');
 const SharedLib = require('common-node-lib');
+const { OpenSearchUpload } = require('./utils/open-search-upload/open-search-upload');
 
 exports.handler = async (event, context) => {
     console.debug(JSON.stringify(event));
@@ -44,25 +44,9 @@ exports.handler = async (event, context) => {
     let eventDetailType = SharedLib.WorkflowEventDetailTypes.TRIGGER_WORKFLOW; // used when we will be triggering more stages
     if (newEvent.case.status === SharedLib.WorkflowStatus.COMPLETE) {
         eventDetailType = SharedLib.WorkflowEventDetailTypes.PROCESSING_COMPLETE;
+        const requestAccountId = SharedLib.getAccountIdFromLambdaContext(context);
 
-        try {
-            // Upload documents to Kendra index if configured.
-            if (process.env.KENDRA_INDEX_ID) {
-                EnvSetup.checkKendraRoleArnEnvSetup(); // env setup
-                const requestAccountId = SharedLib.getAccountIdFromLambdaContext(context);
-                await KendraUpload.uploadToKendraIndex(
-                    process.env.KENDRA_INDEX_ID,
-                    process.env.KENDRA_ROLE_ARN,
-                    newEvent,
-                    requestAccountId
-                ); // doesn't return
-            } else {
-                console.log('KENDRA_INDEX_ID is not found for this deployment.');
-            }
-        } catch (error) {
-            console.error(`Failed to upload documents to Kendra index with error: ${error}`);
-            throw error;
-        }
+        await this.handleSearchStorageUpload(newEvent, requestAccountId);
 
         try {
             // publishing cw metrics and case status to indicate success
@@ -78,7 +62,7 @@ exports.handler = async (event, context) => {
         await SharedLib.updateCaseStatus(event.detail.case.id, SharedLib.CaseStatus.SUCCESS);
     }
 
-    return await EventDispatcher.publishEvent(newEvent, eventDetailType); // NOSONAR - false positive. Await required in lambda
+    return await SharedLib.publishEvent(newEvent, eventDetailType); // NOSONAR - false positive. Await required in lambda
 };
 
 /**
@@ -95,17 +79,11 @@ exports.generateNextStageEventDetail = async (event) => {
     // only occurs when a document is uploaded to s3
     if (event.source == 'aws.s3') {
         // Send cloudwatch metrics and update ddb table status for in-process
-        const response = await S3Trigger.generateSfnEventDetail(event);
+         await S3Trigger.generateSfnEventDetail(event);
         const caseId = S3Trigger.parseFileKey(event.detail.object.key).caseId;
-        if (response) {
-            const cloudWatch = new SharedLib.CloudWatchMetrics(SharedLib.CloudwatchNamespace.CASE);
-            await cloudWatch.publishMetrics(SharedLib.CaseStatus.IN_PROCESS);
-            await SharedLib.updateCaseStatus(caseId, SharedLib.CaseStatus.IN_PROCESS);
-        } else {
-            // the case is not yet ready for processing (e.g. missing required required documents)
-            await SharedLib.updateCaseStatus(caseId, SharedLib.CaseStatus.INITIATE);
-        }
-        return response; // NOSONAR - false positive. Await required in lambda
+                 // the case is not yet ready for processing (e.g. missing required required documents)
+        await SharedLib.updateCaseStatus(caseId, SharedLib.CaseStatus.INITIATE);
+        return false; // NOSONAR - false positive. Await required in lambda
     } else if (event.source === `${SharedLib.EventSources.WORKFLOW_STEPFUNCTION}.${process.env.APP_NAMESPACE}`) {
         return SfnTrigger.generateSfnEventDetail(event);
     }
@@ -119,4 +97,42 @@ exports.handleFailure = async (event) => {
     const cloudWatch = new SharedLib.CloudWatchMetrics(SharedLib.CloudwatchNamespace.CASE);
     await cloudWatch.publishMetrics(SharedLib.CaseStatus.FAILURE);
     await SharedLib.updateCaseStatus(event.detail.detail.case.id, SharedLib.CaseStatus.FAILURE);
+};
+
+/**
+ * Handles the inference upload job to Kendra index and OpenSearch cluster if enabled
+ * @param newEvent the event used to trigger the next stage
+ * @param requestAccountId the account id
+ */
+exports.handleSearchStorageUpload = async (newEvent, requestAccountId) => {
+    try {
+        // Upload documents to Kendra index if configured.
+        if (process.env.KENDRA_INDEX_ID) {
+            EnvSetup.checkKendraRoleArnEnvSetup(); // env setup
+            await KendraUpload.uploadToKendraIndex(
+                process.env.KENDRA_INDEX_ID,
+                process.env.KENDRA_ROLE_ARN,
+                newEvent,
+                requestAccountId
+            ); // doesn't return
+        } else {
+            console.log('KENDRA_INDEX_ID is not found for this deployment.');
+        }
+    } catch (error) {
+        console.error(`Failed to upload documents to Kendra index with error: ${error}`);
+        throw error;
+    }
+
+    try {
+        // Upload documents to OpenSearch serverless collection if configured.
+        if (process.env.OS_COLLECTION_ENDPOINT) {
+            const openSearchUpload = new OpenSearchUpload(newEvent, requestAccountId);
+            await openSearchUpload.run();
+        } else {
+            console.log('OS_COLLECTION_ENDPOINT is not found for this deployment.');
+        }
+    } catch (error) {
+        console.error(`Failed to upload documents to OS_COLLECTION_ENDPOINT with error: ${error}`);
+        throw error;
+    }
 };

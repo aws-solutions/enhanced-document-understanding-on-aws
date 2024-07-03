@@ -29,12 +29,16 @@ export const uploadDocumentBodySchema: JsonSchema = {
         caseName: {
             type: JsonSchemaType.STRING,
             description: 'The ID of the case to whom the document belongs',
-            pattern: '\\w+'
+            pattern: '\\w+',
+            minLength: 3,
+            maxLength: 50
         },
         fileName: {
             type: JsonSchemaType.STRING,
             description: 'The name of the file',
-            pattern: '\\w+'
+            pattern: '\\w+',
+            minLength: 3,
+            maxLength: 50
         },
         fileExtension: {
             type: JsonSchemaType.STRING,
@@ -45,11 +49,7 @@ export const uploadDocumentBodySchema: JsonSchema = {
             type: JsonSchemaType.STRING,
             description: 'The type of document based on business rules, such as driving license, passport, etc',
             pattern: '\\w+'
-        },
-        tagging: {
-            type: JsonSchemaType.STRING,
-            description: 'Tags associated with the document'
         }
     },
-    required: ['userId', 'caseId', 'caseName', 'fileName', 'fileExtension', 'documentType', 'tagging']
+    required: ['userId', 'caseId', 'caseName', 'fileName', 'fileExtension', 'documentType']
 };

@@ -26,6 +26,7 @@ describe('When creating a new case record', () => {
         process.env.CASE_DDB_TABLE_NAME = 'fake-test-table';
         process.env.AWS_REGION = 'us-east-1';
         process.env.AWS_SDK_USER_AGENT = '{ "customUserAgent": "AwsSolution/SO0999/v9.9.9" }';
+        process.env.S3_UPLOAD_PREFIX = 'initial';
         jest.restoreAllMocks();
         publishMetricsSpy = jest.spyOn(CloudWatchMetrics.prototype, 'publishMetrics').mockImplementation(() => {});
         jest.spyOn(Date.prototype, 'toISOString').mockReturnValue('2000-01-01T00:00:00.000Z');
@@ -35,10 +36,18 @@ describe('When creating a new case record', () => {
             Item: {
                 'CASE_ID': { 'S': 'fakeUserId:some-uuid' },
                 'DOCUMENT_ID': { 'S': '0000' },
+                'DOC_COUNT': { 'N': '0' },
                 'USER_ID': { 'S': 'fakeUserId' },
+                'USER_DOC_ID': { 'S': 'fakeUserId:0000' },
                 'CASE_NAME': { 'S': 'fakeCaseName' },
                 'CREATION_TIMESTAMP': { 'S': '2000-01-01T00:00:00.000Z' },
-                'STATUS': { 'S': 'initiate' }
+                'STATUS': { 'S': 'initiate' },
+                'ENABLE_BACKEND_UPLOAD': {
+                    'BOOL': false
+                },
+                'S3_FOLDER_PATH': {
+                    'S': 'initial/fakeUserId:some-uuid'
+                }
             }
         };
     });
@@ -74,10 +83,14 @@ describe('When creating a new case record', () => {
         expect(response.ddbResponse).toEqual({
             'CASE_ID': 'fakeUserId:some-uuid',
             'DOCUMENT_ID': '0000',
+            'DOC_COUNT': 0,
             'USER_ID': 'fakeUserId',
+            'USER_DOC_ID': 'fakeUserId:0000',
             'CASE_NAME': 'fakeCaseName',
             'CREATION_TIMESTAMP': '2000-01-01T00:00:00.000Z',
-            'STATUS': 'initiate'
+            'STATUS': 'initiate',
+            'S3_FOLDER_PATH': 'initial/fakeUserId:some-uuid',
+            'ENABLE_BACKEND_UPLOAD': false
         });
         expect(response.caseId).toEqual('fakeUserId:some-uuid');
         expect(publishMetricsSpy).toHaveBeenCalledTimes(1);

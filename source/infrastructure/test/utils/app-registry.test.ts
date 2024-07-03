@@ -161,7 +161,7 @@ describe('When Solution Stack with a nested stack is registered with AppRegistry
             DependsOn: [appRegApplicationCapture.asString()],
             UpdateReplacePolicy: Match.anyValue(),
             DeletionPolicy: Match.anyValue(),
-            Condition: Match.stringLikeRegexp('IndexedStorageDeployKendraIndexCondition*')
+            Condition: Match.stringLikeRegexp('IndexedStorageParametersDeployKendraIndexCondition*')
         });
     });
 

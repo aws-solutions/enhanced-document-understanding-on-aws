@@ -18,8 +18,9 @@ import * as cognito from 'aws-cdk-lib/aws-cognito';
 import * as iam from 'aws-cdk-lib/aws-iam';
 import * as lambda from 'aws-cdk-lib/aws-lambda';
 
-import { LambdaRestApiProps, Model } from 'aws-cdk-lib/aws-apigateway';
+import { Model } from 'aws-cdk-lib/aws-apigateway';
 import {
+    caseBodySchema,
     createCaseBodySchema,
     createCaseResponseSchema,
     downloadDocResponseSchema,
@@ -37,6 +38,7 @@ import { Construct } from 'constructs';
 import { addCfnSuppressRules } from '../utils/cfn-nag-suppressions';
 import { PLACEHOLDER_EMAIL } from '../utils/constants';
 import { ApiDocumentation } from './rest-api-documentation/api-documentation';
+import { LogGroup, RetentionDays } from 'aws-cdk-lib/aws-logs';
 
 export interface RestEndpointProps {
     /**
@@ -106,14 +108,36 @@ export class RestEndpoint extends Construct {
     constructor(scope: Construct, id: string, props: RestEndpointProps) {
         super(scope, id);
         this.stack = cdk.Stack.of(scope);
+        const apiAccessLogGroup = new LogGroup(this, 'ApiGatewayAccessLogs', {
+            retention: RetentionDays.TWO_YEARS
+        });
+        apiAccessLogGroup.grantWrite(new iam.ServicePrincipal('apigateway.amazonaws.com'));
 
         const lambdaRestApi = new ApiGatewayToLambda(this, 'EndPoint', {
             existingLambdaObj: props.getRequestLambda,
             apiGatewayProps: {
                 description: 'API endpoint to access the Document Understanding Services',
                 restApiName: `${cdk.Aws.STACK_NAME}-RestAPI`,
-                proxy: false
-            } as LambdaRestApiProps
+                proxy: false,
+                deployOptions: {
+                    accessLogDestination: new api.LogGroupLogDestination(apiAccessLogGroup),
+                    accessLogFormat: api.AccessLogFormat.custom(
+                        JSON.stringify({
+                            requestId: api.AccessLogField.contextRequestId(),
+                            sourceIp: api.AccessLogField.contextIdentitySourceIp(),
+                            method: api.AccessLogField.contextHttpMethod(),
+                            path: api.AccessLogField.contextResourcePath(),
+                            userContext: {
+                                sub: api.AccessLogField.contextAuthorizerClaims('sub'),
+                                email: api.AccessLogField.contextAuthorizerClaims('email')
+                            }
+                        })
+                    )
+                }
+            },
+            logGroupProps: {
+                retention: RetentionDays.TEN_YEARS
+            }
         });
 
         const requestValidator = new api.RequestValidator(this, 'RequestValidator', {
@@ -287,6 +311,33 @@ export class RestEndpoint extends Construct {
                     statusCode: '200'
                 }
             ]
+        });
+
+        const caseStartJobResource = caseResource.addResource('start-job');
+
+        caseStartJobResource.addCorsPreflight({
+            allowOrigins: ['*'],
+            allowHeaders: ['*'],
+            allowMethods: ['POST']
+        });
+
+        caseStartJobResource.addMethod('POST', postRequestLambdaIntegration, {
+            operationName: 'StartCaseJob',
+            authorizer: externalUserAuth,
+            authorizationType: api.AuthorizationType.COGNITO,
+            requestValidator: requestValidator,
+            requestParameters: {
+                'method.request.header.Authorization': true
+            },
+            requestModels: {
+                'application/json': new Model(this, 'StartCaseJobApiBodyModel', {
+                    restApi: lambdaRestApi.apiGateway,
+                    contentType: 'application/json',
+                    description: 'Defines the required JSON structure of the POST request to create a case',
+                    modelName: 'StartCaseJobApiBodyModel',
+                    schema: caseBodySchema
+                })
+            }
         });
 
         // getting details of a specific case
@@ -575,6 +626,7 @@ export class RestEndpoint extends Construct {
 
         const resourcePathsToSuppress = [
             'case',
+            'case/start-job',
             'case/{caseId}',
             'cases',
             'document',

@@ -140,10 +140,7 @@ export default function EntityDetectionTab(props: EntityDetectionTabProps) {
         getBoundingBoxesForEntityType,
         getBoundingBoxesForEntityValue,
         getFilteredArray,
-        props.medicalEntities,
-        props.piiEntities,
-        props.selectedEntities,
-        props.standardEntities
+        props
     ]);
 
     const status = renderStatus(

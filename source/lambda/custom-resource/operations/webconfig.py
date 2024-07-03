@@ -32,6 +32,7 @@ API_ENDPOINT = "API_ENDPOINT"
 USER_POOL_ID = "USER_POOL_ID"
 USER_POOL_CLIENT_ID = "USER_POOL_CLIENT_ID"
 KENDRA_STACK_DEPLOYED = "KENDRA_STACK_DEPLOYED"
+OPEN_SEARCH_STACK_DEPLOYED = "OPEN_SEARCH_STACK_DEPLOYED"
 WORKFLOW_CONFIG_DDB_TABLE_NAME = "WORKFLOW_CONFIG_DDB_TABLE_NAME"
 WORKFLOW_CONFIG_NAME = "WORKFLOW_CONFIG_NAME"
 
@@ -58,6 +59,7 @@ def verify_env_setup(event):
             or event[RESOURCE_PROPERTIES].get(USER_POOL_ID, None) in ["", None]
             or event[RESOURCE_PROPERTIES].get(USER_POOL_CLIENT_ID, None) in ["", None]
             or event[RESOURCE_PROPERTIES].get(KENDRA_STACK_DEPLOYED, None) in ["", None]
+            or event[RESOURCE_PROPERTIES].get(OPEN_SEARCH_STACK_DEPLOYED, None) in ["", None]
             or event[RESOURCE_PROPERTIES].get(WORKFLOW_CONFIG_DDB_TABLE_NAME, None) in ["", None]
             or event[RESOURCE_PROPERTIES].get(WORKFLOW_CONFIG_NAME, None) in ["", None]
         )
@@ -69,6 +71,7 @@ def verify_env_setup(event):
                 USER_POOL_ID,
                 USER_POOL_CLIENT_ID,
                 KENDRA_STACK_DEPLOYED,
+                OPEN_SEARCH_STACK_DEPLOYED,
                 WORKFLOW_CONFIG_DDB_TABLE_NAME,
                 WORKFLOW_CONFIG_NAME,
             ]
@@ -111,6 +114,7 @@ def create(event, context):
                 "UserPoolId": event[RESOURCE_PROPERTIES][USER_POOL_ID],
                 "UserPoolClientId": event[RESOURCE_PROPERTIES][USER_POOL_CLIENT_ID],
                 "KendraStackDeployed": event[RESOURCE_PROPERTIES][KENDRA_STACK_DEPLOYED],  # resolves to Yes/No
+                "OpenSearchStackDeployed": event[RESOURCE_PROPERTIES][OPEN_SEARCH_STACK_DEPLOYED],  # resolves to Yes/No
                 "AwsRegion": os.environ["AWS_REGION"],
                 "RequiredDocs": d.deserialize(required_docs),
                 "WorkflowConfigName": event[RESOURCE_PROPERTIES][WORKFLOW_CONFIG_NAME],

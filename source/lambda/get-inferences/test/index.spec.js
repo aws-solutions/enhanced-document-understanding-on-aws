@@ -92,7 +92,8 @@ describe('When invoking lambda endpoints', () => {
         const event = {
             httpMethod: 'GET',
             resource: '/inferences/{caseId}/{documentId}',
-            pathParameters: { 'caseId': 'fake-case-id', 'documentId': 'fake-doc-id' }
+            pathParameters: { 'caseId': 'fake-user:fake-case-id', 'documentId': 'fake-doc-id' },
+            requestContext: { authorizer: { claims: { 'cognito:username': 'fake-user' } } }
         };
 
         const context = {
@@ -107,10 +108,11 @@ describe('When invoking lambda endpoints', () => {
             httpMethod: 'GET',
             resource: '/inferences/{caseId}/{documentId}/{inferenceType}',
             pathParameters: {
-                'caseId': 'fake-case-id',
+                'caseId': 'fake-user:fake-case-id',
                 'documentId': 'fake-doc-id',
                 'inferenceType': 'fake-inference-type'
-            }
+            },
+            requestContext: { authorizer: { claims: { 'cognito:username': 'fake-user' } } }
         };
 
         const context = {
@@ -130,7 +132,8 @@ describe('When invoking lambda endpoints', () => {
         const event = {
             httpMethod: 'GET',
             resource: '/inferences/{caseId}/{documentId}',
-            pathParameters: { 'caseId': 'fake-case-id', 'documentId': 'fake-doc-id' }
+            pathParameters: { 'caseId': 'fake-user:fake-case-id', 'documentId': 'fake-doc-id' },
+            requestContext: { authorizer: { claims: { 'cognito:username': 'fake-user' } } }
         };
         const context = {
             invokedFunctionArn: 'arn:aws:lambda:us-east-1:123456789012:function:my-function'
@@ -149,16 +152,30 @@ describe('When invoking lambda endpoints', () => {
             httpMethod: 'GET',
             resource: '/inferences/{caseId}/{documentId}/{inferenceType}',
             pathParameters: {
-                'caseId': 'fake-case-id',
+                'caseId': 'fake-user:fake-case-id',
                 'documentId': 'fake-doc-id',
                 'inferenceType': 'fake-inference-type'
-            }
+            },
+            requestContext: { authorizer: { claims: { 'cognito:username': 'fake-user' } } }
         };
         const context = {
             invokedFunctionArn: 'arn:aws:lambda:us-east-1:123456789012:function:my-function'
         };
         const response = await lambda.handler(event, context);
         expect(response.body).toEqual(`CustomExecutionError: ${errorMessage}`);
+    });
+
+    it('should return an error if user is not associated with the case', async () => {
+        const event = {
+            httpMethod: 'GET',
+            pathParameters: { caseId: 'user123:case456' },
+            requestContext: { authorizer: { claims: { 'cognito:username': 'user456' } } }
+        };
+        const context = {
+            invokedFunctionArn: 'arn:aws:lambda:us-east-1:123456789012:function:my-function'
+        };
+        const response = await lambda.handler(event, context);
+        expect(response.body).toEqual('CustomExecutionError: User is not associated with the case');
     });
     afterAll(() => {
         jest.restoreAllMocks();

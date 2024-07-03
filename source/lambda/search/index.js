@@ -15,6 +15,7 @@
 
 const EnvSetup = require('./utils/env-setup');
 const SharedLib = require('common-node-lib');
+const { AossProxy } = require('common-node-lib');
 const KendraSearch = require('./utils/search-kendra');
 
 /**
@@ -29,7 +30,6 @@ const KendraSearch = require('./utils/search-kendra');
  *
  **/
 exports.handler = async (event) => {
-    console.debug(JSON.stringify(event));
 
     if (event.httpMethod !== 'GET') {
         return SharedLib.formatError(new Error('Invalid request: Only HTTP GET requests are supported'));
@@ -56,6 +56,39 @@ exports.handler = async (event) => {
                 event.headers.Authorization
             );
             return SharedLib.formatResponse(kendraResponse);
+        } catch (error) {
+            console.error(`Error processing request for ${event.resource}. Error is: ${error.message}`);
+            return SharedLib.formatError(error);
+        }
+    }
+
+    if (event.resource === '/search/opensearch/{query}') {
+        try {
+            EnvSetup.checkAllEnvSetup();
+
+            if (
+                event.pathParameters === undefined ||
+                event.pathParameters.query === undefined ||
+                event.pathParameters.query === ''
+            ) {
+                throw new Error('"query" is required to be passed as a path parameter');
+            }
+
+            const attributeFilters = event.multiValueQueryStringParameters??{};
+            const userId = SharedLib.getUserIdFromEvent(event);
+            attributeFilters['user_id'] = [userId];
+
+            const query = decodeURIComponent(event.pathParameters.query);
+
+            const openSearchProxy = new AossProxy();
+            const indexName = 'edu';
+
+            const openSearchResponse = await openSearchProxy.searchDocuments(
+                indexName,
+                query,
+                attributeFilters
+            );
+            return SharedLib.formatResponse(openSearchResponse);
         } catch (error) {
             console.error(`Error processing request for ${event.resource}. Error is: ${error.message}`);
             return SharedLib.formatError(error);

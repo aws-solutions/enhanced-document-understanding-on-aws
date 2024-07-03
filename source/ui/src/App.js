@@ -26,8 +26,9 @@ import DocumentView from './components/DocumentView/DocumentView.tsx';
 import SearchView from './components/SearchView/SearchView';
 import UploadDocumentView from './components/UploadDocumentView.tsx';
 import { withAuthenticator } from '@aws-amplify/ui-react';
+import { useGetCasesQuery } from './store/reducers/caseApiSlice';
 
-function App({ signOut, enableKendra, workflowConfig, requiredDocs }) {
+function App({ signOut, enableKendra, enableOpenSearch, workflowConfig, requiredDocs }) {
     const [selectedDocumentId, setSelectedDocumentId] = useState('');
     const [selectedCaseId, setSelectedCaseId] = useState('');
     const [selectedCaseName, setSelectedCaseName] = useState('');
@@ -35,7 +36,7 @@ function App({ signOut, enableKendra, workflowConfig, requiredDocs }) {
     const [selectedCaseRemainingRequiredDocs, setSelectedCaseRemainingRequiredDocs] = useState(requiredDocs);
 
     const [selectedDocumentFileType, setSelectedDocumentFileType] = useState(null);
-    const [casesList, setCasesList] = useState(null);
+    const { data: casesList } = useGetCasesQuery();
     const [searchValue, setSearchValue] = useState('');
     const [submittedSearchValue, setSubmittedSearchValue] = useState('');
     const navigate = useNavigate();
@@ -64,7 +65,6 @@ function App({ signOut, enableKendra, workflowConfig, requiredDocs }) {
         selectedDocumentFileType: selectedDocumentFileType,
         setSelectedDocumentFileType: setSelectedDocumentFileType,
         casesList: casesList,
-        setCasesList: setCasesList,
         setSelectedCaseName: setSelectedCaseName,
         numRequiredDocuments: workflowConfigState.NumRequiredDocuments,
         requiredDocTypes: workflowConfig.UniqueDocumentTypes,
@@ -86,7 +86,6 @@ function App({ signOut, enableKendra, workflowConfig, requiredDocs }) {
         caseName: selectedCaseName,
         caseId: selectedCaseId,
         casesList: casesList,
-        setCasesList: setCasesList,
         workflowConfig: workflowConfigState,
         selectedCaseRemainingRequiredDocs: selectedCaseRemainingRequiredDocs
     };
@@ -96,11 +95,12 @@ function App({ signOut, enableKendra, workflowConfig, requiredDocs }) {
         submittedSearchValue: submittedSearchValue,
         setSubmittedSearchValue: setSubmittedSearchValue,
         casesList: casesList,
-        setCasesList: setCasesList,
         caseName: selectedCaseId,
         setSelectedCaseId: setSelectedCaseId,
         setSelectedDocumentId: setSelectedDocumentId,
-        setSelectedDocumentFileType: setSelectedDocumentFileType
+        setSelectedDocumentFileType: setSelectedDocumentFileType,
+        enableKendra: enableKendra,
+        enableOpenSearch: enableOpenSearch
     };
 
     const handleKeyDown = async (key) => {
@@ -129,7 +129,7 @@ function App({ signOut, enableKendra, workflowConfig, requiredDocs }) {
                     }
                 ]}
                 search={
-                    enableKendra && (
+                    (enableKendra || enableOpenSearch) && (
                         <Input
                             ariaLabel="Input field"
                             clearAriaLabel="Clear"

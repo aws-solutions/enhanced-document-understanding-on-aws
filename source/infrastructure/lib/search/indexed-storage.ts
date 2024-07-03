@@ -16,29 +16,12 @@ import * as cdk from 'aws-cdk-lib';
 import * as api from 'aws-cdk-lib/aws-apigateway';
 import * as lambda from 'aws-cdk-lib/aws-lambda';
 
-import { Construct, IConstruct } from 'constructs';
+import { Construct } from 'constructs';
 
 import { NagSuppressions } from 'cdk-nag';
 import { KendraCaseStorage } from './kendra-case-storage';
-
-/**
- * The parameters to select Indexed Storage options
- */
-export class IndexedStorageParams {
-    public readonly deployKendraIndex: cdk.CfnParameter;
-
-    constructor(stack: IConstruct) {
-        this.deployKendraIndex = new cdk.CfnParameter(stack, 'DeployKendraIndex', {
-            type: 'String',
-            allowedValues: ['Yes', 'No'],
-            allowedPattern: '^(Yes|No)$',
-            description:
-                'Please select if you would like to deploy Amazon Kendra Index. For more details, refer to the implementation guide for this solution',
-            constraintDescription: 'Please select either Yes or No',
-            default: 'No'
-        });
-    }
-}
+import { OpenSearchCaseStorage } from './open-search-case-storage';
+import { IndexedStorageParams } from './indexed-storage-params';
 
 export interface IndexedStorageProps {
     /**
@@ -75,6 +58,27 @@ export interface IndexedStorageProps {
      * Document Bucket Name to be used to add policy to allow Kendra Index to access the bucket
      */
     documentBucketName: string;
+
+    /**
+     * ID of the security group that workflow orchestrator runs in, in order to access the OpenSearch serverless collections.
+     */
+    securityGroupId: string;
+
+    /**
+     * ID of the vpc that workflow orchestrator runs in.
+     */
+    vpcId: string;
+
+    /**
+     * IDs of the private subnets that workflow orchestrator runs in.
+     */
+    privateSubnetIds: string[];
+
+    /**
+     * Parameters for Kendra and OpenSearch
+     */
+
+    indexStorageParameters: IndexedStorageParams;
 }
 
 /**
@@ -82,24 +86,30 @@ export interface IndexedStorageProps {
  */
 export class IndexedStorage extends Construct {
     /**
+     * OpenSearch serverless creation
+     */
+    public readonly openSearchCaseStorage: OpenSearchCaseStorage;
+
+    /**
      * Kendra index creation
      */
     public readonly kendraCaseSearch: KendraCaseStorage;
 
-    /**
-     * Condition that indicates if Kendra index should be created
-     */
-    public readonly deployKendraIndexCondition: cdk.CfnCondition;
-
-    /**
-     * The value that indicates if Kendra index should be created
-     */
-    public readonly isKendraDeployed: string;
-
     constructor(scope: Construct, id: string, props: IndexedStorageProps) {
         super(scope, id);
 
-        const parameters = new IndexedStorageParams(cdk.Stack.of(this));
+        this.openSearchCaseStorage = new OpenSearchCaseStorage(this, 'openSearchCaseSearch', {
+            parameters: {
+                VpcId: props.vpcId,
+                SubnetIds: props.privateSubnetIds.join(','),
+                SecurityGroupId: props.securityGroupId,
+                WriteRoleArn: props.roleArn,
+                ReadRoleArn: props.searchLambda.role!.roleArn
+            }
+        });
+
+        this.openSearchCaseStorage.nestedStackResource!.cfnOptions.condition =
+            props.indexStorageParameters.deployOpenSearchIndexCondition;
 
         this.kendraCaseSearch = new KendraCaseStorage(this, 'KendraCaseSearch', {
             parameters: {
@@ -113,19 +123,16 @@ export class IndexedStorage extends Construct {
             description: 'Nested Stack that creates the Kendra Index'
         });
 
-        this.deployKendraIndexCondition = new cdk.CfnCondition(this, 'DeployKendraIndexCondition', {
-            expression: cdk.Fn.conditionEquals(parameters.deployKendraIndex, 'Yes')
-        });
-        this.kendraCaseSearch.nestedStackResource!.cfnOptions.condition = this.deployKendraIndexCondition;
+        this.kendraCaseSearch.nestedStackResource!.cfnOptions.condition =
+            props.indexStorageParameters.deployKendraIndexCondition;
 
-        const kendraSearchLambdaIntegration = new api.LambdaIntegration(props.searchLambda, {
+        const searchLambdaIntegration = new api.LambdaIntegration(props.searchLambda, {
             passthroughBehavior: api.PassthroughBehavior.NEVER
         });
 
-        const kendraSearchResource = props.apiRootResource
-            .addResource('search')
-            .addResource('kendra')
-            .addResource('{query}');
+        const searchResource = props.apiRootResource.addResource('search');
+
+        const kendraSearchResource = searchResource.addResource('kendra').addResource('{query}');
         kendraSearchResource.addCorsPreflight({
             allowOrigins: ['*'],
             allowHeaders: [
@@ -135,18 +142,35 @@ export class IndexedStorage extends Construct {
             allowMethods: ['GET']
         });
 
-        kendraSearchResource.addMethod('GET', kendraSearchLambdaIntegration, {
+        const openSearchResource = searchResource.addResource('opensearch').addResource('{query}');
+        openSearchResource.addCorsPreflight({
+            allowOrigins: ['*'],
+            allowHeaders: ['*'],
+            allowMethods: ['GET']
+        });
+
+        kendraSearchResource.addMethod('GET', searchLambdaIntegration, {
+            authorizer: props.extUsrAuthorizer,
+            authorizationType: api.AuthorizationType.COGNITO
+        });
+        openSearchResource.addMethod('GET', searchLambdaIntegration, {
             authorizer: props.extUsrAuthorizer,
             authorizationType: api.AuthorizationType.COGNITO
         });
 
-        this.isKendraDeployed = parameters.deployKendraIndex.valueAsString;
-
         props.searchLambda.addEnvironment(
             'KENDRA_INDEX_ID',
             cdk.Fn.conditionIf(
-                this.deployKendraIndexCondition.logicalId,
+                props.indexStorageParameters.deployKendraIndexCondition.logicalId,
                 this.kendraCaseSearch.kendraCaseSearchIndex.attrId,
+                cdk.Aws.NO_VALUE
+            ).toString()
+        );
+        props.searchLambda.addEnvironment(
+            'OS_COLLECTION_ENDPOINT',
+            cdk.Fn.conditionIf(
+                props.indexStorageParameters.deployOpenSearchIndexCondition.logicalId,
+                this.openSearchCaseStorage.collection.attrCollectionEndpoint,
                 cdk.Aws.NO_VALUE
             ).toString()
         );
@@ -166,13 +190,33 @@ export class IndexedStorage extends Construct {
             ],
             false
         );
+
+        NagSuppressions.addResourceSuppressionsByPath(
+            cdk.Stack.of(this),
+            `${props.apiRootResource}/search/opensearch/{query}/OPTIONS/Resource`,
+            [
+                {
+                    id: 'AwsSolutions-APIG4',
+                    reason: 'The OPTIONS method cannot use auth as the server has to respond to the OPTIONS request for cors reasons'
+                },
+                {
+                    id: 'AwsSolutions-COG4',
+                    reason: 'The OPTIONS method cannot use auth as the server has to respond to the OPTIONS request for cors reasons'
+                }
+            ],
+            false
+        );
     }
 
-    public updateLambdaEnvironmentVariables(lambda: lambda.Function) {
+    public updateLambdaEnvironmentVariables(
+        lambda: lambda.Function,
+        deployKendraIndexCondition: cdk.CfnCondition,
+        deployOpenSearchIndexCondition: cdk.CfnCondition
+    ) {
         lambda.addEnvironment(
             'KENDRA_INDEX_ID',
             cdk.Fn.conditionIf(
-                this.deployKendraIndexCondition.logicalId,
+                deployKendraIndexCondition.logicalId,
                 this.kendraCaseSearch.kendraCaseSearchIndex.attrId,
                 cdk.Aws.NO_VALUE
             ).toString()
@@ -180,8 +224,16 @@ export class IndexedStorage extends Construct {
         lambda.addEnvironment(
             'KENDRA_ROLE_ARN',
             cdk.Fn.conditionIf(
-                this.deployKendraIndexCondition.logicalId,
+                deployKendraIndexCondition.logicalId,
                 this.kendraCaseSearch.kendraRoleArn,
+                cdk.Aws.NO_VALUE
+            ).toString()
+        );
+        lambda.addEnvironment(
+            'OS_COLLECTION_ENDPOINT',
+            cdk.Fn.conditionIf(
+                deployOpenSearchIndexCondition.logicalId,
+                this.openSearchCaseStorage.collection.attrCollectionEndpoint,
                 cdk.Aws.NO_VALUE
             ).toString()
         );

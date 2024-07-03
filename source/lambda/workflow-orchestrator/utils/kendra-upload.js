@@ -16,6 +16,7 @@
 const AWS = require('aws-sdk');
 const UserAgentConfig = require('aws-node-user-agent-config');
 const SharedLib = require('common-node-lib');
+const { getUserIdFromEvent, combineTextractLines, validateInputParams } = require('./search-storage-utils');
 
 /**
  * Uploads documents to Kendra index.
@@ -28,8 +29,8 @@ const SharedLib = require('common-node-lib');
  * @returns
  */
 exports.uploadToKendraIndex = async (indexId, kendraRoleArn, casePayload, requestAccountId) => {
-    this.validateInputParams(casePayload);
-    const userId = this.getUserIdFromEvent(casePayload);
+    validateInputParams(casePayload);
+    const userId = getUserIdFromEvent(casePayload);
     const kendra = new AWS.Kendra(UserAgentConfig.customAwsConfig());
     const documentListNested = await this.prepareDocuments(casePayload, userId, requestAccountId);
 
@@ -59,17 +60,6 @@ exports.uploadToKendraIndex = async (indexId, kendraRoleArn, casePayload, reques
 };
 
 /**
- * Validates the input parameters.
- *
- * @param {*} casePayload  An object containing the payload for the current case.
- */
-exports.validateInputParams = (casePayload) => {
-    if (casePayload.case.documentList.length <= 0) {
-        throw new Error(`No documents found for the case: ${casePayload.case.id}`);
-    }
-};
-
-/**
  * This function prepares batches of documents. Each batch is a list of up to 10 documents.
  * A list of list of documents is returned.
  *
@@ -95,7 +85,7 @@ exports.prepareDocuments = async (casePayload, userId, requestAccountId) => {
                 requestAccountId,
                 s3Client
             );
-            documentString = this.combineTextractLines(textractInference);
+            documentString = combineTextractLines(textractInference);
         } catch (error) {
             console.error(
                 `Failed to get textract inference for case ${casePayload.case.id}, document ${documentPayload.document.id}, with error ${error}`
@@ -162,35 +152,4 @@ exports.prepareDocuments = async (casePayload, userId, requestAccountId) => {
     }
 
     return documentListNested;
-};
-
-/**
- * Combines textract results for a doc into a single string to be indexed by kendra
- *
- * @param {Array[Object]} textractResponse an array of the textract response objects for each page
- * @returns {String} text extracted from textract response as a single string
- */
-exports.combineTextractLines = (textractResponse) => {
-    let text = '';
-    for (let page of textractResponse) {
-        page.Blocks.forEach((block) => {
-            if (block.BlockType === SharedLib.TextractBlockTypes.LINE) {
-                text = text.concat(block.Text, ' ');
-            }
-        });
-    }
-    return text;
-};
-
-/**
- * Parse the caseId from the event to return the userId.
- * The userId for a case was created from the cognito authorization token
- * when a case is created.
- * @param {Object} event
- * @returns userId
- */
-exports.getUserIdFromEvent = (event) => {
-    const caseId = event.case.id;
-    console.log(`CaseId: ${caseId}`);
-    return caseId.split(':')[0];
 };
