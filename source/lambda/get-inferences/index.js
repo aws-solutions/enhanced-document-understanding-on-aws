@@ -29,6 +29,10 @@ exports.handler = async (event, context) => {
 
     try {
 
+        if(!SharedLib.validateUserToCaseAssociation(event.pathParameters.caseId, event.requestContext)) {
+            throw new Error('User is not associated with the case');
+        }
+
         const requestAccountId = SharedLib.getAccountIdFromLambdaContext(context);
 
         if (event.resource === '/inferences/{caseId}/{documentId}') {

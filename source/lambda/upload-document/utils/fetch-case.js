@@ -39,7 +39,8 @@ const getCase = async (params) => {
         const response = await dynamoDB.query(ddbParams).promise();
         console.debug(`RESPONSE from dynamoDB.query: ${JSON.stringify(response)}`);
         if (!response.Count) {
-            throw new Error(`CaseId::${caseId} NOT found in Table::${process.env.CASE_DDB_TABLE_NAME}`);
+            console.error(`CaseId::${caseId} NOT found in Cases table.`);
+            throw new Error('Incorrect CaseId');
         }
 
         return response;

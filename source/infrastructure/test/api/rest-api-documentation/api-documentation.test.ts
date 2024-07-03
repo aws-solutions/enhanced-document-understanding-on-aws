@@ -31,7 +31,7 @@ describe('When CaseManager construct is created', () => {
     });
 
     it('Should create the required number of DocumentationParts', () => {
-        template.resourceCountIs('AWS::ApiGateway::DocumentationPart', 16);
+        template.resourceCountIs('AWS::ApiGateway::DocumentationPart', 18);
     });
 
     it('Should create a DocumentationVersion', () => {

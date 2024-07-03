@@ -37,7 +37,8 @@ describe('When sending unsupported http requests to lambda', () => {
         process.env.S3_UPLOAD_PREFIX = 'initial';
         process.env.AWS_REGION = 'us-east-1';
         process.env.AWS_SDK_USER_AGENT = '{ "customUserAgent": "AwsSolution/SO0999/v9.9.9" }';
-        process.env.DDB_GSI_USER_ID = 'fake-gsi-index';
+        process.env.DDB_GSI_USER_ID = 'fake-user-index';
+        process.env.DDB_GSI_USER_DOC_ID = 'fake-user-doc-index';
     });
 
     it('Should throw an error', async () => {
@@ -62,6 +63,7 @@ describe('When sending unsupported http requests to lambda', () => {
         delete process.env.AWS_REGION;
         delete process.env.AWS_SDK_USER_AGENT;
         delete process.env.DDB_GSI_USER_ID;
+        delete process.env.DDB_GSI_USER_DOC_ID;
 
         jest.resetAllMocks();
     });
@@ -92,7 +94,8 @@ describe('When invoking lambda endpoints', () => {
     beforeEach(() => {
         process.env.AWS_REGION = 'us-east-1';
         process.env.AWS_SDK_USER_AGENT = '{ "customUserAgent": "AwsSolution/SO0999/v9.9.9" }';
-        process.env.DDB_GSI_USER_ID = 'fake-gsi-index';
+        process.env.DDB_GSI_USER_ID = 'fake-user-index';
+        process.env.DDB_GSI_USER_DOC_ID = 'fake-user-doc-index';
         process.env.CASE_DDB_TABLE_NAME = 'testTable';
         process.env.S3_UPLOAD_PREFIX = 'initial';
         process.env.S3_REDACTED_PREFIX = 'redacted';
@@ -114,7 +117,7 @@ describe('When invoking lambda endpoints', () => {
         });
     });
 
-    it('should list all docs when `/cases` is hit', async () => {
+    it('should list all docs when `/cases` is hit and query size not specified', async () => {
         const mockedResponse = {
             Count: 2,
             Items: [
@@ -132,7 +135,7 @@ describe('When invoking lambda endpoints', () => {
         };
         AWSMock.mock('DynamoDB', 'query', async (params) => {
             expect(params.TableName).toEqual('testTable');
-            expect(params.IndexName).toEqual('fake-gsi-index');
+            expect(params.IndexName).toEqual('fake-user-index');
             return mockedResponse;
         });
 
@@ -142,6 +145,43 @@ describe('When invoking lambda endpoints', () => {
             headers: {
                 Authorization: 'fake-token'
             }
+        };
+        const response = await lambda.handler(event);
+        expect(response).toEqual(SharedLib.formatResponse(mockedResponse));
+    });
+
+    it('should list paginated docs when `/cases` is hit and query size specified', async () => {
+        const params = {
+            size: 20
+        };
+        const mockedResponse = {
+            Count: 2,
+            Items: [
+                {
+                    CASE_ID: {
+                        S: 'fake-case-id-1'
+                    }
+                },
+                {
+                    CASE_ID: {
+                        S: 'fake-case-id-2'
+                    }
+                }
+            ]
+        };
+        AWSMock.mock('DynamoDB', 'query', async (params) => {
+            expect(params.TableName).toEqual('testTable');
+            expect(params.IndexName).toEqual('fake-user-doc-index');
+            return mockedResponse;
+        });
+
+        const event = {
+            httpMethod: 'GET',
+            resource: '/cases',
+            headers: {
+                Authorization: 'fake-token'
+            },
+            queryStringParameters: params
         };
         const response = await lambda.handler(event);
         expect(response).toEqual(SharedLib.formatResponse(mockedResponse));
@@ -159,10 +199,11 @@ describe('When invoking lambda endpoints', () => {
         const event = {
             httpMethod: 'GET',
             resource: '/case/{caseId}',
-            body: '{"userId":"fake-user-id","caseId":"fake-case-id"}',
+            body: '{"userId":"fake-user-id","caseId":"fake-user-id:fake-case-id"}',
             pathParameters: {
-                caseId: 'fake-case-id'
-            }
+                caseId: 'fake-user-id:fake-case-id'
+            },
+            requestContext: { authorizer: { claims: { 'cognito:username': 'fake-user-id' } } }
         };
         const response = await lambda.handler(event);
         console.debug(response);
@@ -207,12 +248,13 @@ describe('When invoking lambda endpoints', () => {
             httpMethod: 'GET',
             resource: '/document/{caseId}/{documentId}',
             pathParameters: {
-                caseId: 'fake-case-id',
+                caseId: 'fake-user-id:fake-case-id',
                 documentId: 'fake-document-id'
             },
             headers: {
                 Authorization: 'fake-token'
-            }
+            },
+            requestContext: { authorizer: { claims: { 'cognito:username': 'fake-user-id' } } }
         };
 
         const response = await lambda.handler(eventWithoutQueryString);
@@ -231,7 +273,7 @@ describe('When invoking lambda endpoints', () => {
             httpMethod: 'GET',
             resource: '/document/{caseId}/{documentId}',
             pathParameters: {
-                caseId: 'fake-case-id',
+                caseId: 'fake-user-id:fake-case-id',
                 documentId: 'fake-document-id'
             },
             queryStringParameters: {
@@ -239,7 +281,8 @@ describe('When invoking lambda endpoints', () => {
             },
             headers: {
                 Authorization: 'fake-token'
-            }
+            },
+            requestContext: { authorizer: { claims: { 'cognito:username': 'fake-user-id' } } }
         };
 
         const responseRedactedDoc = await lambda.handler(eventRedactedTrue);
@@ -257,7 +300,7 @@ describe('When invoking lambda endpoints', () => {
             httpMethod: 'GET',
             resource: '/document/{caseId}/{documentId}',
             pathParameters: {
-                caseId: 'fake-case-id',
+                caseId: 'fake-user-id:fake-case-id',
                 documentId: 'fake-document-id'
             },
             queryStringParameters: {
@@ -265,7 +308,8 @@ describe('When invoking lambda endpoints', () => {
             },
             headers: {
                 Authorization: 'fake-token'
-            }
+            },
+            requestContext: { authorizer: { claims: { 'cognito:username': 'fake-user-id' } } }
         };
 
         const responseUnredactedDoc = await lambda.handler(eventRedactedFalse);
@@ -278,6 +322,43 @@ describe('When invoking lambda endpoints', () => {
                 FileName: 'fake-file-name'
             })
         );
+    });
+
+    it('should return an error if user is not associated with the case when the /case/{caseId} and /document/{caseId}/{documentId} endpoints are invoked', async () => {
+        const fetchCaseEvent = {
+            httpMethod: 'GET',
+            resource: '/case/{caseId}',
+            body: '{"userId":"fake-user-2","caseId":"fake-user-2:fake-case-id"}',
+            pathParameters: {
+                caseId: 'fake-user-2:fake-case-id'
+            },
+            headers: {
+                Authorization: 'fake-token'
+            },
+            requestContext: { authorizer: { claims: { 'cognito:username': 'fake-user-1' } } }
+        };
+
+        const response = await lambda.handler(fetchCaseEvent);
+        console.debug(response);
+
+        expect(response).toEqual(SharedLib.formatError('User is not associated with the case'));
+
+        const fetchDocEvent = {
+            httpMethod: 'GET',
+            resource: '/document/{caseId}/{documentId}',
+            pathParameters: {
+                caseId: 'fake-user-1:fake-case-id',
+                documentId: 'fake-document-id'
+            },
+            headers: {
+                Authorization: 'fake-token'
+            },
+            requestContext: { authorizer: { claims: { 'cognito:username': 'fake-user-2' } } }
+        };
+        const response2 = await lambda.handler(fetchDocEvent);
+        console.debug(response2);
+
+        expect(response2).toEqual(SharedLib.formatError('User is not associated with the case'));
     });
 
     it('should catch, format, and return error response if api call errors out', async () => {
@@ -303,6 +384,7 @@ describe('When invoking lambda endpoints', () => {
         delete process.env.AWS_REGION;
         delete process.env.AWS_SDK_USER_AGENT;
         delete process.env.DDB_GSI_USER_ID;
+        delete process.env.DDB_GSI_USER_DOC_ID;
         delete process.env.S3_UPLOAD_PREFIX;
         delete process.env.S3_REDACTED_PREFIX;
 

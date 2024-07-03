@@ -30,7 +30,7 @@ describe('When App is created', () => {
 
     describe('when workflow stacks are created', () => {
         it('should create nested workflows for textract, redaction and entity detection', () => {
-            template.resourceCountIs('AWS::CloudFormation::Stack', 6);
+            template.resourceCountIs('AWS::CloudFormation::Stack', 8);
             template.hasResource('AWS::CloudFormation::Stack', {
                 Type: 'AWS::CloudFormation::Stack',
                 Properties: {
@@ -195,7 +195,7 @@ describe('When App is created', () => {
                 },
                 UpdateReplacePolicy: 'Delete',
                 DeletionPolicy: 'Delete',
-                Condition: Match.stringLikeRegexp('IndexedStorageDeployKendraIndexCondition*')
+                Condition: Match.stringLikeRegexp('IndexedStorageParametersDeployKendraIndexCondition*')
             });
         });
 
@@ -268,7 +268,7 @@ describe('When App is created', () => {
             const jsonTemplate = template.toJSON();
 
             expect(jsonTemplate['Conditions'][deployKendraIndexCondition.asString()]).toEqual({
-                'Fn::Equals': [{ Ref: 'DeployKendraIndex' }, 'Yes']
+                'Fn::Equals': [{ Ref: 'IndexedStorageParametersDeployKendraIndex0D83B94D' }, 'Yes']
             });
 
             expect(jsonTemplate['Resources'][kendraIndexNestedStack.asString()]['Type']).toEqual(
@@ -467,7 +467,7 @@ describe('With all environment variables and context.json available', () => {
                 SolutionId: 'SO0999',
                 Version: 'v9.9.9',
                 DeployKendraIndex: {
-                    Ref: 'DeployKendraIndex'
+                    Ref: Match.stringLikeRegexp('IndexedStorageParametersDeployKendraIndex')
                 },
                 WorkflowConfigName: {
                     Ref: 'WorkflowConfigName'
@@ -500,7 +500,7 @@ describe('With all environment variables and context.json available', () => {
                         },
                         KENDRA_INDEX_ID: {
                             'Fn::If': [
-                                Match.stringLikeRegexp('IndexedStorageDeployKendraIndexCondition*'),
+                                Match.stringLikeRegexp('IndexedStorageParametersDeployKendraIndexCondition*'),
                                 {
                                     'Fn::GetAtt': [
                                         Match.stringLikeRegexp(

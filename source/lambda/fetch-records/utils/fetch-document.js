@@ -116,7 +116,6 @@ exports.getDdbRecord = async (params) => {
  * @returns {Object} response of the form { DocId, Bucket, key, FileName }
  */
 exports.getDocumentPrefix = async (params) => {
-    console.debug(JSON.stringify(params));
     try {
         if (!params.caseId || !params.documentId) {
             throw Error('Missing caseId or documentId');

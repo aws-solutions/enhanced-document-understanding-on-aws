@@ -39,7 +39,6 @@ function _init_() {
  * @returns
  */
 async function sendTaskSuccess(output, taskToken) {
-    console.debug(`Sending successful output, task token is: ${taskToken}`);
     const _sfn = _init_();
 
     try {
@@ -63,7 +62,6 @@ async function sendTaskSuccess(output, taskToken) {
  * @returns
  */
 async function sendTaskFailure(error, taskToken) {
-    console.debug(`Sending failure output, task token is: ${taskToken}`);
     const _sfn = _init_();
     const MAX_ERROR_STR_LENGTH = 256;
 
@@ -89,7 +87,6 @@ async function sendTaskFailure(error, taskToken) {
  * @returns
  */
 async function sendTaskHeartbeat(taskToken) {
-    console.debug(`Sending heart beat, task token is ${taskToken}`);
     const _sfn = _init_();
 
     try {

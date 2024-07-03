@@ -23,6 +23,8 @@ import ReactDOM from 'react-dom/client';
 import { BrowserRouter } from 'react-router-dom';
 import App from './App';
 import { API_NAME } from './utils/constants';
+import { setupStore } from './store/store';
+import { Provider } from 'react-redux';
 
 // apply a color mode
 applyMode(Mode.Light);
@@ -76,23 +78,25 @@ getRuntimeConfig().then(function (json) {
         }
     });
 
-    console.log(requiredDocTypeCounts);
-
     const workflowConfig = {
         NumRequiredDocuments: totalNumRequiredDocs,
         UniqueDocumentTypes: uniqueDocumentTypes,
         WorkflowConfigName: json.WorkflowConfigName
     };
     Amplify.configure(amplifyConfig);
+    const store = setupStore();
     const root = ReactDOM.createRoot(document.getElementById('root'));
     root.render(
         <React.StrictMode>
             <BrowserRouter>
-                <App
-                    enableKendra={json.KendraStackDeployed === 'Yes'}
-                    workflowConfig={workflowConfig}
-                    requiredDocs={requiredDocTypeCounts}
-                />
+                <Provider store={store}>
+                    <App
+                        enableKendra={json.KendraStackDeployed === 'Yes'}
+                        enableOpenSearch={json.OpenSearchStackDeployed === 'Yes'}
+                        workflowConfig={workflowConfig}
+                        requiredDocs={requiredDocTypeCounts}
+                    />
+                </Provider>
             </BrowserRouter>
         </React.StrictMode>
     );

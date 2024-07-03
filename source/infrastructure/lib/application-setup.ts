@@ -51,6 +51,12 @@ export interface WebConfigProps {
      */
     deployKendraIndexCondition: cdk.CfnCondition;
 
+
+    /**
+     * Condition that indicates if OpenSearch serverless collection was deployed
+     */
+    deployOpenSearchCondition: cdk.CfnCondition;
+
     /**
      * Name of the selected workflow config that will be used to write into the ssm param store
      */
@@ -275,6 +281,11 @@ export class ApplicationSetup extends Construct {
                 SSM_KEY: ssmKey,
                 KENDRA_STACK_DEPLOYED: cdk.Fn.conditionIf(
                     props.deployKendraIndexCondition.logicalId,
+                    'Yes',
+                    'No'
+                ).toString(),
+                OPEN_SEARCH_STACK_DEPLOYED: cdk.Fn.conditionIf(
+                    props.deployOpenSearchCondition.logicalId,
                     'Yes',
                     'No'
                 ).toString(),

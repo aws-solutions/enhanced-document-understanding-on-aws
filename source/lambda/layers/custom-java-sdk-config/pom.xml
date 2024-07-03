@@ -7,7 +7,7 @@
     <groupId>com.builder.config</groupId>
     <artifactId>custom-java-sdk-config</artifactId>
     <packaging>jar</packaging>
-    <version>1.0.12</version>
+    <version>1.1.0</version>
     <name>custom-java-sdk-config</name>
     <properties>
         <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>

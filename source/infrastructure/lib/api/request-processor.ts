@@ -20,6 +20,7 @@ import * as events from 'aws-cdk-lib/aws-events';
 import * as iam from 'aws-cdk-lib/aws-iam';
 import * as lambda from 'aws-cdk-lib/aws-lambda';
 import * as s3 from 'aws-cdk-lib/aws-s3';
+import * as ec2 from 'aws-cdk-lib/aws-ec2';
 
 import { EventbridgeToLambda, EventbridgeToLambdaProps } from '@aws-solutions-constructs/aws-eventbridge-lambda';
 import {
@@ -82,6 +83,21 @@ export interface RequestProcessorProps {
      * The trademark name of the solution
      */
     applicationTrademarkName: string;
+
+    /**
+     * Vpc that workflow orchestrator runs in.
+     */
+    vpc: ec2.Vpc;
+
+    /**
+     * Security group that workflow orchestrator runs in, in order to access the OpenSearch serverless collections.
+     */
+    securityGroup: ec2.SecurityGroup;
+
+    /**
+     * Condition that indicates if OpenSearch serverless should be created
+     */
+    deployOpenSearchIndexCondition: cdk.CfnCondition;
 }
 
 /**
@@ -193,7 +209,8 @@ export class RequestProcessor extends Construct {
             inferenceBucket: inferenceBucket,
             genUUID: props.genUUID,
             workflowConfigName: props.workflowConfigName,
-            workflowConfigTable: props.workflowConfigTable
+            workflowConfigTable: props.workflowConfigTable,
+            eventBusArn: props.orchestratorBus.eventBusArn
         });
 
         // responsible for handling redaction requests as posted to the API, so it must be able to read both the upload and inference buckets
@@ -217,8 +234,13 @@ export class RequestProcessor extends Construct {
             }
         });
 
+        // creating these ids for the vpc configuration
+        const privateSubnetIds = props.vpc.privateSubnets.map((subnet) => subnet.subnetId);
+        const securityGroupIds = [props.securityGroup.securityGroupId];
+
         // lambda to back the search lambda. It could use kendra or open search, decided by
         // the required env variable
+
         const searchLambdaFunction = new lambda.Function(scope, 'SearchLambda', {
             runtime: COMMERCIAL_REGION_LAMBDA_NODE_RUNTIME,
             handler: 'index.handler',
@@ -230,11 +252,6 @@ export class RequestProcessor extends Construct {
             ),
             timeout: cdk.Duration.minutes(LAMBDA_TIMEOUT_MINS)
         });
-
-        // must read from inferences and uploaded files buckets, be able to upload to redacted prefix in upload bucket
-        inferenceBucket.grantRead(apiRedactionLambdaFunction);
-        uploadBucket.grantRead(apiRedactionLambdaFunction, `${S3_UPLOAD_PREFIX}/*`);
-        uploadBucket.grantPut(apiRedactionLambdaFunction, `${S3_REDACTED_PREFIX}/*`);
 
         const restEndpoint = new RestEndpoint(this, 'Api', {
             postRequestLambda: caseManager.docUploadLambda,
@@ -251,6 +268,34 @@ export class RequestProcessor extends Construct {
         this.apiRootResource = restEndpoint.apiRootResource;
         this.extUsrPool = restEndpoint.extUsrPool;
         this.extUserPoolClient = restEndpoint.extUsrPoolClient;
+
+        this.createVpcConfigForLambda(
+            this.searchFunc,
+            props.deployOpenSearchIndexCondition,
+            privateSubnetIds,
+            securityGroupIds
+        );
+
+        cdk.Fn.conditionIf(
+            props.deployOpenSearchIndexCondition.logicalId,
+            this.searchFunc.addToRolePolicy(
+                new iam.PolicyStatement({
+                    actions: [
+                        'ec2:AssignPrivateIpAddresses',
+                        'ec2:UnassignPrivateIpAddresses',
+                        'ec2:CreateNetworkInterface',
+                        'ec2:DescribeNetworkInterfaces',
+                        'ec2:DeleteNetworkInterface',
+                        'ec2:DetachNetworkInterface'
+                    ],
+                    effect: iam.Effect.ALLOW,
+                    // any more restrictive the policy does not have affect and the Lambda function does not
+                    // remove the network interface it creates in the private subnet in the VPC.
+                    resources: ['*']
+                })
+            ),
+            cdk.Aws.NO_VALUE
+        );
 
         // enable eventBridge notifications on default bus
         const cfnUploadBucket = uploadBucket.node.defaultChild as s3.CfnBucket;
@@ -278,6 +323,7 @@ export class RequestProcessor extends Construct {
                     S3_UPLOAD_PREFIX: caseManager.s3UploadPrefix,
                     S3_INFERENCE_BUCKET_NAME: inferenceBucket.bucketName,
                     EVENT_BUS_ARN: props.orchestratorBus.eventBusArn,
+                    DOCUMENT_BUCKET_NAME: uploadBucket.bucketName,
                     WORKFLOW_CONFIG_NAME: props.workflowConfigName,
                     UUID: props.genUUID
                 }
@@ -306,6 +352,34 @@ export class RequestProcessor extends Construct {
 
         this.workflowOrchestratorFunc = defaultBusToWorkflowOrchestrator.lambdaFunction;
 
+        cdk.Fn.conditionIf(
+            props.deployOpenSearchIndexCondition.logicalId,
+            this.workflowOrchestratorFunc.addToRolePolicy(
+                new iam.PolicyStatement({
+                    actions: [
+                        'ec2:CreateNetworkInterface',
+                        'ec2:DescribeNetworkInterfaces',
+                        'ec2:DeleteNetworkInterface',
+                        'ec2:AssignPrivateIpAddresses',
+                        'ec2:UnassignPrivateIpAddresses',
+                        'ec2:DetachNetworkInterface'
+                    ],
+                    effect: iam.Effect.ALLOW,
+                    // any more restrictive the policy does not have affect and the Lambda function does not
+                    // remove the network interface it creates in the private subnet in the VPC.
+                    resources: ['*']
+                })
+            ),
+            cdk.Aws.NO_VALUE
+        );
+
+        this.createVpcConfigForLambda(
+            this.workflowOrchestratorFunc,
+            props.deployOpenSearchIndexCondition,
+            privateSubnetIds,
+            securityGroupIds
+        );
+
         // also enable workflow orchestrator to be triggered by workflow failure events
         new EventbridgeToLambda(this, 'EventOrchestratorOnSfnFailure', {
             existingLambdaObj: this.workflowOrchestratorFunc,
@@ -324,6 +398,8 @@ export class RequestProcessor extends Construct {
         props.workflowConfigTable.grantReadData(this.workflowOrchestratorFunc);
         caseManager.table.grantReadData(this.workflowOrchestratorFunc);
         caseManager.table.grant(this.workflowOrchestratorFunc, 'dynamodb:UpdateItem');
+        caseManager.table.grant(this.workflowOrchestratorFunc, 'dynamodb:PutItem');
+        props.orchestratorBus.grantPutEventsTo(caseManager.docUploadLambda);
         props.orchestratorBus.grantPutEventsTo(this.workflowOrchestratorFunc);
         inferenceBucket.grantRead(this.workflowOrchestratorFunc);
 
@@ -335,6 +411,12 @@ export class RequestProcessor extends Construct {
                 effect: iam.Effect.ALLOW
             })
         );
+
+        // must read from inferences and uploaded files buckets, be able to upload to redacted prefix in upload bucket
+        inferenceBucket.grantRead(apiRedactionLambdaFunction);
+        uploadBucket.grantRead(apiRedactionLambdaFunction, `${S3_UPLOAD_PREFIX}/*`);
+        uploadBucket.grantPut(apiRedactionLambdaFunction, `${S3_REDACTED_PREFIX}/*`);
+        uploadBucket.grantRead(this.workflowOrchestratorFunc, `${S3_UPLOAD_PREFIX}/*`);
 
         this.docUploadBucket = [uploadBucket, props.s3LoggingBucket];
         this.inferenceBucket = [inferenceBucket, props.s3LoggingBucket];
@@ -348,8 +430,31 @@ export class RequestProcessor extends Construct {
 
         // prettier-ignore
         new cdk.CfnOutput(cdk.Stack.of(this), 'UserPoolClientId', { // NOSONAR typescript:S1848. Not valid for CDK
-            value: this.extUserPoolClient.ref      
+            value: this.extUserPoolClient.ref
         });
+
+        //prettier-ignore
+        new cdk.CfnOutput(cdk.Stack.of(this), 'UploadBucket', { // NOSONAR typescript:S1848. Not valid for CDK
+            value: uploadBucket.bucketName
+        })
+
+        NagSuppressions.addResourceSuppressions(
+            this.searchFunc.role?.node.tryFindChild('DefaultPolicy') as iam.Policy,
+            [
+                {
+                    id: 'AwsSolutions-IAM5',
+                    reason: 'Networking resources are not known and hence "*". Also there are additional conditions to scope it down',
+                    appliesTo: [
+                        'Resource::arn:<AWS::Partition>:ec2:<AWS::Region>:<AWS::AccountId>:*',
+                        'Resource::arn:<AWS::Partition>:ec2:<AWS::Region>:<AWS::AccountId>:network-interface/*',
+                        'Resource::arn:<AWS::Partition>:ec2:<AWS::Region>:<AWS::AccountId>:subnet/*',
+                        'Resource::arn:<AWS::Partition>:ec2:<AWS::Region>:<AWS::AccountId>:security-group/*',
+                        'Resource::arn:<AWS::Partition>:ec2:<AWS::Region>:<AWS::AccountId>:instance*',
+                        'Resource::*'
+                    ]
+                }
+            ]
+        );
 
         NagSuppressions.addResourceSuppressions(this.workflowOrchestratorFunc.role!, [
             // add suppressions
@@ -365,6 +470,16 @@ export class RequestProcessor extends Construct {
         NagSuppressions.addResourceSuppressions(
             this.workflowOrchestratorFunc.role!.node.tryFindChild('DefaultPolicy') as iam.Policy,
             [
+                {
+                    id: 'AwsSolutions-IAM5',
+                    reason: 'Providing permission to read from the upload bucket under the upload prefix',
+                    appliesTo: [
+                        `Resource::<RequestProcessorDocumentRepo94D336AB.Arn>/${S3_UPLOAD_PREFIX}/*`,
+                        'Action::s3:GetBucket*',
+                        'Action::s3:GetObject*',
+                        'Action::s3:List*'
+                    ]
+                },
                 {
                     id: 'AwsSolutions-IAM5',
                     reason: 'the lambda has been granted read permissions to the inferences bucket',
@@ -386,6 +501,18 @@ export class RequestProcessor extends Construct {
                     id: 'AwsSolutions-IAM5',
                     reason: 'Lambda needs the following minimum required permissions to send trace data to X-Ray and access ENIs in a VPC.',
                     appliesTo: ['Resource::*']
+                },
+                {
+                    id: 'AwsSolutions-IAM5',
+                    reason: 'Networking resources are not known and hence "*". Also there are additional conditions to scope it down',
+                    appliesTo: [
+                        'Resource::arn:<AWS::Partition>:ec2:<AWS::Region>:<AWS::AccountId>:*',
+                        'Resource::arn:<AWS::Partition>:ec2:<AWS::Region>:<AWS::AccountId>:network-interface/*',
+                        'Resource::arn:<AWS::Partition>:ec2:<AWS::Region>:<AWS::AccountId>:subnet/*',
+                        'Resource::arn:<AWS::Partition>:ec2:<AWS::Region>:<AWS::AccountId>:security-group/*',
+                        'Resource::arn:<AWS::Partition>:ec2:<AWS::Region>:<AWS::AccountId>:instance*',
+                        'Resource::*'
+                    ]
                 }
             ],
             true
@@ -463,9 +590,39 @@ export class RequestProcessor extends Construct {
         NagSuppressions.addResourceSuppressions(this.searchFunc.role!, [
             {
                 id: 'AwsSolutions-IAM4',
-                reason: 'This lambda generates a managed policy to create log groups, log streams and put events.',
-                appliesTo: ['Policy::arn:<AWS::Partition>:iam::aws:policy/service-role/AWSLambdaBasicExecutionRole']
+                reason: 'This lambda generates a managed policy to create log groups, log streams and put events and runs in VPC.',
+                appliesTo: [
+                    'Policy::arn:<AWS::Partition>:iam::aws:policy/service-role/AWSLambdaBasicExecutionRole',
+                    'Policy::arn:<AWS::Partition>:iam::aws:policy/service-role/AWSLambdaVPCAccessExecutionRole'
+                ]
             }
         ]);
+    }
+
+    /**
+     * Method to add vpc configuration to lambda functions
+     *
+     * @param lambdaFunction
+     */
+    protected createVpcConfigForLambda(
+        lambdaFunction: lambda.Function,
+        deployOpenSearchIndexCondition: cdk.CfnCondition,
+        privateSubnetIds: string[],
+        securityGroupIds?: string[]
+    ): void {
+        if (lambdaFunction === undefined) {
+            throw new Error('This method should be called after the lambda function is defined');
+        }
+        const cfnFunction = lambdaFunction.node.defaultChild as lambda.CfnFunction;
+        cfnFunction.addPropertyOverride('VpcConfig', {
+            'Fn::If': [
+                deployOpenSearchIndexCondition.logicalId,
+                {
+                    SubnetIds: privateSubnetIds,
+                    SecurityGroupIds: securityGroupIds
+                },
+                cdk.Aws.NO_VALUE
+            ]
+        });
     }
 }

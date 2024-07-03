@@ -17,12 +17,14 @@ let CASE_DDB_TABLE_NAME;
 let S3_UPLOAD_PREFIX;
 let UPLOAD_DOCS_BUCKET_NAME;
 let WORKFLOW_CONFIG_TABLE_NAME;
+let DDB_GSI_USER_DOC_ID;
 let WORKFLOW_CONFIG_NAME;
 
 function checkDdbEnvSetup() {
-    if (process.env.CASE_DDB_TABLE_NAME && process.env.WORKFLOW_CONFIG_TABLE_NAME) {
+    if (process.env.CASE_DDB_TABLE_NAME && process.env.WORKFLOW_CONFIG_TABLE_NAME && process.env.DDB_GSI_USER_DOC_ID) {
         CASE_DDB_TABLE_NAME = process.env.CASE_DDB_TABLE_NAME;
         WORKFLOW_CONFIG_TABLE_NAME = process.env.WORKFLOW_CONFIG_TABLE_NAME;
+        DDB_GSI_USER_DOC_ID = process.env.DDB_GSI_USER_DOC_ID;
     } else {
         throw new Error(
             'Either CASE_DDB_TABLE_NAME or WORKFLOW_CONFIG_TABLE_NAME Lambda Environment variable not set.'

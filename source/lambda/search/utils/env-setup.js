@@ -13,6 +13,8 @@
 'use strict';
 
 let KENDRA_INDEX_ID;
+let REGION;
+let ENDPOINT;
 
 function checkKendraIndexIdEnvSetup() {
     if (process.env.KENDRA_INDEX_ID) {
@@ -24,11 +26,36 @@ function checkKendraIndexIdEnvSetup() {
     }
 }
 
+/**
+ * Check the Lambda environment variables for OpenSearch - search documents. It sets:
+ *
+ * `AWS_REGION`: This value sets the region of the where OpenSearch client will be calling to.
+ * If not set, it will throw an error.
+ *
+ * `OS_COLLECTION_ENDPOINT`: This value sets the endpoint of the OpenSearch serverless cluster.
+ * If not set, it will throw an error.
+ */
+function checkOpenSearchEnvSetup() {
+    if (process.env.AWS_REGION) {
+        REGION = process.env.AWS_REGION;
+    } else {
+        throw new Error('AWS_REGION Lambda Environment variable not set.');
+    }
+
+    if (process.env.OS_COLLECTION_ENDPOINT) {
+        ENDPOINT = process.env.OS_COLLECTION_ENDPOINT;
+    } else {
+        throw new Error('OS_COLLECTION_ENDPOINT Lambda Environment variable not set. Ensure you have set the DeployOpenSearch parameter to "Yes" when deploying the CloudFormation template');
+    }
+}
+
 function checkAllEnvSetup() {
     checkKendraIndexIdEnvSetup();
+    checkOpenSearchEnvSetup();
 }
 
 module.exports = {
     checkKendraIndexIdEnvSetup,
+    checkOpenSearchEnvSetup,
     checkAllEnvSetup
 };

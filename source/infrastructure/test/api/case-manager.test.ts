@@ -36,7 +36,8 @@ describe('When CaseManager construct is created', () => {
                     name: 'WorkflowConfigName',
                     type: dynamodb.AttributeType.STRING
                 }
-            })
+            }),
+            eventBusArn: 'fake-arn'
         });
         template = Template.fromStack(stack);
     });
@@ -386,6 +387,7 @@ describe('When CaseManager construct is created', () => {
 
     it('should create dynamodb cases and workflow config tables', () => {
         template.resourceCountIs('AWS::DynamoDB::Table', 2);
+        console.log(template.findResources('AWS::DynamoDB::Table'));
         template.hasResourceProperties('AWS::DynamoDB::Table', {
             KeySchema: [
                 {
@@ -409,6 +411,14 @@ describe('When CaseManager construct is created', () => {
                 {
                     AttributeName: 'USER_ID',
                     AttributeType: 'S'
+                },
+                {
+                    AttributeName: 'USER_DOC_ID',
+                    AttributeType: 'S'
+                },
+                {
+                    AttributeName: 'CASE_NAME',
+                    AttributeType: 'S'
                 }
             ],
             PointInTimeRecoverySpecification: {
@@ -428,6 +438,22 @@ describe('When CaseManager construct is created', () => {
                         },
                         {
                             AttributeName: 'CASE_ID',
+                            KeyType: 'RANGE'
+                        }
+                    ],
+                    Projection: {
+                        ProjectionType: 'ALL'
+                    }
+                },
+                {
+                    IndexName: 'UserDocIdIndex',
+                    KeySchema: [
+                        {
+                            AttributeName: 'USER_DOC_ID',
+                            KeyType: 'HASH'
+                        },
+                        {
+                            AttributeName: 'CASE_NAME',
                             KeyType: 'RANGE'
                         }
                     ],

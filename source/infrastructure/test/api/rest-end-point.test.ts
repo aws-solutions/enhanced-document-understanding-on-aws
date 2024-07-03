@@ -96,7 +96,7 @@ describe('When creating rest endpoints', () => {
                 DestinationArn: {
                     'Fn::GetAtt': Match.anyValue()
                 },
-                Format: '{"requestId":"$context.requestId","ip":"$context.identity.sourceIp","user":"$context.identity.user","caller":"$context.identity.caller","requestTime":"$context.requestTime","httpMethod":"$context.httpMethod","resourcePath":"$context.resourcePath","status":"$context.status","protocol":"$context.protocol","responseLength":"$context.responseLength"}'
+                Format: '{"requestId":"$context.requestId","sourceIp":"$context.identity.sourceIp","method":"$context.httpMethod","path":"$context.resourcePath","userContext":{"sub":"$context.authorizer.claims.sub","email":"$context.authorizer.claims.email"}}'
             },
             DeploymentId: {
                 'Ref': restApiDeploymentCapture
@@ -126,7 +126,7 @@ describe('When creating rest endpoints', () => {
             },
             ResponseType: 'DEFAULT_5XX',
             RestApiId: {
-                Ref: Match.stringLikeRegexp("TestEndpointCreationEndPointLambdaRestApi*")
+                Ref: Match.stringLikeRegexp('TestEndpointCreationEndPointLambdaRestApi*')
             },
             StatusCode: '400'
         });
@@ -140,7 +140,7 @@ describe('When creating rest endpoints', () => {
         const downloadDocumentLambdaCapture = new Capture();
         const getInferenceLambdaCapture = new Capture();
         const redactLambdaCapture = new Capture();
-        template.resourceCountIs('AWS::Lambda::Permission', 18);
+        template.resourceCountIs('AWS::Lambda::Permission', 20);
         template.hasResourceProperties('AWS::Lambda::Permission', {
             Action: 'lambda:InvokeFunction',
             FunctionName: {
@@ -457,7 +457,7 @@ describe('When creating rest endpoints', () => {
     it('should create path based resources', () => {
         const restApiCapture = new Capture();
 
-        template.resourceCountIs('AWS::ApiGateway::Resource', 14);
+        template.resourceCountIs('AWS::ApiGateway::Resource', 15);
 
         // the root level resources have matching parents and restApi
         template.hasResourceProperties('AWS::ApiGateway::Resource', {
@@ -765,7 +765,7 @@ describe('When creating rest endpoints', () => {
     });
 
     it('should create Models to validate request and response data', () => {
-        template.resourceCountIs('AWS::ApiGateway::Model', 7);
+        template.resourceCountIs('AWS::ApiGateway::Model', 8);
         template.hasResourceProperties('AWS::ApiGateway::Model', {
             ContentType: 'application/json',
             Name: 'UploadDocumentApiBodyModel',
@@ -899,4 +899,3 @@ describe('When creating a default cognito user in the user pool', () => {
         return [template, template.toJSON()];
     }
 });
-

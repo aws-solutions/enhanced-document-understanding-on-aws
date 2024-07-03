@@ -32,12 +32,12 @@ export const EntityTypes = {
     MEDICAL_ENTITY: 'entity-medical'
 };
 
-export const InferenceName = {
-    TEXTRACT_DETECT_TEXT: 'textract-detectText',
-    TEXTRACT_ANALYZE_TEXT: 'textract-analyzeDoc',
-    COMPREHEND_GENERIC: 'entity-standard-locations',
-    COMPREHEND_PII: 'entity-pii-locations',
-    COMPREHEND_MEDICAL: 'entity-medical-locations'
+export enum InferenceName  {
+    TEXTRACT_DETECT_TEXT= 'textract-detectText',
+    TEXTRACT_ANALYZE_TEXT= 'textract-analyzeDoc',
+    COMPREHEND_GENERIC= 'entity-standard-locations',
+    COMPREHEND_PII= 'entity-pii-locations',
+    COMPREHEND_MEDICAL= 'entity-medical-locations'
 };
 
 export const FacetDocumentAttributeKey = {

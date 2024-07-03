@@ -84,8 +84,7 @@ describe('When retrieving a single record from the database', () => {
             const params = { caseId: 'invalid-fake-case-id', ddbTableName: 'testTable' };
             await CaseFetcher.getCase(params);
         } catch (error) {
-            const expectedErrMessage = 'CaseId::invalid-fake-case-id NOT found in Table::testTable';
-            expect(error.message).toEqual(expectedErrMessage);
+            expect(error.message).toEqual('Incorrect CaseId');
         }
     });
 

@@ -34,6 +34,7 @@ For reference, the string in the Parameter Store should look something like the 
         "UserPoolId": "<user-pool-id>",
         "UserPoolClientId": "<user-pool-client-id>",
         "KendraStackDeployed": "<Yes/No>",
+        "OpenSearchStackDeployed": "<Yes/No>",
         "AwsRegion": "<the region where the stack was deployed>",
         "NumRequiredDocuments": "<Number of documents required for the workflow>,
         "UniqueDocumentTypes": ["doc-type-1", "doc-type-2", "etc..."],

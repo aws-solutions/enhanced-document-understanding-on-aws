@@ -48,14 +48,22 @@ exports.handler = async (event) => {
     try {
         if (event.resource === '/cases') {
             const userId = SharedLib.getUserIdFromEvent(event);
-            const response = await CaseFetcher.listCases(userId);
+            const response = await CaseFetcher.listCases(userId, event.queryStringParameters);
             return SharedLib.formatResponse(response);
         } else if (event.resource === '/case/{caseId}') {
+            if (!SharedLib.validateUserToCaseAssociation(event.pathParameters.caseId, event.requestContext)) {
+                throw new Error('User is not associated with the case');
+            }
+
             const response = await CaseFetcher.getCase({
                 caseId: event.pathParameters.caseId
             });
             return SharedLib.formatResponse(response);
         } else if (event.resource === '/document/{caseId}/{documentId}') {
+            if (!SharedLib.validateUserToCaseAssociation(event.pathParameters.caseId, event.requestContext)) {
+                throw new Error('User is not associated with the case');
+            }
+
             const getDocPrefixParams = {
                 caseId: event.pathParameters.caseId,
                 documentId: event.pathParameters.documentId,

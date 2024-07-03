@@ -16,12 +16,15 @@
 const AWSMock = require('aws-sdk-mock');
 const lambda = require('../index');
 const SharedLib = require('common-node-lib');
+const { AossProxy } = require('common-node-lib');
+const { mockedOpenSearchResponse } = require('./event-test-data');
 
 describe('When invoking lambda', () => {
     beforeEach(() => {
         process.env.KENDRA_INDEX_ID = 'mock-query-id';
         process.env.AWS_REGION = 'us-east-1';
         process.env.AWS_SDK_USER_AGENT = '{ "customUserAgent": "AwsSolution/SO0999/v9.9.9" }';
+        process.env.OS_COLLECTION_ENDPOINT = 'https://foobar.us-east-1.aoss.amazonaws.com';
     });
 
     it('should throw an error when no index id is set', async () => {
@@ -182,7 +185,7 @@ describe('When invoking lambda', () => {
 
         const response = await lambda.handler(event);
         expect(response).toEqual(
-            SharedLib.formatError("Cannot read properties of undefined (reading 'Authorization')")
+            SharedLib.formatError('Cannot read properties of undefined (reading \'Authorization\')')
         );
     });
 
@@ -210,10 +213,84 @@ describe('When invoking lambda', () => {
         );
     });
 
+    it('should throw an error when no collection endpoint is set', async () => {
+        delete process.env.OS_COLLECTION_ENDPOINT;
+
+        const event = {
+            httpMethod: 'GET',
+            resource: '/search/opensearch/{query}',
+            pathParameters: { 'query': 'fake-query-text' },
+            headers: { Authorization: 'fake-token' }
+        };
+
+        const response = await lambda.handler(event);
+        expect(response).toEqual(
+            SharedLib.formatError(
+                'OS_COLLECTION_ENDPOINT Lambda Environment variable not set. Ensure you have set the DeployOpenSearch parameter to "Yes" when deploying the CloudFormation template'
+            )
+        );
+    });
+
+    it('should pass successfully on opensearch query', async () => {
+        const prototype = AossProxy.prototype;
+        jest.spyOn(SharedLib, 'getUserIdFromEvent').mockImplementation((event) => {
+            expect(event.headers.Authorization).toEqual('fake-token');
+            return 'user';
+        });
+        const searchDocumentsSpy = jest.spyOn(prototype, 'searchDocuments').mockImplementation(async (params) => {
+            return mockedOpenSearchResponse;
+        });
+
+        const event = {
+            httpMethod: 'GET',
+            resource: '/search/opensearch/{query}',
+            pathParameters: { 'query': 'some-content' },
+            headers: { Authorization: 'fake-token' }
+        };
+
+        const response = await lambda.handler(event);
+        expect(response).toEqual(SharedLib.formatResponse(mockedOpenSearchResponse));
+        expect(searchDocumentsSpy).toBeCalledTimes(1);
+        expect(searchDocumentsSpy).toBeCalledWith('edu', 'some-content', {'user_id': ['user']});
+    });
+
+    it('should pass successfully on opensearch query  with attribute filters', async () => {
+        const prototype = AossProxy.prototype;
+        jest.spyOn(SharedLib, 'getUserIdFromEvent').mockImplementation((event) => {
+            expect(event.headers.Authorization).toEqual('fake-token');
+            return 'user';
+        });
+        const searchDocumentsSpy = jest.spyOn(prototype, 'searchDocuments').mockImplementation(async (params) => {
+            return mockedOpenSearchResponse;
+        });
+
+        const event = {
+            httpMethod: 'GET',
+            resource: '/search/opensearch/{query}',
+            pathParameters: { 'query': 'some-content' },
+            multiValueQueryStringParameters: {
+                'mock-doc-attribute-1': ['mock-value1', 'mock-value2'],
+                'mock-doc-attribute-2': ['mock-value3']
+            },
+            headers: { Authorization: 'fake-token' }
+        };
+
+        const response = await lambda.handler(event);
+        expect(response).toEqual(SharedLib.formatResponse(mockedOpenSearchResponse));
+        expect(searchDocumentsSpy).toBeCalledTimes(1);
+        expect(searchDocumentsSpy).toBeCalledWith('edu', 'some-content', {
+            'mock-doc-attribute-1': ['mock-value1', 'mock-value2'],
+            'mock-doc-attribute-2': ['mock-value3'],
+            'user_id': ['user']
+        });
+    });
+
     afterEach(() => {
         AWSMock.restore('Kendra');
+        jest.restoreAllMocks();
         delete process.env.AWS_REGION;
         delete process.env.AWS_SDK_USER_AGENT;
         delete process.env.KENDRA_INDEX_ID;
+        delete process.env.OS_COLLECTION_ENDPOINT;
     });
 });

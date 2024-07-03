@@ -7,6 +7,18 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 =======
 
+## [1.1.0] - 2024-07-03
+
+### Updated
+
+- Added OpenSearch support
+- Backend bulk documents upload
+- Pagination on loading cases page
+
+### Security
+
+- Updated node modules to patch vulnerabilities
+
 ## [1.0.12] - 2024-06-25
 
 ### Security

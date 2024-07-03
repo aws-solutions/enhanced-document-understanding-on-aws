@@ -15,6 +15,7 @@ import * as cdk from 'aws-cdk-lib';
 import * as dynamodb from 'aws-cdk-lib/aws-dynamodb';
 import * as events from 'aws-cdk-lib/aws-events';
 import * as s3 from 'aws-cdk-lib/aws-s3';
+import * as ec2 from 'aws-cdk-lib/aws-ec2';
 
 import { Capture, Match, Template } from 'aws-cdk-lib/assertions';
 import {
@@ -29,6 +30,7 @@ import {
 import * as rawCdkJson from '../../cdk.json';
 import { RequestProcessor } from '../../lib/api/request-processor';
 import { CustomInfraSetup } from '../../lib/utils/custom-infra-setup';
+import { IndexedStorageParams } from '../../lib/search/indexed-storage-params';
 
 describe('When RequestProcessor construct is created', () => {
     let template: Template;
@@ -40,6 +42,9 @@ describe('When RequestProcessor construct is created', () => {
             solutionID: rawCdkJson.context.solution_id,
             solutionVersion: rawCdkJson.context.solution_version
         });
+
+        const params = new IndexedStorageParams(stack, 'TestIndexedStorageParams');
+        const vpc = new ec2.Vpc(stack, 'vpc');
 
         new RequestProcessor(stack, 'WorkflowTestStack', {
             orchestratorBus: new events.EventBus(stack, 'TestBus'),
@@ -62,7 +67,13 @@ describe('When RequestProcessor construct is created', () => {
                 }
             })
                 .getAtt('UUID')
-                .toString()
+                .toString(),
+            vpc: vpc,
+            securityGroup: new ec2.SecurityGroup(stack, 'IngressSG', {
+                vpc,
+                allowAllOutbound: true
+            }),
+            deployOpenSearchIndexCondition: params.deployOpenSearchIndexCondition
         });
         template = Template.fromStack(stack);
     });
@@ -211,6 +222,7 @@ describe('When RequestProcessor construct is created', () => {
         const ddbTableCapture = new Capture();
         const eventBusCapture = new Capture();
         const inferenceBucketCapture = new Capture();
+        const workFlowRepo = new Capture();
 
         template.resourceCountIs('AWS::Lambda::Function', 9);
         template.hasResourceProperties('AWS::Lambda::Function', {
@@ -236,10 +248,27 @@ describe('When RequestProcessor construct is created', () => {
                 }
             }
         });
+
         template.hasResourceProperties('AWS::IAM::Policy', {
             PolicyDocument: {
                 'Statement': [
-                    Match.anyValue(),
+                    {
+                        'Action': ['xray:PutTraceSegments', 'xray:PutTelemetryRecords'],
+                        'Effect': 'Allow',
+                        'Resource': '*'
+                    },
+                    {
+                        'Action': [
+                            'ec2:CreateNetworkInterface',
+                            'ec2:DescribeNetworkInterfaces',
+                            'ec2:DeleteNetworkInterface',
+                            'ec2:AssignPrivateIpAddresses',
+                            'ec2:UnassignPrivateIpAddresses',
+                            'ec2:DetachNetworkInterface'
+                        ],
+                        'Effect': 'Allow',
+                        'Resource': '*'
+                    },
                     {
                         Action: [
                             'dynamodb:BatchGetItem',
@@ -311,6 +340,26 @@ describe('When RequestProcessor construct is created', () => {
                         ]
                     },
                     {
+                        Action: 'dynamodb:PutItem',
+                        Effect: 'Allow',
+                        Resource: [
+                            {
+                                'Fn::GetAtt': [ddbTableCapture, 'Arn']
+                            },
+                            {
+                                'Fn::Join': [
+                                    '',
+                                    [
+                                        {
+                                            'Fn::GetAtt': [ddbTableCapture, 'Arn']
+                                        },
+                                        '/index/*'
+                                    ]
+                                ]
+                            }
+                        ]
+                    },
+                    {
                         Action: 'events:PutEvents',
                         Effect: 'Allow',
                         Resource: {
@@ -332,6 +381,26 @@ describe('When RequestProcessor construct is created', () => {
                                             'Fn::GetAtt': [inferenceBucketCapture, 'Arn']
                                         },
                                         '/*'
+                                    ]
+                                ]
+                            }
+                        ]
+                    },
+                    {
+                        Action: ['s3:GetObject*', 's3:GetBucket*', 's3:List*'],
+                        Effect: 'Allow',
+                        'Resource': [
+                            {
+                                'Fn::GetAtt': [workFlowRepo, 'Arn']
+                            },
+                            {
+                                'Fn::Join': [
+                                    '',
+                                    [
+                                        {
+                                            'Fn::GetAtt': [workFlowRepo, 'Arn']
+                                        },
+                                        '/initial/*'
                                     ]
                                 ]
                             }

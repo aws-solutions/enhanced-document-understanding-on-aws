@@ -37,15 +37,23 @@ describe('Check DynamoDB table name environment', () => {
 
 describe('Check DynamoDB GSI name environment', () => {
     beforeEach(() => {
-        process.env.DDB_GSI_USER_ID = 'fake-gsi-index';
+        process.env.DDB_GSI_USER_ID = 'fake-user-index';
+        process.env.DDB_GSI_USER_DOC_ID = 'fake-user-doc-index';
     });
 
     it('succeeds when env is set correctly', () => {
         expect(envSetupChecker.checkDdbGsiNameEnvSetup()).toBe();
     });
 
-    it('fails when env is not set correctly', () => {
+    it('fails when user index is not set correctly', () => {
         delete process.env.DDB_GSI_USER_ID;
+        expect(() => {
+            envSetupChecker.checkDdbGsiNameEnvSetup();
+        }).toThrow();
+    });
+
+    it('fails when user index is not set correctly', () => {
+        delete process.env.DDB_GSI_USER_DOC_ID;
         expect(() => {
             envSetupChecker.checkDdbGsiNameEnvSetup();
         }).toThrow();
@@ -53,6 +61,7 @@ describe('Check DynamoDB GSI name environment', () => {
 
     afterAll(() => {
         delete process.env.DDB_GSI_USER_ID;
+        delete process.env.DDB_GSI_USER_DOC_ID;
     });
 });
 
@@ -80,7 +89,8 @@ describe('Check Redacted doc s3 prefix name environment', () => {
 describe('Checks all environments', () => {
     beforeEach(() => {
         process.env.CASE_DDB_TABLE_NAME = 'fake_table';
-        process.env.DDB_GSI_USER_ID = 'fake-gsi-index';
+        process.env.DDB_GSI_USER_ID = 'fake-user-index';
+        process.env.DDB_GSI_USER_DOC_ID = 'fake-user-doc-index';
     });
 
     it('succeeds when env is set correctly', () => {
@@ -90,5 +100,6 @@ describe('Checks all environments', () => {
     afterAll(() => {
         delete process.env.CASE_DDB_TABLE_NAME;
         delete process.env.DDB_GSI_USER_ID;
+        delete process.env.DDB_GSI_USER_DOC_ID;
     });
 });

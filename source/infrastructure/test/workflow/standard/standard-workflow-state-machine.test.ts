@@ -375,7 +375,7 @@ describe('Standard-Workflow SYNC processing task step-function test', () => {
                     ]
                 ]
             },
-            'RetentionInDays': 731
+            'RetentionInDays': 3653
         });
     });
 

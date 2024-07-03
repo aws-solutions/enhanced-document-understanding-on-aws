@@ -15,6 +15,7 @@
 
 let CASE_DDB_TABLE_NAME;
 let DDB_GSI_USER_ID;
+let DDB_GSI_USER_DOC_ID;
 let S3_REDACTED_PREFIX;
 
 function checkDdbEnvSetup() {
@@ -43,6 +44,13 @@ function checkDdbGsiNameEnvSetup() {
         console.debug(`DDB_GSI_USER_ID is: ${DDB_GSI_USER_ID}`);
     } else {
         throw new Error('DDB_GSI_USER_ID Lambda Environment variable not set.');
+    }
+
+    if (process.env.DDB_GSI_USER_DOC_ID) {
+        DDB_GSI_USER_DOC_ID = process.env.DDB_GSI_USER_DOC_ID;
+        console.debug(`DDB_GSI_USER_DOC_ID is: ${DDB_GSI_USER_DOC_ID}`);
+    } else {
+        throw new Error('DDB_GSI_USER_DOC_ID Lambda Environment variable not set.');
     }
 }
 

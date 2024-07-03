@@ -15,9 +15,13 @@
 
 const _ = require('lodash');
 const ConfigLoader = require('../config/ddb-loader');
+const UserAgentConfig = require('aws-node-user-agent-config');
 const SharedLib = require('common-node-lib');
+const AWS = require('aws-sdk');
 
 const DEFAULT_DOC_PROCESSING_TYPE = 'sync';
+
+const FIVE_MEGABYTES = 5;
 
 let WORKFLOW_CONFIG;
 
@@ -46,29 +50,75 @@ exports.generateSfnEventDetail = async (event) => {
     await this.loadConfig();
 
     const fileKey = event.detail.object.key;
-    if (!this.isInitialUploadEvent(fileKey)) {
-        return false;
-    }
+    const bucket = event.detail.bucket.name;
 
-    const caseId = this.parseFileKey(fileKey).caseId;
+    const { caseId, documentName } = this.parseFileKey(fileKey);
     const params = {
         caseId: caseId,
         ddbTableName: process.env.CASE_DDB_TABLE_NAME
     };
 
-    const isComplete = await this.isCaseUploadComplete(params);
-    if (!isComplete) {
-        console.debug(`Required document upload incomplete for case:${caseId}`);
-        return false;
-    }
+    const { baseCase, filteredDocRecords } = await this.getCaseFilteredDocumentRecords(caseId);
 
-    try {
-        const stepFunctionEvent = this.createEventForStepFunction(params);
-        return stepFunctionEvent;
-    } catch (error) {
-        console.error(error);
-        throw error;
+    const documentNameSplit = documentName.split('.');
+    const docId = documentNameSplit[0];
+    const docExtension = `.${documentNameSplit[1]}`;
+    const getObjectParams = {
+        Bucket: bucket,
+        Key: fileKey
+    };
+    const headObject = await SharedLib.getHeadObjectFromS3(getObjectParams);
+
+    // 1MB is equal to 1024 kilobytes which is equal to 1,048,576 (1024 x 1024) bytes
+    const totalSizeInMB = headObject.ContentLength / Math.pow(1024, 2);
+
+    if (totalSizeInMB <= FIVE_MEGABYTES) {
+        const s3ObjectTags = await SharedLib.getObjectTaggingFromS3(getObjectParams);
+        const tagMap = new Map(s3ObjectTags.TagSet.map((tag) => [tag.Key, tag.Value]));
+        const fileName = atob(tagMap.get(SharedLib.fileNameBase64EncodedKey).replace(/\s/g, ''));
+        console.debug(tagMap);
+        const documentInDb = filteredDocRecords.find((record) => record.DOCUMENT_ID === docId) !== undefined;
+
+        if (!documentInDb) {
+            const userId = tagMap.get(SharedLib.userIdKey);
+            const userDocId = userId.concat(':', docId);
+            await this.addDocumentToDb(baseCase, {
+                caseId: caseId,
+                docId: docId,
+                userDocId: userDocId,
+                bucketName: bucket,
+                filekey: fileKey,
+                fileName: fileName,
+                documentType: tagMap.get(SharedLib.documentTypeKey),
+                fileExtension: docExtension,
+                userId: tagMap.get(SharedLib.userIdKey)
+            });
+        }
+        await this.isCaseUploadComplete(params);
+    } else {
+        throw new Error(`This file: ${fileKey} exceeds the 5MB file size limit and needs to be reduced`);
     }
+};
+
+exports.getCaseFilteredDocumentRecords = async (caseId) => {
+    const uploadedDocumentRecords = await SharedLib.getCase({
+        caseId: caseId,
+        ddbTableName: process.env.CASE_DDB_TABLE_NAME
+    });
+
+    const baseCase = uploadedDocumentRecords.Items.find(
+        (record) => record.DOCUMENT_ID.S === SharedLib.casePlaceholderDocumentId
+    );
+
+    // initial record has to be filtered out
+    const filteredDocRecords = _.filter(uploadedDocumentRecords.Items, (record) => {
+        return record.DOCUMENT_ID.S != SharedLib.casePlaceholderDocumentId;
+    });
+
+    return {
+        baseCase: baseCase,
+        filteredDocRecords: filteredDocRecords
+    };
 };
 
 /**
@@ -101,11 +151,11 @@ exports.parseFileKey = (s3FileKey) => {
     const parts = s3FileKey.split('/');
     const uploadPrefix = parts.shift();
     const caseId = parts.shift();
-    const fileName = parts.shift();
+    const documentName = parts.shift();
     return {
         caseId: caseId,
         uploadPrefix: uploadPrefix,
-        fileName: fileName
+        documentName: documentName
     };
 };
 
@@ -127,17 +177,7 @@ exports.isCaseUploadComplete = async (params) => {
         requiredDocTypeMap.set(requiredDocuments.DocumentType.toLowerCase(), numDocuments);
     }
 
-    const uploadedDocumentRecords = await SharedLib.getCase({
-        caseId: params.caseId,
-        ddbTableName: process.env.CASE_DDB_TABLE_NAME
-    });
-    console.debug(`uploadedDocumentRecords: ${JSON.stringify(uploadedDocumentRecords)}`);
-
-    // initial record has to be filtered out
-    const filteredDocRecords = _.filter(uploadedDocumentRecords.Items, (record) => {
-        return record.DOCUMENT_ID.S != SharedLib.casePlaceholderDocumentId;
-    });
-
+    const { filteredDocRecords } = await this.getCaseFilteredDocumentRecords(params.caseId);
     const uploadedDocTypeMap = new Map();
 
     filteredDocRecords.forEach((docRecord) => {
@@ -169,44 +209,6 @@ exports.getPropertyFromDocConfigs = (docConfigList, property) => {
     return _.map(docConfigList, (config) => {
         return config[property];
     });
-};
-
-/**
- * Retrieves the records for a caseId for which all required documents have been
- * uploaded and builds the payload required to trigger a step function workflow.
- * @param {Object} params
- * @param {string} params.caseId
- *
- * @returns {Object}
- */
-exports.createEventForStepFunction = async (params) => {
-    const caseRecords = await SharedLib.getCase({
-        caseId: params.caseId,
-        ddbTableName: process.env.CASE_DDB_TABLE_NAME
-    });
-    console.debug(`createEventForSfn::caseRecords: ${JSON.stringify(caseRecords)}`);
-
-    const workflowConfig = await this.loadConfig();
-    const workflowsRequiredForCase = workflowConfig.WorkflowSequence;
-    const initialWorkflow = workflowsRequiredForCase[0].toLowerCase().replace('workflow', '');
-
-    const documentListPayload = [];
-    caseRecords.Items.forEach(async (record) => {
-        if (record.DOCUMENT_ID.S != SharedLib.casePlaceholderDocumentId) {
-            const docPayload = this.createDocumentPayload(record, workflowConfig);
-            documentListPayload.push(docPayload);
-        }
-    });
-
-    const caseEventPayload = {
-        id: params.caseId,
-        status: SharedLib.WorkflowStatus.INITIATE,
-        stage: initialWorkflow,
-        workflows: workflowsRequiredForCase,
-        documentList: documentListPayload
-    };
-    const stepFunctionEvent = { case: caseEventPayload };
-    return stepFunctionEvent;
 };
 
 /**
@@ -249,4 +251,89 @@ exports.createDocumentPayload = (ddbDocRecord, workflowConfig) => {
     }
 
     return documentPayload;
+};
+
+/**
+ * Create a documentId and use it along with the file extension to create
+ * a s3 file key. Generate a presigned post policy that can be used to upload the document.
+ * If successful, then add the document entry into the database.
+ * This gets triggered when the lambda receives a request that includes the filename
+ * and filetype.
+ * @param {Object} baseCase
+ * @param {Object} params
+ * @param {Object} params.caseId
+ * @param {string} params.caseName
+ * @param {string} params.fileName
+ * @param {string} params.fileExtension
+ * @param {string} params.documentType
+ * @param {string} params.docId
+ * @param {string} params.filekey
+ * @param {string} params.userId
+ * @param {string} params.userDocId
+ * @param {number} params.docCount
+ * @param {string} params.bucketName
+ *
+ * @returns DynamoDB.putItem response
+ */
+exports.addDocumentToDb = async (baseCase, params, dynamoDB = undefined) => {
+    const _dynamoDB = dynamoDB ?? new AWS.DynamoDB(UserAgentConfig.customAwsConfig());
+    const caseId = params.caseId;
+    const fileName = params.fileName;
+    const fileExtension = params.fileExtension;
+    const documentType = params.documentType;
+    const docId = params.docId;
+    const filekey = params.filekey;
+    const userId = params.userId;
+    const userDocId = params.userDocId;
+    const bucketName = params.bucketName;
+
+    const ddbCaseParams = {
+        TransactItems: [
+            {
+                Update: {
+                    TableName: process.env.CASE_DDB_TABLE_NAME,
+                    Key: {
+                        'CASE_ID': {
+                            'S': caseId
+                        },
+                        'DOCUMENT_ID': {
+                            'S': SharedLib.casePlaceholderDocumentId
+                        }
+                    },
+                    UpdateExpression: 'ADD DOC_COUNT :change',
+                    ExpressionAttributeValues: {
+                        ':change': {
+                            'N': '1'
+                        }
+                    },
+                    ReturnValuesOnConditionCheckFailure: 'ALL_OLD'
+                }
+            }
+        ]
+    };
+
+    const ddbDocumentParams = {
+        TableName: process.env.CASE_DDB_TABLE_NAME,
+        Item: AWS.DynamoDB.Converter.marshall({
+            CASE_ID: caseId,
+            CASE_NAME: baseCase.CASE_NAME.S,
+            DOCUMENT_ID: docId,
+            USER_DOC_ID: userDocId,
+            BUCKET_NAME: bucketName,
+            S3_KEY: filekey,
+            UPLOADED_FILE_NAME: fileName,
+            UPLOADED_FILE_EXTENSION: fileExtension,
+            DOCUMENT_TYPE: documentType,
+            USER_ID: userId,
+            CREATION_TIMESTAMP: new Date().toISOString()
+        }),
+        ReturnValues: 'ALL_OLD'
+    };
+    try {
+        await _dynamoDB.transactWriteItems(ddbCaseParams).promise();
+        return await _dynamoDB.putItem(ddbDocumentParams).promise();
+    } catch (error) {
+        console.error('Error writing record to dynamoDb');
+        throw error;
+    }
 };

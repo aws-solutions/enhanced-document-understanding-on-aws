@@ -16,11 +16,9 @@ import './DocumentView.css';
 import { AppLayout, ContentLayout, StatusIndicatorProps, Tabs } from '@cloudscape-design/components';
 import React, { useEffect } from 'react';
 import {
-    API_NAME,
     COMPREHEND_MEDICAL_SERVICE,
     COMPREHEND_SERVICE,
     EntityTypes,
-    InferenceName,
     TEXTRACT_KEY_VALUE_PAIRS,
     TEXTRACT_RAW_TEXT,
     TEXTRACT_TABLES
@@ -31,14 +29,18 @@ import {
     getDocumentPageCount,
     getDocumentTables
 } from '../../utils/document';
-import { DocumentProcessingResponse } from '../../utils/interfaces';
 
-import { API } from 'aws-amplify';
-import { generateToken } from '../DocumentTable/DocumentTable';
 import EntityDetectionTab from '../EntityDetectionTab';
 import TextractTab from '../TextractTab';
 import { DocumentResultsInfoPanelContent } from '../../utils/info-panel-contents';
 import { DocResultsPageHeader } from '../DocumentTable/full-page-header';
+import {
+    useLazyDocumentToDownloadQuery,
+    useLazyGetDocumentByCaseAndDocumentIdQuery
+} from '../../store/reducers/documentApiSlice';
+import { useGetInferencesQuery } from '../../store/reducers/inferenceApiSlice';
+import { useAppSelector } from '../../store/hooks/hooks';
+import { selectDocumentProcessingResult } from '../../store/reducers/documentSlice';
 
 type DocumentViewProps = {
     selectedDocumentId: string;
@@ -53,31 +55,20 @@ type DocumentViewProps = {
     setSelectedDocumentName: React.Dispatch<React.SetStateAction<string>>;
 };
 
-let token: string;
-
 export default function DocumentView(props: DocumentViewProps) {
+    const [getDocumentByCaseAndDocumentId] = useLazyGetDocumentByCaseAndDocumentIdQuery();
+    const [getSignedUrl] = useLazyDocumentToDownloadQuery();
+    useGetInferencesQuery(
+        { selectedCaseId: props.selectedCaseId, selectedDocumentId: props.selectedDocumentId },
+        { skip: props.selectedCaseId === '' || props.selectedDocumentId === '' }
+    );
+    const [getDocumentToDownloadTrigger] = useLazyDocumentToDownloadQuery();
     const [documentUrl, setDocumentUrl] = React.useState<string>('');
     const [currentStatus, setCurrentStatus] = React.useState<StatusIndicatorProps.Type | undefined>();
     const [documentPageCount, setDocumentPageCount] = React.useState<number>(0);
     const [currentPageNumber, setCurrentPageNumber] = React.useState(1);
-    const [documentProcessingResults, setDocumentProcessingResults] = React.useState<DocumentProcessingResponse>({
-        textractDetectResponse: {
-            Bucket: '',
-            UploadedFileName: '',
-            DocumentMetadata: { Pages: 0 },
-            JobStatus: '',
-            AnalyzeDocumentModelVersion: ''
-        },
-        comprehendGenericResponse: {
-            results: []
-        },
-        comprehendMedicalResponse: {
-            results: []
-        },
-        comprehendPiiResponse: {
-            results: []
-        }
-    });
+    const documentProcessingResults = useAppSelector(selectDocumentProcessingResult);
+
     const [selectedEntities, setSelectedEntities] = React.useState<any>({
         [EntityTypes.ENTITY_STANDARD]: [],
         [EntityTypes.PII]: [],
@@ -108,111 +99,35 @@ export default function DocumentView(props: DocumentViewProps) {
         props.setSelectedDocumentName(window.sessionStorage.getItem('selectedDocumentName') || '');
     }, [props]);
 
-    const getResource = async (endpoint: string, queryStringParameters = {}) => {
-        try {
-            token = await generateToken();
-            const response = await API.get(API_NAME, endpoint, {
-                headers: {
-                    Authorization: token
-                },
-                queryStringParameters: queryStringParameters
-            });
-            return response;
-        } catch (err) {
-            console.error(err);
-        }
-    };
-
-    const formatTextract = (response: any) => {
-        if (response) {
-            for (let pageNumber = 0; pageNumber < response.length; pageNumber++) {
-                response[pageNumber].DocumentMetadata.Pages = response.length;
-                for (const block of response[pageNumber].Blocks) {
-                    block.Page = pageNumber + 1;
-                }
-            }
-        }
-        return response;
-    };
-
     const retrieveSignedUrl = async () => {
-        const documentResponse = await getResource(`document/${props.selectedCaseId}/${props.selectedDocumentId}`, {
+        const documentResponse = await getDocumentByCaseAndDocumentId({
+            caseId: props.selectedCaseId,
+            documentId: props.selectedDocumentId,
             redacted: false
-        });
+        }).unwrap();
 
-        const signedUrlObject = await getResource(`document/download`, { key: documentResponse.key });
+        const signedUrlObject = await getSignedUrl({ key: documentResponse.key }).unwrap();
         setDocumentUrl(signedUrlObject.downloadUrl);
     };
 
     useEffect(() => {
         const getDocumentData = async () => {
             setCurrentStatus('loading');
-            let documentResponse,
-                textractDetectResponse,
-                textractAnalyzeResponse,
-                entityGenericResponse,
-                entityMedicalResponse,
-                entityPiiResponse;
-            let validInferences = [];
-            textractDetectResponse =
-                textractAnalyzeResponse =
-                entityGenericResponse =
-                entityMedicalResponse =
-                entityPiiResponse =
-                    undefined;
-
             try {
                 if (props.selectedCaseId === '' || props.selectedDocumentId === '') {
                     setCurrentStatus('error');
                     return;
                 }
 
-                validInferences = await getResource(`inferences/${props.selectedCaseId}/${props.selectedDocumentId}`);
-
-                documentResponse = await getResource(`document/${props.selectedCaseId}/${props.selectedDocumentId}`, {
+                const documentResponse = await getDocumentByCaseAndDocumentId({
+                    caseId: props.selectedCaseId,
+                    documentId: props.selectedDocumentId,
                     redacted: false
-                });
+                }).unwrap();
 
-                const signedUrlObject = await getResource(`document/download`, { key: documentResponse.key });
+                const signedUrlObject = await getDocumentToDownloadTrigger({ key: documentResponse.key }).unwrap();
                 setDocumentUrl(signedUrlObject.downloadUrl);
 
-                if (validInferences.includes(InferenceName.TEXTRACT_DETECT_TEXT)) {
-                    textractDetectResponse = await getResource(
-                        `inferences/${props.selectedCaseId}/${props.selectedDocumentId}/${InferenceName.TEXTRACT_DETECT_TEXT}`
-                    );
-                }
-
-                if (validInferences.includes(InferenceName.TEXTRACT_ANALYZE_TEXT)) {
-                    textractAnalyzeResponse = await getResource(
-                        `inferences/${props.selectedCaseId}/${props.selectedDocumentId}/${InferenceName.TEXTRACT_ANALYZE_TEXT}`
-                    );
-                }
-
-                if (validInferences.includes(InferenceName.COMPREHEND_GENERIC)) {
-                    entityGenericResponse = await getResource(
-                        `inferences/${props.selectedCaseId}/${props.selectedDocumentId}/${InferenceName.COMPREHEND_GENERIC}`
-                    );
-                }
-
-                if (validInferences.includes(InferenceName.COMPREHEND_PII)) {
-                    entityPiiResponse = await getResource(
-                        `inferences/${props.selectedCaseId}/${props.selectedDocumentId}/${InferenceName.COMPREHEND_PII}`
-                    );
-                }
-
-                if (validInferences.includes(InferenceName.COMPREHEND_MEDICAL)) {
-                    entityMedicalResponse = await getResource(
-                        `inferences/${props.selectedCaseId}/${props.selectedDocumentId}/${InferenceName.COMPREHEND_MEDICAL}`
-                    );
-                }
-
-                setDocumentProcessingResults({
-                    textractDetectResponse: formatTextract(textractDetectResponse),
-                    textractAnalyzeResponse: formatTextract(textractAnalyzeResponse),
-                    comprehendGenericResponse: entityGenericResponse,
-                    comprehendMedicalResponse: entityMedicalResponse,
-                    comprehendPiiResponse: entityPiiResponse
-                });
                 setCurrentStatus('success');
             } catch (error) {
                 console.error(
@@ -226,7 +141,7 @@ export default function DocumentView(props: DocumentViewProps) {
         };
 
         getDocumentData();
-    }, [props.selectedCaseId, props.selectedDocumentId]);
+    }, [props.selectedCaseId, props.selectedDocumentId, getDocumentByCaseAndDocumentId, getDocumentToDownloadTrigger]);
 
     useEffect(() => {
         setDocumentPageCount(getDocumentPageCount(documentProcessingResults, 'LINE'));

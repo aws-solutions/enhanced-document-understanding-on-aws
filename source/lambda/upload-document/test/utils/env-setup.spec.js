@@ -18,6 +18,7 @@ describe('Check DynamoDB table name environment', () => {
     beforeEach(() => {
         process.env.CASE_DDB_TABLE_NAME = 'fake_table';
         process.env.WORKFLOW_CONFIG_TABLE_NAME = 'fake-workflow-config-table';
+        process.env.DDB_GSI_USER_DOC_ID = 'user-doc-id-index';
     });
 
     it('succeeds when env is set correctly', () => {

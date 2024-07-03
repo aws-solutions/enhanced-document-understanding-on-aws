@@ -25,7 +25,7 @@ import { AbstractWorkflow, EventPatternGenerator } from './abstract-workflow';
 
 import { EventbridgeToStepfunctions } from '@aws-solutions-constructs/aws-eventbridge-stepfunctions';
 import { ITable, Table } from 'aws-cdk-lib/aws-dynamodb';
-import { LogGroup } from 'aws-cdk-lib/aws-logs';
+import { LogGroup, RetentionDays } from 'aws-cdk-lib/aws-logs';
 import { Topic } from 'aws-cdk-lib/aws-sns';
 import { NagSuppressions } from 'cdk-nag';
 import { Construct } from 'constructs';
@@ -118,7 +118,8 @@ export class StandardWorkflow extends AbstractWorkflow {
         const workflowChain = this.createWorkflowChain();
 
         const logGroup = new LogGroup(this, `${id}StateMachineLogGroup`, {
-            logGroupName: `/aws/vendedlogs/states/${cdk.Aws.STACK_NAME}-StateMachineLogGroup--${props.genUUID}`
+            logGroupName: `/aws/vendedlogs/states/${cdk.Aws.STACK_NAME}-StateMachineLogGroup--${props.genUUID}`,
+            retention: RetentionDays.TEN_YEARS
         });
 
         const stateMachineProps = {
