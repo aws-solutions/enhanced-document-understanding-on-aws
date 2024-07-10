@@ -62,7 +62,9 @@ describe('SearchView component', () => {
         caseName: 'case1',
         setSelectedCaseId: jest.fn(),
         setSelectedDocumentId: jest.fn(),
-        setSelectedDocumentFileType: jest.fn()
+        setSelectedDocumentFileType: jest.fn(),
+        enableKendra: true,
+        enableOpenSearch: false
     };
 
     beforeEach(() => {
