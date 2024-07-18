@@ -1,5 +1,5 @@
 import * as cdk from 'aws-cdk-lib';
-import { Construct, IConstruct } from 'constructs';
+import { Construct } from 'constructs';
 
 /**
  * The parameters to select Indexed Storage options
