@@ -26,11 +26,7 @@ function validateUserToCaseAssociation(caseId, requestContext) {
 
     const userIdFromCase = caseId.split(':')[0];
     const userIdFromAuthClaim = requestContext.authorizer.claims['cognito:username'];
-    if (userIdFromCase !== userIdFromAuthClaim) {
-        return false;
-    }
-
-    return true;
+    return (userIdFromCase === userIdFromAuthClaim)
 }
 
 module.exports = { validateUserToCaseAssociation };
