@@ -1,6 +1,6 @@
 {
   "name": "fetch-records",
-  "version": "1.1.0",
+  "version": "1.1.1",
   "description": "This lambda backs the ApiGateway REST endpoint to process record and document fetch requests",
   "main": "index.js",
   "scripts": {
