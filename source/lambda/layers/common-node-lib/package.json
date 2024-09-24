@@ -1,6 +1,6 @@
 {
   "name": "common-node-lib",
-  "version": "1.1.4",
+  "version": "1.1.5",
   "description": "Common libraries shared by all lambda node modules",
   "scripts": {
     "test": "jest --coverage --silent --verbose",
@@ -32,6 +32,7 @@
     "@opensearch-project/opensearch": "^2.4.0"
   },
   "overrides": {
-    "@babel/traverse": "^7.23.2"
+    "@babel/traverse": "^7.23.2",
+    "find-my-way": "^8.2.2"
   }
 }
