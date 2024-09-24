@@ -1,6 +1,6 @@
 {
   "name": "workflow-orchestrator",
-  "version": "1.1.4",
+  "version": "1.1.5",
   "description": "This lambda validates if required documents for a workflow has been uploaded",
   "main": "index.js",
   "scripts": {
