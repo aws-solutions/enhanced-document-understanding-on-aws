@@ -11,5 +11,6 @@ s3transfer/*
 *.dist-info
 jp.py
 THIRD_PARTY-LICENSES
+dist/
 
 

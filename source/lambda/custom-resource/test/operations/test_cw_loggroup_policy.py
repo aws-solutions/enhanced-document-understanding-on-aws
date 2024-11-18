@@ -19,7 +19,7 @@ import botocore
 import mock
 import pytest
 from lambda_func import handler
-from moto import mock_logs
+from moto import mock_aws
 from operations.cw_loggroup_policy import (
     CWLOG_ARN,
     CWLOG_NAME,
@@ -84,7 +84,7 @@ def test_create_log_policy_for_valid_principal(lambda_event):
     assert policy_definition["Statement"][0]["Resource"] == lambda_event[RESOURCE_PROPERTIES][CWLOG_ARN]
 
 
-@mock_logs
+@mock_aws
 def test_create_log_policy_for_invalid_principal(cw_logs, lambda_event, mock_lambda_context):
     lambda_event[RESOURCE_PROPERTIES][SERVICE_PRINCIPAL] = "fake.amazonaws.com"
     with pytest.raises(InvalidPrincipalException) as ex:
@@ -119,7 +119,7 @@ def test_delete_method(cw_logs, lambda_event, mock_lambda_context):
         delete(cw_logs, lambda_event, mock_lambda_context)
 
 
-@mock_logs
+@mock_aws
 def test_delete_method_for_invalid_policy(cw_logs, lambda_event, mock_lambda_context):
     with pytest.raises(botocore.exceptions.ClientError):
         delete(cw_logs, lambda_event, mock_lambda_context)
@@ -140,7 +140,7 @@ def test_create_method_for_succesful_creation(cw_logs, lambda_event, mock_lambda
         create(cw_logs, lambda_event, mock_lambda_context)
 
 
-@mock_logs
+@mock_aws
 @pytest.mark.parametrize("requestType", ["Create", "Update", "Delete"])
 def test_execute_method(cw_logs, lambda_event, mock_lambda_context, requestType):
     lambda_event["RequestType"] = requestType
@@ -178,7 +178,7 @@ def test_execute_method(cw_logs, lambda_event, mock_lambda_context, requestType)
             )
 
 
-@mock_logs
+@mock_aws
 @pytest.mark.parametrize("requestType", ["Create", "Update", "Delete"])
 def test_lambda_handler(cw_logs, lambda_event, mock_lambda_context, requestType):
     lambda_event["RequestType"] = requestType

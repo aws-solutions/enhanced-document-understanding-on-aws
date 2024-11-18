@@ -79,9 +79,9 @@ exports.generateNextStageEventDetail = async (event) => {
     // only occurs when a document is uploaded to s3
     if (event.source == 'aws.s3') {
         // Send cloudwatch metrics and update ddb table status for in-process
-         await S3Trigger.generateSfnEventDetail(event);
+        await S3Trigger.generateSfnEventDetail(event);
         const caseId = S3Trigger.parseFileKey(event.detail.object.key).caseId;
-                 // the case is not yet ready for processing (e.g. missing required required documents)
+        // the case is not yet ready for processing (e.g. missing required required documents)
         await SharedLib.updateCaseStatus(caseId, SharedLib.CaseStatus.INITIATE);
         return false; // NOSONAR - false positive. Await required in lambda
     } else if (event.source === `${SharedLib.EventSources.WORKFLOW_STEPFUNCTION}.${process.env.APP_NAMESPACE}`) {

@@ -124,7 +124,7 @@ describe('When a non-supported runtime is provided', () => {
             });
         } catch (error) {
             expect((error as Error).message).toEqual(
-                'This lambda function uses a runtime that is incompatible with this layer (python3.7 is not in [python3.8, python3.9, python3.10, python3.11])'
+                'This lambda function uses a runtime that is incompatible with this layer (python3.7 is not in [python3.11, python3.12])'
             );
         }
     });

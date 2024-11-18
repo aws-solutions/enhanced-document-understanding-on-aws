@@ -52,3 +52,6 @@ source/infrastructure/test/mock-lambda-func/java-lambda/checkstyle-result.xml
 .venv/**
 source/ui/public/pdf.worker.min.mjs
 .viperlightrc
+
+.temp_redpencil
+bom.json

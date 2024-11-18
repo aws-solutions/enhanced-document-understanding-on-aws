@@ -14,10 +14,7 @@ typing_extensions.py
 *.dist-info
 *.egg-info
 jp.py
-<<<<<<< HEAD
 s3transfer/*
-=======
-s3transfer/*
+dist/
 
 
->>>>>>> d47e14f8 (add gitignores in different folders)

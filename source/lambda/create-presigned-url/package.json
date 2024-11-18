@@ -1,6 +1,6 @@
 {
   "name": "create-presigned-url",
-  "version": "1.1.6",
+  "version": "1.1.7",
   "description": "This lambda has minimal permissions required to create downloadable presigned URLs for documents.",
   "main": "index.js",
   "scripts": {
@@ -13,6 +13,9 @@
     "code-linter": "npm run code-linter-ts && npm run code-linter-js",
     "code-formatter": "./node_modules/prettier/bin-prettier.js --config .prettierrc.yml '**/*.ts' '**/*.js' --write"
   },
+  "overrides": {
+    "cross-spawn": "^7.0.5"
+  },
   "author": {
     "name": "Amazon Web Services",
     "url": "https://aws.amazon.com/solutions"
@@ -20,8 +23,8 @@
   "license": "Apache-2.0",
   "devDependencies": {
     "aws-sdk-mock": "^5.8.0",
-    "eslint": "^8.52.0",
+    "eslint": "^9.15.0",
     "jest": "^29.7.0",
-    "prettier": "^3.0.3"
+    "prettier": "^3.3.3"
   }
 }

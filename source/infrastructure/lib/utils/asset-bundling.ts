@@ -51,9 +51,13 @@ class PythonAssetOptions implements AppAssetOptions {
                                 `echo local bundling ${entry}`,
                                 `cd ${entry}`,
                                 'rm -fr .venv*',
+                                'rm -fr dist',
                                 'python3 -m venv .venv',
                                 '. .venv/bin/activate',
-                                `pip3 install -r requirements.txt -t ${outputDir}`,
+                                'python3 -m pip install poetry',
+                                'python3 -m poetry build',
+                                'python3 -m poetry install --only main',
+                                `python3 -m poetry run pip install -t ${outputDir} dist/*.whl`,
                                 'deactivate',
                                 'rm -fr .venv*',
                                 `rm -fr ${outputDir}/.coverage`
@@ -190,12 +194,10 @@ class AppAssetOptionsFactory {
         this._assetOptionsMap = new Map();
         this._assetOptionsMap.set(COMMERCIAL_REGION_LAMBDA_PYTHON_RUNTIME, new PythonAssetOptions());
         this._assetOptionsMap.set(COMMERCIAL_REGION_LAMBDA_NODE_RUNTIME, new NodejsAssetOptions());
-        this._assetOptionsMap.set(lambda.Runtime.JAVA_8_CORRETTO, new JavaAssetOptions(lambda.Runtime.JAVA_8_CORRETTO));
         this._assetOptionsMap.set(
             COMMERCIAL_REGION_LAMBDA_JAVA_RUNTIME,
             new JavaAssetOptions(COMMERCIAL_REGION_LAMBDA_JAVA_RUNTIME)
         );
-        this._assetOptionsMap.set(lambda.Runtime.JAVA_8.toString, new JavaAssetOptions(lambda.Runtime.JAVA_8));
         this._assetOptionsMap.set('Reactjs', new ReactjsAssetOptions());
     }
 
@@ -249,8 +251,12 @@ export function getCommandsForPythonDockerBuild(outputDir: string, moduleName: s
             `echo "local bundling failed for ${moduleName} and hence building with Docker image"`,
             `mkdir -p ${outputDir}/`,
             'rm -fr .venv*',
+            'rm -fr dist',
             `cp -au /asset-input/* ${outputDir}/`,
-            `pip3 install -qr requirements.txt -t ${outputDir}/`,
+            'python3 -m pip install poetry',
+            'python3 -m poetry build',
+            'python3 -m poetry install --only main',
+            `python3 -m poetry run pip install -t ${outputDir} dist/*.whl`,
             `rm -fr ${outputDir}/.coverage`
         ].join(' && ')
     ];
@@ -316,7 +322,7 @@ export function getCommandsForReactjsDockerBuild(outputDir: string, moduleName: 
             `echo "local bundling failed for ${moduleName} and hence building with Docker image"`,
             'npm install',
             'npm run build',
-            `rm -fr /asset-input/node_modules`,
+            'rm -fr /asset-input/node_modules',
             'npm ci --omit=dev',
             `mkdir -p ${outputDir}/`,
             `cp -au /asset-input/* ${outputDir}/`,

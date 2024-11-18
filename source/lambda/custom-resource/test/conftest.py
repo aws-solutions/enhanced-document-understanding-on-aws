@@ -21,7 +21,7 @@ import pytest
 from aws_lambda_powertools import Metrics
 from aws_lambda_powertools.metrics import metrics as metrics_global
 from custom_config import custom_usr_agent_config
-from moto import mock_dynamodb, mock_logs, mock_s3, mock_ssm
+from moto import mock_aws
 
 
 @pytest.fixture(autouse=True)
@@ -36,25 +36,25 @@ def aws_credentials():
 
 @pytest.fixture
 def s3():
-    with mock_s3():
+    with mock_aws():
         yield boto3.resource("s3", config=custom_usr_agent_config())
 
 
 @pytest.fixture
 def ddb():
-    with mock_dynamodb():
+    with mock_aws():
         yield boto3.client("dynamodb", config=custom_usr_agent_config())
 
 
 @pytest.fixture
 def cw_logs():
-    with mock_logs():
+    with mock_aws():
         yield boto3.client("logs", config=custom_usr_agent_config())
 
 
 @pytest.fixture
 def ssm():
-    with mock_ssm():
+    with mock_aws():
         yield boto3.client("ssm", config=custom_usr_agent_config())
 
 
