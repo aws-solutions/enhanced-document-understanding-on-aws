@@ -36,9 +36,10 @@ setup_python_env() {
 	echo "Initiating virtual environment"
 	source .venv-test/bin/activate
 	echo "Installing python packages"
-	pip3 install wheel
-	pip3 install -r requirements.txt --target .
-	pip3 install -r requirements-dev.txt
+	pip install --upgrade pip setuptools
+	pip install poetry
+	poetry build
+	poetry install
 	echo "deactivate virtual environment"
 	deactivate
 }
@@ -64,7 +65,7 @@ run_python_lambda_test() {
 	echo "coverage report path set to $coverage_report_path"
 
 	# Use -vv for debugging
-	python3 -m pytest --cov --cov-report=term-missing --cov-report "xml:$coverage_report_path"
+	poetry run pytest -sv -vv --cov --cov-report=term-missing --cov-report "xml:$coverage_report_path"
 	if [ "$?" = "1" ]; then
 		echo "(source/run-all-tests.sh) ERROR: there is likely output above." 1>&2
 		exit 1

@@ -33,12 +33,12 @@ import {
 import { ApiGatewayToLambda } from '@aws-solutions-constructs/aws-apigateway-lambda';
 import { WafwebaclToApiGateway } from '@aws-solutions-constructs/aws-wafwebacl-apigateway';
 import { CfnUserPoolUser } from 'aws-cdk-lib/aws-cognito';
+import { LogGroup, RetentionDays } from 'aws-cdk-lib/aws-logs';
 import { NagSuppressions } from 'cdk-nag';
 import { Construct } from 'constructs';
 import { addCfnSuppressRules } from '../utils/cfn-nag-suppressions';
 import { PLACEHOLDER_EMAIL } from '../utils/constants';
 import { ApiDocumentation } from './rest-api-documentation/api-documentation';
-import { LogGroup, RetentionDays } from 'aws-cdk-lib/aws-logs';
 
 export interface RestEndpointProps {
     /**
@@ -403,7 +403,10 @@ export class RestEndpoint extends Construct {
         // Upload a document to a case
         documentResource.addCorsPreflight({
             allowOrigins: ['*'],
-            allowHeaders: ['Content-Type, Access-Control-Allow-Headers, X-Requested-With, Authorization'],
+            allowHeaders: [
+                'Content-Type, Access-Control-Allow-Headers, X-Requested-With, Authorization',
+                'Access-Control-Allow-Origin'
+            ],
             allowMethods: ['POST']
         });
         documentResource.addMethod('POST', postRequestLambdaIntegration, {

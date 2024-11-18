@@ -21,7 +21,7 @@ import mock
 import pytest
 from helper import get_service_client
 from lambda_func import handler
-from moto import mock_ssm, mock_dynamodb
+from moto import mock_aws
 from operations.webconfig import (
     API_ENDPOINT,
     RESOURCE_PROPERTIES,
@@ -107,7 +107,7 @@ def test_env_setup_with_no_config_name(monkeypatch, lambda_event, requestType):
         verify_env_setup(lambda_event)
 
 
-@mock_ssm
+@mock_aws
 def test_create_success(lambda_event, mock_lambda_context, setup_workflow_config_ddb_table):
     create(lambda_event, mock_lambda_context)
     ssm = get_service_client("ssm")
@@ -156,14 +156,14 @@ def test_create_success(lambda_event, mock_lambda_context, setup_workflow_config
     )
 
 
-@mock_ssm
+@mock_aws
 def test_delete_failure(monkeypatch, setup_ssm, mock_lambda_context):
     lambda_event, ssm = setup_ssm
     monkeypatch.setitem(lambda_event[RESOURCE_PROPERTIES], SSM_KEY, "/non-existent/key")
     assert None == delete(lambda_event, mock_lambda_context)
 
 
-@mock_ssm
+@mock_aws
 def test_delete_success(setup_ssm, mock_lambda_context):
     lambda_event, ssm = setup_ssm
     delete(lambda_event, lambda_event)
@@ -175,7 +175,7 @@ def test_delete_success(setup_ssm, mock_lambda_context):
     assert len(parameter_list["Parameters"]) == 0
 
 
-@mock_ssm
+@mock_aws
 @pytest.mark.parametrize("requestType", ["Create", "Update"])
 def test_execute_create_and_update(lambda_event, mock_lambda_context, requestType, setup_workflow_config_ddb_table):
     lambda_event["RequestType"] = requestType
@@ -192,7 +192,7 @@ def test_execute_create_and_update(lambda_event, mock_lambda_context, requestTyp
             )
 
 
-@mock_ssm()
+@mock_aws
 def test_execute_delete(setup_ssm, mock_lambda_context):
     lambda_event, ssm = setup_ssm
     lambda_event["RequestType"] = "Delete"

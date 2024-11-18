@@ -108,9 +108,13 @@ describe('when local bundling is successful lambda assets', () => {
                 [
                     `cd ${path.resolve('../infrastructure/test/mock-lambda-func/python-lambda')}`,
                     'rm -fr .venv*',
+                    'rm -fr dist',
                     'python3 -m venv .venv',
                     '. .venv/bin/activate',
-                    'pip3 install -r requirements.txt -t '
+                    'python3 -m pip install poetry',
+                    'python3 -m poetry build',
+                    'python3 -m poetry install --only main',
+                    'python3 -m poetry run pip install -t'
                 ].join(' && ')
             ),
             path.resolve('../infrastructure/test/mock-lambda-func/python-lambda'),
@@ -217,8 +221,12 @@ describe('when local bundling of assets is not successful', () => {
                 'echo "local bundling failed for mock-lambda and hence building with Docker image"',
                 'mkdir -p ../infrastructure/test/mock-lambda-func/python-lambda/',
                 'rm -fr .venv*',
+                'rm -fr dist',
                 'cp -au /asset-input/* ../infrastructure/test/mock-lambda-func/python-lambda/',
-                'pip3 install -qr requirements.txt -t ../infrastructure/test/mock-lambda-func/python-lambda/',
+                'python3 -m pip install poetry',
+                'python3 -m poetry build',
+                'python3 -m poetry install --only main',
+                'python3 -m poetry run pip install -t ../infrastructure/test/mock-lambda-func/python-lambda dist/*.whl',
                 'rm -fr ../infrastructure/test/mock-lambda-func/python-lambda/.coverage'
             ].join(' && ')
         ]);

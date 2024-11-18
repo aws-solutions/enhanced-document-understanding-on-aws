@@ -25,7 +25,7 @@ import { SharedLibLayerProps } from './shared-lib';
  */
 export class AwsNodeSdkLibLayer extends lambda.LayerVersion {
     constructor(scope: Construct, id: string, props: SharedLibLayerProps) {
-        const compatibleRuntimes = props.compatibleRuntimes ?? [lambda.Runtime.NODEJS_18_X];
+        const compatibleRuntimes = props.compatibleRuntimes ?? [lambda.Runtime.NODEJS_18_X, lambda.Runtime.NODEJS_20_X];
 
         for (const runtime of compatibleRuntimes) {
             if (runtime && runtime.family !== lambda.RuntimeFamily.NODEJS) {
@@ -61,11 +61,7 @@ export class AwsNodeSdkLibLayer extends lambda.LayerVersion {
  */
 export class Boto3SdkLibLayer extends lambda.LayerVersion {
     constructor(scope: Construct, id: string, props: SharedLibLayerProps) {
-        const compatibleRuntimes = props.compatibleRuntimes ?? [
-            lambda.Runtime.PYTHON_3_8,
-            lambda.Runtime.PYTHON_3_9,
-            lambda.Runtime.PYTHON_3_10
-        ];
+        const compatibleRuntimes = props.compatibleRuntimes ?? [lambda.Runtime.PYTHON_3_11, lambda.Runtime.PYTHON_3_12];
 
         for (const runtime of compatibleRuntimes) {
             if (runtime && runtime.family !== lambda.RuntimeFamily.PYTHON) {
@@ -82,7 +78,7 @@ export class Boto3SdkLibLayer extends lambda.LayerVersion {
                     user: 'root',
                     local: {
                         tryBundle(outputDir: string) {
-                            const cliCommand = `cd ${entry} && echo "Trying local bundling of python modules" && rm -fr .venv* && pip3 install -r requirements.txt --target ${outputDir}/python/`;
+                            const cliCommand = `cd ${entry} && echo "Trying local bundling of python modules" && rm -fr .venv* && rm -fr dist && python3 -m pip install poetry && python3 -m poetry build && python3 -m poetry install --only main && python3 -m poetry run pip install -t ${outputDir}/python dist/*.whl`;
                             const targetDirectory = `${outputDir}/python/`;
                             return localBundling(cliCommand, `${entry}/`, targetDirectory);
                         }

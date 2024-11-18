@@ -1,6 +1,6 @@
 {
   "name": "common-node-lib",
-  "version": "1.1.5",
+  "version": "1.1.7",
   "description": "Common libraries shared by all lambda node modules",
   "scripts": {
     "test": "jest --coverage --silent --verbose",
@@ -11,12 +11,12 @@
     "code-linter": "./node_modules/eslint/bin/eslint.js . -c ../../.eslintrc.js --ext .js"
   },
   "devDependencies": {
+    "@elastic/elasticsearch": "^8.13.1",
+    "@elastic/elasticsearch-mock": "^2.0.0",
     "aws-sdk-mock": "^5.8.0",
     "eslint": "^8.56.0",
     "jest": "^29.7.0",
-    "prettier": "^3.1.1",
-    "@elastic/elasticsearch": "^8.10.0",
-    "@elastic/elasticsearch-mock": "^2.0.0"
+    "prettier": "^3.1.1"
   },
   "author": {
     "name": "Amazon Web Services",
@@ -24,15 +24,16 @@
   },
   "license": "Apache-2.0",
   "dependencies": {
+    "@aws-sdk/credential-provider-node": "^3.569.0",
+    "@opensearch-project/opensearch": "^2.7.0",
     "jwt-decode": "^4.0.0",
     "lodash": "^4.17.21",
     "pdf-lib": "1.17.1",
-    "uuid": "^9.0.1",
-    "@aws-sdk/credential-provider-node": "^3.437.0",
-    "@opensearch-project/opensearch": "^2.4.0"
+    "uuid": "^9.0.1"
   },
   "overrides": {
     "@babel/traverse": "^7.23.2",
-    "find-my-way": "^8.2.2"
+    "find-my-way": "^8.2.2",
+    "cross-spawn": "^7.0.5"
   }
 }

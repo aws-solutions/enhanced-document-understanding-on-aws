@@ -15,7 +15,7 @@ from setuptools import find_packages, setup
 
 setup(
     name="custom_boto3_init",
-    version="1.1.5",
+    version="1.1.7",
     description="Initialize boto config for AWS Python SDK with custom configuration",
     url="https://github.com/aws-solutions/enhanced-document-understanding-on-aws",
     author="Amazon Web Services",

@@ -7,6 +7,22 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 =======
 
+## [1.1.7] - 2024-11-18
+
+### Security
+
+- Updated node and python packages to patch vulnerabilities
+
+### Fixed
+
+- Search failure when deployed with exclusively with Amazon OpenSearch option
+
+## [1.1.6] - 2024-10-31
+
+### Security
+
+- Updated node modules to patch vulnerabilities
+
 ## [1.1.5] - 2024-09-24
 
 ### Security
@@ -39,7 +55,7 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ## [1.1.0] - 2024-07-03
 
-### Updated
+### Changed
 
 - Added OpenSearch support
 - Backend bulk documents upload
@@ -69,7 +85,7 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ## [1.0.9] - 2024-05-16
 
-### Update
+### Changed
 
 - Updated java runtime libraries to patch vulnerabilities
 
@@ -95,27 +111,27 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 - Fixed a bug in the entity detection code which caused failures on an edge case with repeating words ([issue 34](https://github.com/aws-solutions/enhanced-document-understanding-on-aws/issues/34))
 
-### Updated
+### Changed
 
 - Failure on a single entity now does not cause the whole workflow to fail, instead logging an error message and continuing
 
 ## [1.0.5] - 2024-03-05
 
-### Updated
+### Changed
 
 - Library upgrades to address security vulnerability related to `node-ip` [CVE-2023-42282](https://github.com/advisories/GHSA-78xj-cgh5-2h22)
 - Add dependency between Amazon S3 bucket creation and S3 bucket policy to reduce failures with `Fn::GetAtt` when retrieving bucket arn to create bucket policy
 
 ## [1.0.4] - 2024-01-11
 
-### Updated
+### Changed
 
 - AWS CDK and SDK upgrades
 - Fix an intermittent issue in AWS CloudFormation by setting explicit dependencies between resources
 
 ## [1.0.3] - 2023-12-07
 
-### Updated
+### Changed
 
 - Library upgrades to address security vulnerabilities.
 - Fix an issue with sample workflow configurations where `textract` workflow was missing before any `entity` based detection workflow.
@@ -124,14 +140,14 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ## [1.0.2] - 2023-11-09
 
-### Updated
+### Changed
 
 - AWS CDK and SDK version updates
 - Library upgrades to address security vulnerabilities.
 
 ## [1.0.1] - 2023-10-18
 
-### Updated
+### Changed
 
 - Library upgrades to address security vulnerabilities
 

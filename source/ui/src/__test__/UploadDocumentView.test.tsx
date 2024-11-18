@@ -13,16 +13,16 @@
 
 import '@testing-library/jest-dom';
 
-import { act, fireEvent, screen, waitFor } from '@testing-library/react';
+import { fireEvent, screen, waitFor } from '@testing-library/react';
 import { MemoryRouter, Route, Routes } from 'react-router-dom';
 
 import { API } from '@aws-amplify/api';
 import { Auth } from '@aws-amplify/auth';
 import createWrapper from '@cloudscape-design/components/test-utils/dom';
-import { MAX_UPLOAD_FILE_SIZE } from '../utils/constants';
-import UploadDocumentView from '../components/UploadDocumentView';
-import { formatFileSize } from '../components/FileUpload/internal';
 import { FileSize } from '../components/FileUpload/interfaces';
+import { formatFileSize } from '../components/FileUpload/internal';
+import UploadDocumentView from '../components/UploadDocumentView';
+import { MAX_UPLOAD_FILE_SIZE } from '../utils/constants';
 import { renderWithProviders, renderWithProvidersAndUserSetup } from './utils/tesUtils';
 
 const mockAPI = {

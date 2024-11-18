@@ -17,13 +17,13 @@ let REGION;
 let ENDPOINT;
 
 function checkKendraIndexIdEnvSetup() {
+    let checkEnv = false;
     if (process.env.KENDRA_INDEX_ID) {
         KENDRA_INDEX_ID = process.env.KENDRA_INDEX_ID;
-    } else {
-        throw new Error(
-            'KENDRA_INDEX_ID Lambda Environment variable not set. Ensure you have set the DeployKendraIndex parameter to "Yes" when deploying the CloudFormation template'
-        );
+        checkEnv = true;
     }
+
+    return checkEnv;
 }
 
 /**
@@ -36,22 +36,25 @@ function checkKendraIndexIdEnvSetup() {
  * If not set, it will throw an error.
  */
 function checkOpenSearchEnvSetup() {
-    if (process.env.AWS_REGION) {
+    let checkEnv = false;
+    if (process.env.AWS_REGION && process.env.OS_COLLECTION_ENDPOINT) {
         REGION = process.env.AWS_REGION;
-    } else {
-        throw new Error('AWS_REGION Lambda Environment variable not set.');
+        ENDPOINT = process.env.OS_COLLECTION_ENDPOINT;
+        checkEnv = true;
     }
 
-    if (process.env.OS_COLLECTION_ENDPOINT) {
-        ENDPOINT = process.env.OS_COLLECTION_ENDPOINT;
-    } else {
-        throw new Error('OS_COLLECTION_ENDPOINT Lambda Environment variable not set. Ensure you have set the DeployOpenSearch parameter to "Yes" when deploying the CloudFormation template');
-    }
+    return checkEnv;
 }
 
 function checkAllEnvSetup() {
-    checkKendraIndexIdEnvSetup();
-    checkOpenSearchEnvSetup();
+    const checkKendra = checkKendraIndexIdEnvSetup();
+    const checkOpenSearch = checkOpenSearchEnvSetup();
+
+    if (!(checkKendra || checkOpenSearch)) {
+        throw new Error(
+            'Either KENDRA_INDEX_ID Lambda Environment variable is not set or AWS_REGION and OS_COLLECTION_ENDPOINT is not set'
+        );
+    }
 }
 
 module.exports = {

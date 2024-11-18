@@ -1,6 +1,6 @@
 {
   "name": "get-inferences",
-  "version": "1.1.5",
+  "version": "1.1.7",
   "description": "This lambda function is used to get inference results by backing the rest-endpoints",
   "main": "index.js",
   "scripts": {
@@ -17,8 +17,11 @@
   "license": "Apache-2.0",
   "devDependencies": {
     "aws-sdk-mock": "^5.8.0",
-    "eslint": "^8.46.0",
-    "jest": "^29.6.2",
+    "eslint": "^9.15.0",
+    "jest": "^29.7.0",
     "prettier": "^3.0.0"
+  },
+  "overrides": {
+    "cross-spawn": "^7.0.5"
   }
 }
