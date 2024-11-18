@@ -94,6 +94,6 @@ exports.handler = async (event) => {
             return SharedLib.formatError(error);
         }
     } else {
-        return SharedLib.formatError(new Error('Invalid resource requested: Only /search/kendra/{query} is supported'));
+        return SharedLib.formatError(new Error('Invalid resource requested: Only /search/kendra/{query} or /search/kendra/{query} is supported'));
     }
 };

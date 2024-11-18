@@ -27,8 +27,10 @@ describe('When invoking lambda', () => {
         process.env.OS_COLLECTION_ENDPOINT = 'https://foobar.us-east-1.aoss.amazonaws.com';
     });
 
-    it('should throw an error when no index id is set', async () => {
+    it('should throw an error when no index id and open search both are not set', async () => {
         delete process.env.KENDRA_INDEX_ID;
+        delete process.env.AWS_REGION;
+        delete process.env.OS_COLLECTION_ENDPOINT;
 
         const event = {
             httpMethod: 'GET',
@@ -40,7 +42,7 @@ describe('When invoking lambda', () => {
         const response = await lambda.handler(event);
         expect(response).toEqual(
             SharedLib.formatError(
-                'KENDRA_INDEX_ID Lambda Environment variable not set. Ensure you have set the DeployKendraIndex parameter to "Yes" when deploying the CloudFormation template'
+                'Either KENDRA_INDEX_ID Lambda Environment variable is not set or AWS_REGION and OS_COLLECTION_ENDPOINT is not set'
             )
         );
     });
@@ -185,7 +187,7 @@ describe('When invoking lambda', () => {
 
         const response = await lambda.handler(event);
         expect(response).toEqual(
-            SharedLib.formatError('Cannot read properties of undefined (reading \'Authorization\')')
+            SharedLib.formatError("Cannot read properties of undefined (reading 'Authorization')")
         );
     });
 
@@ -209,12 +211,15 @@ describe('When invoking lambda', () => {
 
         const response = await lambda.handler(event);
         expect(response).toEqual(
-            SharedLib.formatError('Invalid resource requested: Only /search/kendra/{query} is supported')
+            SharedLib.formatError(
+                'Invalid resource requested: Only /search/kendra/{query} or /search/kendra/{query} is supported'
+            )
         );
     });
 
     it('should throw an error when no collection endpoint is set', async () => {
         delete process.env.OS_COLLECTION_ENDPOINT;
+        delete process.env.KENDRA_INDEX_ID;
 
         const event = {
             httpMethod: 'GET',
@@ -226,7 +231,7 @@ describe('When invoking lambda', () => {
         const response = await lambda.handler(event);
         expect(response).toEqual(
             SharedLib.formatError(
-                'OS_COLLECTION_ENDPOINT Lambda Environment variable not set. Ensure you have set the DeployOpenSearch parameter to "Yes" when deploying the CloudFormation template'
+                'Either KENDRA_INDEX_ID Lambda Environment variable is not set or AWS_REGION and OS_COLLECTION_ENDPOINT is not set'
             )
         );
     });
@@ -251,7 +256,7 @@ describe('When invoking lambda', () => {
         const response = await lambda.handler(event);
         expect(response).toEqual(SharedLib.formatResponse(mockedOpenSearchResponse));
         expect(searchDocumentsSpy).toBeCalledTimes(1);
-        expect(searchDocumentsSpy).toBeCalledWith('edu', 'some-content', {'user_id': ['user']});
+        expect(searchDocumentsSpy).toBeCalledWith('edu', 'some-content', { 'user_id': ['user'] });
     });
 
     it('should pass successfully on opensearch query  with attribute filters', async () => {

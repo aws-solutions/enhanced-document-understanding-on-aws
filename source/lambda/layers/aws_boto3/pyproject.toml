@@ -1,0 +1,18 @@
+[tool.poetry]
+name = "boto3-layer"
+version = "1.1.7"
+authors = [ "Amazon Web Services" ]
+description = "Layer for AWS Boto3 python SDK"
+packages = [
+    { include = "*.toml" },
+    { include = "*.lock" },
+]
+
+[tool.poetry.dependencies]
+botocore = "1.35.63"
+boto3 = "1.35.63"
+python = "^3.11"
+
+[build-system]
+requires = [ "poetry-core>=1.9.0" ]
+build-backend = "poetry.core.masonry.api"

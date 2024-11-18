@@ -141,7 +141,7 @@ export class UIAssets extends cdk.NestedStack {
         NagSuppressions.addResourceSuppressions(customResourceWebsiteBucketPolicy, [
             {
                 id: 'AwsSolutions-IAM5',
-                reason: 'These permissions are required to read and write into the S3 bucket. The use of wildchar is within the specific Actions for S3',
+                reason: 'These permissions are required to read and write into the S3 bucket. The use of wildcard is within the specific Actions for S3',
                 appliesTo: [
                     'Action::s3:Abort*',
                     'Action::s3:DeleteObject*',

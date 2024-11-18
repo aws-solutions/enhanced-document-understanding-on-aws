@@ -1,6 +1,6 @@
 {
   "name": "workflow-orchestrator",
-  "version": "1.1.6",
+  "version": "1.1.7",
   "description": "This lambda validates if required documents for a workflow has been uploaded",
   "main": "index.js",
   "scripts": {
@@ -23,9 +23,12 @@
     "lodash": "4.17.21"
   },
   "devDependencies": {
-    "aws-sdk-mock": "5.8.0",
-    "eslint": "^8.56.0",
+    "aws-sdk-mock": "^5.9.0",
+    "eslint": "^9.15.0",
     "jest": "^29.7.0",
     "prettier": "^3.1.1"
+  },
+  "overrides": {
+    "cross-spawn": "^7.0.5"
   }
 }

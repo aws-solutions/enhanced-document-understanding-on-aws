@@ -21,14 +21,12 @@ describe('Check Kendra index id env variable setup', () => {
     });
 
     it('checkKendraIndexIdEnvSetup', () => {
-        expect(envSetupChecker.checkKendraIndexIdEnvSetup()).toBe();
+        expect(envSetupChecker.checkKendraIndexIdEnvSetup()).toBe(true);
     });
 
     it('fails when env is not set correctly', () => {
         delete process.env.KENDRA_INDEX_ID;
-        expect(() => {
-            envSetupChecker.checkKendraIndexIdEnvSetup();
-        }).toThrow();
+        expect(envSetupChecker.checkKendraIndexIdEnvSetup()).toBe(false);
     });
 
     afterAll(() => {
@@ -43,21 +41,17 @@ describe('Check open search env variable setup', () => {
     });
 
     it('checkOpenSearchEnvSetup', () => {
-        expect(envSetupChecker.checkOpenSearchEnvSetup()).toBe();
+        expect(envSetupChecker.checkOpenSearchEnvSetup()).toBe(true);
     });
 
     it('fails when aws region env is not set correctly', () => {
         delete process.env.AWS_REGION;
-        expect(() => {
-            envSetupChecker.checkOpenSearchEnvSetup();
-        }).toThrow();
+        expect(envSetupChecker.checkOpenSearchEnvSetup()).toBe(false);
     });
 
     it('fails when collection endpoint env is not set correctly', () => {
         delete process.env.OS_COLLECTION_ENDPOINT;
-        expect(() => {
-            envSetupChecker.checkOpenSearchEnvSetup();
-        }).toThrow();
+        expect(envSetupChecker.checkOpenSearchEnvSetup()).toBe(false);
     });
 
     afterAll(() => {
