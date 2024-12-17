@@ -441,7 +441,13 @@ const EntitiesList: React.FC<EntitiesListProps> = (props) => {
                     <Button onClick={() => deselectAllEntities()} data-testid="deselect-all-entities">
                         Deselect All
                     </Button>
-                    <Button onClick={() => redactAllEntities()} data-testid="redact-all-entities">
+                    <Button
+                        onClick={() => redactAllEntities()}
+                        data-testid="redact-all-entities"
+                        disabled={Object.values(props.selectedEntities as string[][]).every(
+                            (subArray) => subArray.length === 0
+                        )}
+                    >
                         Download Redacted Document &nbsp;
                         {currentStatus && <StatusIndicator data-testid="status" type={currentStatus} />}
                     </Button>
