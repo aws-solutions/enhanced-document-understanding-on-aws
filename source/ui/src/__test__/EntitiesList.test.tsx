@@ -342,3 +342,34 @@ test('handles download redacted document button click', async () => {
         expect(status).toEqual('success');
     });
 });
+
+test('disables download redacted document button', async () => {
+    windowSpy.mockImplementation(jest.fn());
+    server.use(
+        rest.post(`${MOCK_CONFIG.ApiEndpoint}redact/:caseId/:documentId`, (_, res, ctx) => {
+            return res(ctx.status(200));
+        })
+    );
+
+    global.URL.createObjectURL = jest.fn();
+    const renderer: any = renderWithProviders(
+        <EntitiesList
+            {...entitiesListProps}
+            selectedEntities={{
+                'entity-standard': [],
+                'entity-pii': [],
+                'entity-medical': []
+            }}
+        />,
+        {
+            routerProvided: false
+        }
+    );
+
+    await waitFor(async () => {
+        const statusBeforeClick = renderer.store.getState().entity.status;
+        expect(statusBeforeClick).toBeUndefined();
+        const downloadRedactButton = screen.getByTestId('redact-all-entities');
+        expect(downloadRedactButton).toBeDisabled();
+    });
+});

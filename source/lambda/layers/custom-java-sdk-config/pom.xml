@@ -1,12 +1,13 @@
 <?xml version="1.0" encoding="UTF-8"?>
 
 <project xmlns="http://maven.apache.org/POM/4.0.0"
-    xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
+    xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+    xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
     <modelVersion>4.0.0</modelVersion>
     <groupId>com.builder.config</groupId>
     <artifactId>custom-java-sdk-config</artifactId>
     <packaging>jar</packaging>
-    <version>1.1.7</version>
+    <version>1.1.8</version>
     <name>custom-java-sdk-config</name>
     <properties>
         <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
@@ -62,12 +63,12 @@
         <dependency>
             <groupId>software.amazon.awssdk</groupId>
             <artifactId>sfn</artifactId>
-            <version>2.28.28</version>            
+            <version>2.28.28</version>
         </dependency>
         <dependency>
             <groupId>software.amazon.awssdk</groupId>
             <artifactId>s3</artifactId>
-            <version>2.28.28</version>            
+            <version>2.28.28</version>
         </dependency>
         <dependency>
             <groupId>software.amazon.awssdk</groupId>
@@ -154,7 +155,8 @@
                     <outputFile>${project.basedir}/dist/${project.artifactId}.jar</outputFile>
                     <outputDirectory>${project.basedir}/dist</outputDirectory>
                     <transformers>
-                        <transformer implementation="io.github.edwgiz.log4j.maven.plugins.shade.transformer.Log4j2PluginCacheFileTransformer">
+                        <transformer
+                            implementation="io.github.edwgiz.log4j.maven.plugins.shade.transformer.Log4j2PluginCacheFileTransformer">
                         </transformer>
                     </transformers>
                 </configuration>

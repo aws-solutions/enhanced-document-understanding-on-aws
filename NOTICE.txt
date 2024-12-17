@@ -1964,6 +1964,10 @@ responses under the Apache-2.0 license.
 setuptools under the MIT license.
 Werkzeug under the 0BSD license.
 xmltodict under the MIT license.
+jinja2 under the 0BSD license.
+markupsafe under the 0BSD license.
+pyyaml under the MIT license.
+werkzeug under the 0BSD license.
 
 ********************
 OPEN SOURCE LICENSES
