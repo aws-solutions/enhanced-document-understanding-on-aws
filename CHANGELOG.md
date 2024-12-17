@@ -7,6 +7,16 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 =======
 
+## [1.1.8] - 2024-12-17
+
+### Security
+
+- Updated node modules to patch vulnerabilities
+
+### Fixed
+
+- Disable button to download redacted documents when no entities are selected. This previously caused an error.
+
 ## [1.1.7] - 2024-11-18
 
 ### Security
