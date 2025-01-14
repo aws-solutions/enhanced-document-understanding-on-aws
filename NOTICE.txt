@@ -280,7 +280,7 @@ jsesc under the MIT license.
 @babel/compat-data under the MIT license.
 @babel/helper-validator-option under the MIT license.
 browserslist under the MIT license.
-caniuse-lite under the CC-BY-4.0 license.
+caniuse-lite under the CC-BY-4.0 license (source: caniuse.com).
 electron-to-chromium under the ISC license.
 node-releases under the MIT license.
 update-browserslist-db under the MIT license.
@@ -955,7 +955,7 @@ ts-toolbelt under the Apache-2.0 license.
 @types/uuid under the MIT license.
 @types/whatwg-fetch under the MIT license.
 @types/whatwg-streams under the MIT license.
-whatwg-streams under the BSD 3-Clause license
+whatwg-streams under the BSD 3-Clause license.
 bluebird under the MIT license.
 tape under the MIT license.
 deep-equal under the MIT license.
