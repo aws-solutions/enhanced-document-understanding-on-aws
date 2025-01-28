@@ -23,9 +23,11 @@ export const inferenceApiSlice = api.injectEndpoints({
                 const validInferences = validInferencesResponse.data as any;
 
                 if (validInferences.includes(InferenceName.TEXTRACT_DETECT_TEXT)) {
-                    unformattedtextractDetectResponse = await baseQuery(
+                    const response = await baseQuery(
                         `${INFERENCES_PATH}/${arg.selectedCaseId}/${arg.selectedDocumentId}/${InferenceName.TEXTRACT_DETECT_TEXT}`
                     );
+
+                    unformattedtextractDetectResponse = response.data as any;
                 }
 
                 if (validInferences.includes(InferenceName.TEXTRACT_ANALYZE_TEXT)) {
