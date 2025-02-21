@@ -31,22 +31,30 @@ export default function KendraHighlightedText({ textWithHighlights }: any) {
 
     const { Text: text, Highlights: highlights } = textWithHighlights;
 
-    if (!highlights || !highlights.length) {
+    try {
+        if (!highlights || !highlights.length) {
+            return <span>{text}</span>;
+        }
+
+        const sortedHighlights = unionSortedHighlights(
+            [...highlights].sort((a: any, b: any) => a.BeginOffset - b.BeginOffset)
+        );
+
+        const lastHighlight = sortedHighlights[sortedHighlights.length - 1];
+
+        return (
+            <span>
+                {sortedHighlights.map((highlight: any, idx: any) => (
+                    <Fragment key={JSON.stringify(highlight)}>
+                        {text.substring(idx === 0 ? 0 : sortedHighlights[idx - 1].EndOffset, highlight.BeginOffset)}
+                        <mark>{text.substring(highlight.BeginOffset, highlight.EndOffset)}</mark>
+                    </Fragment>
+                ))}
+                {text.substring(lastHighlight ? lastHighlight.EndOffset : 0)}
+            </span>
+        );
+    } catch (error) {
+        console.error('Error occurred while highlighting:', error);
         return <span>{text}</span>;
     }
-
-    const sortedHighlights = unionSortedHighlights(highlights.sort((a: any, b: any) => a.BeginOffset - b.BeginOffset));
-    const lastHighlight = sortedHighlights[sortedHighlights.length - 1];
-
-    return (
-        <span>
-            {sortedHighlights.map((highlight: any, idx: any) => (
-                <Fragment key={JSON.stringify(highlight)}>
-                    {text.substring(idx === 0 ? 0 : sortedHighlights[idx - 1].EndOffset, highlight.BeginOffset)}
-                    <mark>{text.substring(highlight.BeginOffset, highlight.EndOffset)}</mark>
-                </Fragment>
-            ))}
-            {text.substring(lastHighlight ? lastHighlight.EndOffset : 0)}
-        </span>
-    );
 }
