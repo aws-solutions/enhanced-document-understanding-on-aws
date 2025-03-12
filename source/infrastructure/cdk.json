@@ -57,7 +57,7 @@
     "@aws-cdk/aws-codepipeline-actions:useNewDefaultBranchForCodeCommitSource": true,
     "solution_id": "SO0281",
     "solution_name": "enhanced-document-understanding-on-aws",
-    "solution_version": "v1.1.12",
+    "solution_version": "v1.1.13",
     "app_namespace": "app.idp",
     "app_registry_name": "enhanced-document-understanding",
     "application_type": "AWS-Solutions",
