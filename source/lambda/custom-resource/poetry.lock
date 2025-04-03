@@ -64,7 +64,7 @@ crt = ["botocore[crt] (>=1.21.0,<2.0a0)"]
 
 [[package]]
 name = "boto3-layer"
-version = "1.1.13"
+version = "1.1.14"
 description = "Layer for AWS Boto3 python SDK"
 optional = false
 python-versions = "^3.11"
@@ -444,7 +444,7 @@ test-randomorder = ["pytest-randomly"]
 
 [[package]]
 name = "custom-boto3-init"
-version = "1.1.13"
+version = "1.1.14"
 description = "Initialize boto config for AWS Python SDK with custom configuration"
 optional = false
 python-versions = "^3.11"
