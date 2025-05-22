@@ -1,6 +1,6 @@
 [tool.poetry]
 name = "mock-python-lambda"
-version = "1.1.14"
+version = "1.1.15"
 authors = [ "Amazon Web Services" ]
 description = "Mock function for infra testing"
 packages = [
