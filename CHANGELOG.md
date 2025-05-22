@@ -5,6 +5,15 @@ All notable changes to this project will be documented in this file.
 The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/),
 and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
 
+## [1.1.15] - 2025-05-22
+
+### Security
+
+- Upgraded setuptools to `80.8.0`
+- Upgraded http-proxy-middleware to `2.0.9`
+- Upgraded aws-cdk-lib to `2.196.1`
+- Upgraded undici to `5.29.0`
+
 ## [1.1.14] - 2025-04-03
 
 ### Security
