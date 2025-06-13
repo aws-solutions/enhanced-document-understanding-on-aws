@@ -1,5 +1,8 @@
 ## Enhanced Document Understanding on AWS
 
+⚠️🚨⚠️ __Important: This solution will retire in October 2025. Until then, deployments (via CloudFormation or GitHub) will remain operational, but customers will assume responsibility for maintenance and API-related updates after support ends.
+Customers can explore using [Bedrock Data Automation](https://aws.amazon.com/bedrock/bda/), which allows insights and extraction of content from various unstructured files (video, audio, documents etc.), as well as [Guidance for Intelligent Document Processing on AWS](https://aws.amazon.com/solutions/guidance/intelligent-document-processing-on-aws/).__ ⚠️🚨⚠️
+
 Organizations across industries are increasingly required to process large volumes of semi-structured and unstructured documents with greater accuracy and speed. They need a document processing system that ingests and analyzes documents, extracts their content, identifies and redacts sensitive customer information, and creates search indexes from the analyzed data.
 Many industries have stringent compliance requirements to redact personally identifiable information (PII) and protected health information (PHI) from documents. In most cases, organizations manually process documents to extract information and insights. This approach can be time consuming, expensive, and difficult to scale. Organizations need information to rapidly extract insights from documents. They can benefit from a smart document processing system as a foundation to automating business processes that rely on manual inputs and interventions. 
 To help meet these needs, the Enhanced Document Understanding on AWS solution: 
