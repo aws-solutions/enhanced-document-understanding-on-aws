@@ -2,6 +2,8 @@ deployment/global-s3-assets
 deployment/regional-s3-assets
 deployment/open-source
 
+/build
+
 **/coverage/
 **/coverage-reports/
 .coverage
