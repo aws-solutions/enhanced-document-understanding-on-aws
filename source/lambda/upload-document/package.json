@@ -1,6 +1,6 @@
 {
   "name": "upload-document",
-  "version": "1.1.16",
+  "version": "1.1.17",
   "description": "This lambda function to upload documents",
   "main": "index.js",
   "scripts": {

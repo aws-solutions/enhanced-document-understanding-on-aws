@@ -5,6 +5,20 @@ All notable changes to this project will be documented in this file.
 The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/),
 and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
 
+## [1.1.17] - 2025-07-24
+
+### Security
+
+- Upgraded form-data to `4.0.4`
+- Upgraded @eslint/plugin-kit to `0.3.4`
+- Upgraded urllib3 to `2.5.0`
+- Upgraded requests to `2.32.4`
+- Upgraded on-headers to `1.1.0`
+- Upgraded webpack-dev-server to `5.2.2`
+- Upgraded aws-cdk to `2.1021.0`
+- Upgraded aws-cdk-lib to `2.206.0`
+- Upgraded brace-expansion to `2.0.2`
+
 ## [1.1.16] - 2025-06-04
 
 ### Security
