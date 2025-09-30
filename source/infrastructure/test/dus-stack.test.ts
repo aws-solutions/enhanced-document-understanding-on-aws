@@ -9,16 +9,32 @@ import { Capture, Match, Template } from 'aws-cdk-lib/assertions';
 import { DusStack } from '../lib/dus-stack';
 import { COMMERCIAL_REGION_LAMBDA_NODE_RUNTIME, EventSources } from '../lib/utils/constants';
 
+interface SolutionData {
+    id: string;
+    name: string;
+    version: string;
+}
+
+interface BuildStackResult {
+    template: Template;
+    jsonTemplate: { [key: string]: any };
+    stack: cdk.Stack;
+    solutionData: SolutionData;
+}
+
 describe('When App is created', () => {
     let template: Template;
     let jsonTemplate: { [key: string]: any };
     let stack: cdk.Stack;
-    const solutionId = process.env.SOLUTION_ID ?? 'undefined';
-    const solutionName = process.env.SOLUTION_NAME ?? 'undefined';
-    const solutionVersion = process.env.VERSION ?? 'undefined';
+
+    let solutionData: SolutionData;
 
     beforeAll(() => {
-        [template, jsonTemplate, stack] = buildStack();
+        const result = buildStack();
+        template = result.template;
+        jsonTemplate = result.jsonTemplate;
+        stack = result.stack;
+        solutionData = result.solutionData;
     });
 
     describe('when workflow stacks are created', () => {
@@ -59,15 +75,15 @@ describe('When App is created', () => {
         it('should have a description in the nested stack', () => {
             const dusStack = stack as DusStack;
             expect(Template.fromStack(dusStack.textractWorkflow).toJSON()['Description']).toEqual(
-                `(${solutionId}) - ${solutionName} - Nested Stack that deploys components to interact with Amazon Textract for uploaded documents - Version ${solutionVersion}`
+                `(${solutionData.id}) - ${solutionData.name} - Nested Stack that deploys components to interact with Amazon Textract for uploaded documents - Version ${solutionData.version}`
             );
 
             expect(Template.fromStack(dusStack.entityDetectionWorkflow).toJSON()['Description']).toEqual(
-                `(${solutionId}) - ${solutionName} - Nested Stack that deploys components to interact with Amazon Comprehend and Amazon Comprehend Medical for uploaded documents - Version ${solutionVersion}`
+                `(${solutionData.id}) - ${solutionData.name} - Nested Stack that deploys components to interact with Amazon Comprehend and Amazon Comprehend Medical for uploaded documents - Version ${solutionData.version}`
             );
 
             expect(Template.fromStack(dusStack.redactionWorkflow).toJSON()['Description']).toEqual(
-                `(${solutionId}) - ${solutionName} - Nested Stack that deploys components to redact content in uploaded documents - Version ${solutionVersion}`
+                `(${solutionData.id}) - ${solutionData.name} - Nested Stack that deploys components to redact content in uploaded documents - Version ${solutionData.version}`
             );
         });
 
@@ -155,7 +171,7 @@ describe('When App is created', () => {
         it('should have a description in the nested UI stack', () => {
             const dusStack = stack as DusStack;
             expect(Template.fromStack(dusStack.uiInfrastructure.nestedUIStack).toJSON()['Description']).toEqual(
-                `(${solutionId}) - ${solutionName} - Nested stack that deploys UI components that include an S3 bucket for web assets and a CloudFront distribution - Version ${solutionVersion}`
+                `(${solutionData.id}) - ${solutionData.name} - Nested stack that deploys UI components that include an S3 bucket for web assets and a CloudFront distribution - Version ${solutionData.version}`
             );
         });
     });
@@ -195,7 +211,7 @@ describe('When App is created', () => {
         it('should have a description in the nested stack', () => {
             const dusStack = stack as DusStack;
             expect(Template.fromStack(dusStack.indexedStorage.kendraCaseSearch).toJSON()['Description']).toEqual(
-                `(${solutionId}) - ${solutionName} - Nested Stack that creates the Kendra Index for document search - Version ${solutionVersion}`
+                `(${solutionData.id}) - ${solutionData.name} - Nested Stack that creates the Kendra Index for document search - Version ${solutionData.version}`
             );
         });
 
@@ -373,7 +389,9 @@ describe('With all environment variables and context.json available', () => {
         process.env.VERSION = 'v9.9.9';
         process.env.APP_NAMESPACE = 'app.idp';
 
-        [template, jsonTemplate] = buildStack();
+        const result = buildStack();
+        template = result.template;
+        jsonTemplate = result.jsonTemplate;
     });
 
     afterAll(() => {
@@ -529,10 +547,7 @@ describe('With all environment variables and context.json available', () => {
     });
 });
 
-function buildStack(): [Template, { [key: string]: any }, cdk.Stack] {
-    let template: Template;
-    let jsonTemplate: { [key: string]: any };
-
+function buildStack(): BuildStackResult {
     const app = new cdk.App({
         context: rawCdkJson.context
     });
@@ -549,8 +564,18 @@ function buildStack(): [Template, { [key: string]: any }, cdk.Stack] {
         appNamespace: appNamespace,
         applicationTrademarkName: rawCdkJson.context.application_trademark_name
     });
-    template = Template.fromStack(stack);
-    jsonTemplate = template.toJSON();
 
-    return [template, jsonTemplate, stack];
+    const template = Template.fromStack(stack);
+    const jsonTemplate = template.toJSON();
+
+    return {
+        template,
+        jsonTemplate,
+        stack,
+        solutionData: {
+            id: solutionID,
+            name: solutionName,
+            version: version
+        }
+    };
 }
