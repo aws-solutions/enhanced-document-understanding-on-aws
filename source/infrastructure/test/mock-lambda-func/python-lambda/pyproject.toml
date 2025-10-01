@@ -1,6 +1,6 @@
 [tool.poetry]
 name = "mock-python-lambda"
-version = "1.2.1"
+version = "1.2.2"
 authors = ["Amazon Web Services"]
 description = "Mock function for infra testing"
 packages = [{ include = "*.toml" }, { include = "*.lock" }]
